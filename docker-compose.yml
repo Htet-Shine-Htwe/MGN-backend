@@ -1,0 +1,74 @@
+services:
+    db:
+        image: mysql:8
+        container_name: mgn-db
+        volumes:
+            - db_data:/var/lib/mysql
+        restart: always
+        ports:
+            - "3307:3306"
+        environment:
+            MYSQL_ROOT_PASSWORD: root
+            MYSQL_DATABASE: mgn
+            MYSQL_USER: user
+            MYSQL_PASSWORD: password
+        networks:
+            - mgn-network
+
+    laravel:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        container_name: mgn-app
+        restart: always
+        tty: true
+        volumes:
+            - .:/var/www/html/mgn
+        ports:
+            - "8000:8000"
+        networks:
+            - mgn-network
+        environment:
+            DB_CONNECTION: mysql
+            DB_HOST: db
+            DB_PORT: 3306
+            DB_DATABASE: mgn
+            DB_USERNAME: user
+            DB_PASSWORD: password
+            APP_NAME: Radian
+            APP_ENV: local
+            REDIS_HOST: redis
+            REDIS_PORT: 6379
+
+    nginx:
+        image: nginx:alpine
+        container_name: mgn-nginx
+        restart: unless-stopped
+        tty: true
+        ports:
+            - "7777:80"
+        volumes:
+            - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+            - .:/var/www/html
+        depends_on:
+            - laravel
+        networks:
+            - mgn-network
+
+    redis:
+        image: redis:alpine
+        container_name: mgn-redis
+        restart: always
+        ports:
+            - "6379:6379"
+
+        networks:
+            - mgn-network
+
+volumes:
+    db_data:
+
+
+networks:
+    mgn-network:
+        driver: bridge
