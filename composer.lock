@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "4c4b9ffd3df280c6caf047debf7e9130",
+    "content-hash": "339ae4eac50da3b36136b8d91d798a92",
     "packages": [
         {
             "name": "brick/math",
@@ -137,16 +137,16 @@
         },
         {
             "name": "dede/hydrastorage",
-            "version": "0.4.3",
+            "version": "v0.4.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Dede182/HydraStorage.git",
-                "reference": "deeb7bda8353af48ba0fe14642a0e3eae3e121f3"
+                "reference": "84c8e36debf8476b3b93548a14c2543a01ac7d3c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Dede182/HydraStorage/zipball/deeb7bda8353af48ba0fe14642a0e3eae3e121f3",
-                "reference": "deeb7bda8353af48ba0fe14642a0e3eae3e121f3",
+                "url": "https://api.github.com/repos/Dede182/HydraStorage/zipball/84c8e36debf8476b3b93548a14c2543a01ac7d3c",
+                "reference": "84c8e36debf8476b3b93548a14c2543a01ac7d3c",
                 "shasum": ""
             },
             "require": {
@@ -236,7 +236,7 @@
                 "laravel"
             ],
             "support": {
-                "source": "https://github.com/Dede182/HydraStorage/tree/0.4.3",
+                "source": "https://github.com/Dede182/HydraStorage/tree/v0.4.5",
                 "issues": "https://github.com/Dede182/HydraStorage/issues"
             },
             "funding": [
@@ -245,7 +245,7 @@
                     "url": "https://github.com/HydraStorage"
                 }
             ],
-            "time": "2024-06-06T10:11:38+00:00"
+            "time": "2024-08-04T09:42:40+00:00"
         },
         {
             "name": "dflydev/dot-access-data",
