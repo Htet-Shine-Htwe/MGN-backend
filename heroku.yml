@@ -1,4 +1,6 @@
 build:
-  docker:
-    web: Dockerfile
+  - heroku/php
 
+config:
+  PHP_EXTENSIONS:
+    - imagick
