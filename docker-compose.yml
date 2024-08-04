@@ -39,6 +39,7 @@ services:
             APP_ENV: local
             REDIS_HOST: redis
             REDIS_PORT: 6379
+            PORT: 8000
 
     nginx:
         image: nginx:alpine
