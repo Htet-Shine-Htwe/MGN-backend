@@ -17,8 +17,7 @@
         "spatie/laravel-permission": "^6.4",
         "staudenmeir/eloquent-eager-limit": "^1.0",
         "ext-imagick" : "*",
-        "ext-gd" : "*",
-        "ext-redis" : "*"
+        "ext-gd" : "*"
     },
     "require-dev": {
         "fakerphp/faker": "^1.9.1",
