@@ -85,5 +85,17 @@ it("social info can delete successfully !",function(){
     $response->assertStatus(200);
 });
 
+it("can create social info start banner",function(){
+    $response = $this->postJson(route('api.admin.social-info.store'),[
+        'name' => 'Facebook',
+        'type' => SocialInfoType::Image,
+        'icon' => 'facebook',
+        'cover_photo' => UploadedFile::fake()->image('cover.jpg'),
+        'url' => 'https://facebook.com'
+    ]);
+
+    $response->assertStatus(201);
+});
+
 
 
