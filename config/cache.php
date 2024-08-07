@@ -75,6 +75,9 @@ return [
         ],
 
         'redis' => [
+
+            'client' => env('REDIS_CLIENT', 'predis'),
+
             'driver' => 'redis',
             'connection' => 'cache',
             'lock_connection' => 'default',

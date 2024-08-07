@@ -34,6 +34,10 @@ class SubMogou extends Model
         'mogou_id',
     ];
 
+    protected $casts = [
+        'third_party_redirect' => 'boolean',
+    ];
+
     protected $appends = ['full_cover_path'];
 
     protected static function boot()
