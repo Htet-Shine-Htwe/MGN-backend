@@ -21,4 +21,9 @@ class SocialInfo extends Model
     protected $casts = [
         'type' => SocialInfoType::class,
     ];
+
+    public function getCoverPhotoAttribute($value)
+    {
+        return $value ? asset('storage/social_info/banners/' . $value) : null;
+    }
 }

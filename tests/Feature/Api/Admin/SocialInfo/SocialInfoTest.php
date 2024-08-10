@@ -88,14 +88,17 @@ it("social info can delete successfully !",function(){
 it("can create social info start banner",function(){
     $response = $this->postJson(route('api.admin.social-info.store'),[
         'name' => 'Facebook',
-        'type' => SocialInfoType::Image,
+        'type' => SocialInfoType::Banner,
         'icon' => 'facebook',
         'cover_photo' => UploadedFile::fake()->image('cover.jpg'),
         'url' => 'https://facebook.com'
     ]);
 
+    dd($response->json());
+
     $response->assertStatus(201);
-});
+})->group('test');
+
 
 
 
