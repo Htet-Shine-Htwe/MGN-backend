@@ -2,6 +2,7 @@
 
 namespace App\Repo\Admin\SocialInfo;
 
+use App\Enum\SocialInfoType;
 use App\Models\SocialInfo;
 use HydraStorage\HydraStorage\Traits\HydraMedia;
 
@@ -20,6 +21,11 @@ class SocialInfoRepo
     public function all()
     {
         return $this->model->all();
+    }
+
+    public function getBanners()
+    {
+        return $this->model->where('type', SocialInfoType::Banner->value)->get();
     }
 
     public function create($data)
