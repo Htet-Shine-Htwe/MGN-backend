@@ -45,4 +45,14 @@ class SocialInfoController extends Controller
             'success' => true,
         ], 200);
     }
+
+
+    public function banners(Request $request)
+    {
+        $banners = $this->socialInfoRepo->getBanners();
+        return response()->json([
+            'success' => true,
+            'social_info' => $banners
+        ], 200);
+    }
 }

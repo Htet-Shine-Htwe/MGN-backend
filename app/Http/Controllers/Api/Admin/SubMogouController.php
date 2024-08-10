@@ -3,13 +3,16 @@
 namespace App\Http\Controllers\Api\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\SubMogouZipUploadRequest;
 use App\Repo\Admin\SubMogouRepo\SubMogouActionRepo;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class SubMogouController extends Controller
 {
     public function __construct(protected SubMogouActionRepo $subMogouActionRepo)
     {
+
     }
 
     public function saveNewDraft(Request $request)
@@ -41,6 +44,19 @@ class SubMogouController extends Controller
         return  response()->json([
             'sub_mogou' => $mogou
         ], 200);
+    }
+
+    public function uploadZipFile(SubMogouZipUploadRequest $request)
+    {
+        DB::beginTransaction();
+        try{
+
+        }
+        catch(\Exception $e){
+            return response()->json([
+                'message' => $e->getMessage()
+            ], 500);
+        }
     }
 
     public function show($mogous_id, $sub_mogou_id)

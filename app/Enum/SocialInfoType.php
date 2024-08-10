@@ -9,11 +9,14 @@ enum SocialInfoType :string implements SmartEnum
     case Image = 'image';
     case ReferSocial = 'refer_social';
 
+    case Banner = 'banner';
+
     public static function getValues(): array
     {
         return [
             self::Image,
-            self::ReferSocial
+            self::ReferSocial,
+            self::Banner
         ];
     }
 
@@ -21,7 +24,8 @@ enum SocialInfoType :string implements SmartEnum
     {
         return [
             'image' => self::Image,
-            'refer_social' => self::ReferSocial
+            'refer_social' => self::ReferSocial,
+            'banner' => self::Banner
         ];
     }
 
@@ -30,6 +34,7 @@ enum SocialInfoType :string implements SmartEnum
         return match ($label) {
             'Image' => self::Image->value,
             'Refer Social' => self::ReferSocial->value,
+            'Banner' => self::Banner->value,
         };
     }
 
