@@ -32,6 +32,7 @@ Route::prefix('users')->name('users.')->group(function(){
 });
 
 
-Route::get('/test',function(){
-    return 'test';
+Route::get('/throw-slack-exception',function(){
+     throw new \Exception('This is a slack exception');
+
 });
