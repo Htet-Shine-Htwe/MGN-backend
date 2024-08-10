@@ -94,8 +94,6 @@ it("can create social info start banner",function(){
         'url' => 'https://facebook.com'
     ]);
 
-    dd($response->json());
-
     $response->assertStatus(201);
 })->group('test');
 
