@@ -2,11 +2,13 @@
 
 use App\Enum\SocialInfoType;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
+use Tests\Support\TestStorage;
 use Tests\Support\UserAuthenticated;
 
 
 uses()->group('admin','api','socialinfo');
-uses(UserAuthenticated::class);
+uses(UserAuthenticated::class,TestStorage::class);
 
 beforeEach(function(){
     $this->setupAdmin();
@@ -86,6 +88,7 @@ it("social info can delete successfully !",function(){
 });
 
 it("can create social info start banner",function(){
+
     $response = $this->postJson(route('api.admin.social-info.store'),[
         'name' => 'Facebook',
         'type' => SocialInfoType::Banner,
