@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
-use App\Contracts\DbPartitionModelInterface;
 use App\Traits\DbPartition;
+use HydraStorage\HydraStorage\Traits\HydraMedia;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
@@ -11,7 +11,7 @@ use Illuminate\Support\Str;
 
 class SubMogou extends Model
 {
-    use HasFactory,\Staudenmeir\EloquentEagerLimit\HasEagerLimit,DbPartition;
+    use HasFactory,\Staudenmeir\EloquentEagerLimit\HasEagerLimit,DbPartition,HydraMedia;
 
     protected $table = 'sub_mogous';
 
@@ -38,7 +38,7 @@ class SubMogou extends Model
         'third_party_redirect' => 'boolean',
     ];
 
-    protected $appends = ['full_cover_path'];
+    // protected $appends = ['full_cover_path'];
 
     protected static function boot()
     {
@@ -57,7 +57,8 @@ class SubMogou extends Model
 
     public function getFullCoverPathAttribute()
     {
-        return asset('storage/'.generateStorageFolder("sub_mogou",$this->slug.'/cover') . '/' . $this->cover);
+        // return asset('storage/'.generateStorageFolder("sub_mogou",$this->slug.'/cover') . '/' . $this->cover);
+        return $this->getMedia(generateStorageFolder("sub_mogou",$this->slug.'/cover') . '/' . $this->cover);
     }
 
     public function getCreatedAtAttribute($value)

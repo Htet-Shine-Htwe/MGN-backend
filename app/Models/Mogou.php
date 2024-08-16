@@ -7,6 +7,7 @@ use App\Enum\MogousStatus;
 use App\Enum\MogouTypeEnum;
 use App\Scope\MogouScope;
 use App\Services\Partition\TablePartition;
+use HydraStorage\HydraStorage\Traits\HydraMedia;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
@@ -14,6 +15,7 @@ class Mogou extends Model
 {
     use HasFactory,\Staudenmeir\EloquentEagerLimit\HasEagerLimit;
     use MogouScope;
+    use HydraMedia;
 
     protected $fillable = [
         'rotation_key',
@@ -67,6 +69,11 @@ class Mogou extends Model
         {
             return MogousStatus::getStatusName($this->status);
         }
+    }
+
+    protected function getCoverAttribute($value)
+    {
+        return $this->getMedia($value,'public/mogou/cover/');
     }
 
     protected function getMogouTypeNameAttribute()
