@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\User\HomePageController;
 use App\Http\Controllers\Api\User\UserFavoriteController;
 use App\Http\Controllers\Api\User\UserMogouController;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Storage;
 
 Route::middleware(['auth:sanctum'])->name('users.')->group(function(){
 
@@ -38,4 +39,15 @@ Route::get('/env',function(){
 
 Route::get('/throw-slack-exception',function(){
      throw new \Exception('This is a slack exception');
+});
+
+Route::get('s3-test',function(){
+    $disk = Storage::disk('s3');
+    // return $disk->put('test.txt','Hello World');
+    // return $disk->allFiles("Solo Leveling - episode 1");
+
+    // get the file
+    // return $disk->setVisibility("Solo Leveling - episode 1","public");
+
+    return $disk->url("Solo Leveling - episode 1/00.jpg");
 });
