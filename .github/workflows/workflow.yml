@@ -19,7 +19,7 @@ jobs:
           php-version: '8.1' # or your Laravel PHP version
 
       - name: Install Composer dependencies
-        run: composer install --no-dev --no-interaction --prefer-dist --optimize-autoloader
+        run: composer install --no-interaction --prefer-dist --optimize-autoloader
 
       - name: Create .env.testing file
         run: |
