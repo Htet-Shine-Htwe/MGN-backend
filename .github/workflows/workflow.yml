@@ -56,5 +56,4 @@ jobs:
         env:
           HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
         run: |
-            git remote add heroku https://heroku:${{ secrets.HEROKU_API_KEY }}@git.heroku.com/radian-b.git
             git push heroku main --force
