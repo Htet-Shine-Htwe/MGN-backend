@@ -39,5 +39,5 @@ jobs:
         env:
           HEROKU_API_KEY: HRKU-64478511-410f-483d-a281-e4ca87dbe576
         run: |
-          heroku git:remote -a radian-b
-          git push heroku main
+            git remote add heroku https://heroku:${{ secrets.HEROKU_API_KEY }}@git.heroku.com/radian-b.git
+            git push heroku main
