@@ -128,7 +128,7 @@ test("mogou can be created",function($mogou_data)
         'title' => $mogou_data['title']
     ]);
 
-    $this->assertFileExists(storage_path('app/public/mogou/cover/'.$response->json('cover')));
+    $this->assertInStorage('mogou/cover/'.$response->json('cover'));
 
     $mogou = $response->json('mogou');
 
@@ -137,6 +137,7 @@ test("mogou can be created",function($mogou_data)
         'category_id' => $mogou_data['categories'][0]
     ]);
 })
+->group('asd')
 ->with('mogou-data-collection');
 
 test("mogou can be updated",function($mogou_data)
@@ -158,8 +159,6 @@ test("mogou can be updated",function($mogou_data)
 
     $full_path = 'mogou/cover/' . $response->json('cover');
     $this->assertInStorage($full_path);
-
-    $this->assertFileExists(storage_path('app/public/mogou/cover/'.$response->json('cover')));
 
     $mogou = $response->json('mogou');
 

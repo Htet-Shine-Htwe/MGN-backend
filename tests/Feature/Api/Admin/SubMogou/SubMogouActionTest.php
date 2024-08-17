@@ -94,9 +94,7 @@ test("can successfully update the cover of sub mogous",function($sub_mogou){
         'mogou_id' => $sub_mogou['mogou_id']
     ]);
 
-
     $subMogou = $response->json('sub_mogou');
-
 
     $response = $this->postJson(route('api.admin.sub-mogous.updateCover'),[
         'mogou_id' => $subMogou['mogou_id'],
