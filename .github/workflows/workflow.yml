@@ -1,52 +1,46 @@
-name : First pipeline
+name: Deploy to Heroku
 
-on :
-  push :
-    branches: ["main"]
-  pull_request:
-    branches: ["main"]
+on:
+  push:
+    branches:
+      - main
 
 jobs:
-  tests:
+  build-and-deploy:
     runs-on: ubuntu-latest
 
-    services:
-      mysql:
-        image: mysql:8.0.21
-        env:
-          MYSQL_DATABASE: posts-test
-          MYSQL_ROOT_PASSWORD: root
-          ports:
-            - 3306:3306
-          options: --health-cmd="mysqladmin ping"
-
     steps:
-      -uses: shivammathur/setup-php@15c43e89cdef867065b0213be354c2841860869e
-      with:
-        php-version: '8.1'
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-      -uses: actions/checkout@v3
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1' # or your Laravel PHP version
 
-      - name: Copy .env
-        run: cp .env.ci .env
+      - name: Install Composer dependencies
+        run: composer install --no-dev --no-interaction --prefer-dist --optimize-autoloader
 
-      - name: Install Dependencies
-        run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress
+      - name: Create .env.testing file
+        run: |
+          cp .env.example .env.testing
+          echo "DB_CONNECTION=sqlite" >> .env.testing
+          echo "DB_DATABASE=:memory:" >> .env.testing
+          php artisan key:generate --env=testing
 
-      - name: Generate Key
-        run: php artisan key:generate
+      - name: Run migrations for testing
+        run: php artisan migrate --env=testing --force
 
-      - name: Directory Permissions
-        run: chmod -R 777 storage bootstrap/cache
+      - name: Run Pest tests
+        run: ./vendor/bin/pest --env=testing
 
-      - name: phpstan
-        run: ./vendor/bin/phpstan analyse --memory-limit=1G
+      - name: Run Pest tests
+        run: ./vendor/bin/pest
 
-      - name: phpinsights
-        run: php artisan insights --no-interaction \ --min-quality=90 --min-complexity=90 \ --min-architecture=90 --min-style=90 \ --ansi --format=github-action
-
-      - name: run testss
-        run: php artisan test
-
-      - name: Generate Key
-        run: cd api | php artisan key:generate
+      - name: Deploy to Heroku
+        if: success()
+        env:
+          HEROKU_API_KEY: HRKU-64478511-410f-483d-a281-e4ca87dbe576
+        run: |
+          git remote add heroku https://git.heroku.com/radian-b.git
+          git push heroku main
