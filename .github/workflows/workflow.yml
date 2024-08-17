@@ -34,14 +34,17 @@ jobs:
       - name: Run Pest tests
         run: ./vendor/bin/pest --parallel
 
-      - name: Pull from heroku & rebase
+      - name: Fetch from heroku
         if: success()
         env:
           HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
         run: |
             git remote add heroku https://heroku:${{ secrets.HEROKU_API_KEY }}@git.heroku.com/radian-b.git
             git fetch heroku main
-            git rebase heroku/main
+            git rebase -X theirs heroku/main
+
+      - name: Continue rebase if necessary
+        run: git rebase --continue || echo "No rebase needed"
 
       - name: Deploy to Heroku
         if: success()
@@ -49,4 +52,4 @@ jobs:
           HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
         run: |
             git remote add heroku https://heroku:${{ secrets.HEROKU_API_KEY }}@git.heroku.com/radian-b.git
-            git push heroku main
+            git push heroku main --force
