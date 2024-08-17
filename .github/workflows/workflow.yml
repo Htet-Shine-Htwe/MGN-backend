@@ -32,10 +32,7 @@ jobs:
         run: php artisan migrate --env=testing --force
 
       - name: Run Pest tests
-        run: ./vendor/bin/pest --env=testing
-
-      - name: Run Pest tests
-        run: ./vendor/bin/pest
+        run: ./vendor/bin/pest --parallel
 
       - name: Deploy to Heroku
         if: success()
