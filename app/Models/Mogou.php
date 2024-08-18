@@ -92,6 +92,11 @@ class Mogou extends Model
         }
     }
 
+     public function getTotalViewCountAttribute()
+    {
+        return (int) $this->subMogous()->sum('views');
+    }
+
     // relationship
     public function categories()
     {
@@ -108,7 +113,13 @@ class Mogou extends Model
         );
     }
 
+
     public function getReleasedAtAttribute($value)
+    {
+        return date('d M,Y', strtotime($value));
+    }
+
+    public function getCreatedAtAttribute($value)
     {
         return date('d M,Y', strtotime($value));
     }

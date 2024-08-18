@@ -22,7 +22,7 @@ class MogouRepo implements \App\Contracts\ModelRepoInterface {
             $this->collection();
         }
 
-        return $this->collection->latest( 'id' )->paginate( $request->input( 'per_page', 10 ) );
+        return $this->collection->latest( 'id' )->paginate( $request->input( 'limit', 10 ) );
 
     }
 
@@ -35,6 +35,7 @@ class MogouRepo implements \App\Contracts\ModelRepoInterface {
         ->orderByRating()
         ->byFinishStatus()
         ->byMogouType()
+        ->byMogouTotalViewCount()
         ->year();
 
         return $this->collection;
@@ -49,4 +50,5 @@ class MogouRepo implements \App\Contracts\ModelRepoInterface {
         $this->collection = $this->collection->with( 'categories:id,title' );
         return $this;
     }
+
 }
