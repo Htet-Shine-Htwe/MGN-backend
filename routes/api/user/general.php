@@ -32,6 +32,9 @@ Route::prefix('users')->name('users.')->group(function(){
 
 });
 
+Route::get('/ci-test',function(){
+    return 'CI test';
+});
 
 Route::get('/env',function(){
     dd(env('APP_ENV'));
