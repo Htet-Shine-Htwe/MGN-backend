@@ -84,4 +84,9 @@ trait MogouScope
             return $query->where('released_year', $year);
         });
     }
+
+    public function scopeByMogouTotalViewCount($query)
+    {
+
+    }
 }

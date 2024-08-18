@@ -32,13 +32,27 @@ class MogouController extends Controller
 
             $key = $mogou->rotation_key;
 
-            $subMogou = $mogou->subMogous($key)->select('title')->latest()->limit(3)->get();
+            if(request('mogou_total_count'))
+            {
+                $mogou->append('total_view_count');
+            }
+
+            $subMogou = $mogou->subMogous($key)->select('title','views')->latest()->limit(3)->get();
 
             $mogou->setRelation('subMogous', $subMogou);
         });
 
         return response()->json([
             'mogous' => $collection
+        ]);
+    }
+
+    public function show(Mogou $mogou)
+    {
+        $mogou->load('categories');
+
+        return response()->json([
+            'mogou' => $mogou
         ]);
     }
 
