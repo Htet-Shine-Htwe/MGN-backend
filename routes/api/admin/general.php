@@ -49,6 +49,7 @@ Route::middleware(['auth:sanctum'])
     Route::controller(MogouController::class)->group(function(){
         Route::get('/mogous','index')->name('mogous.index');
 
+        Route::get("/mogous/{mogou}",'show')->name('mogous.show');
         Route::post('/mogous','create')->name('mogous.store');
         Route::post('/mogous/update-status','updateStatus')->name('mogous.updateStatus');
         Route::post('/mogous/add-category','bindCategory')->name('mogous.addCategory');
