@@ -5,6 +5,10 @@ use App\Http\Controllers\Api\User\UserFavoriteController;
 use App\Http\Controllers\Api\User\UserMogouController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
+use NotificationChannels\Telegram\Telegram;
+use NotificationChannels\Telegram\TelegramMessage;
+use NotificationChannels\Telegram\TelegramUpdates;
+use WeStacks\TeleBot\TeleBot;
 
 Route::middleware(['auth:sanctum'])->name('users.')->group(function(){
 
@@ -34,6 +38,18 @@ Route::prefix('users')->name('users.')->group(function(){
 
 Route::get('/ci-test',function(){
     return 'CI test';
+});
+
+Route::get('/telegram-test',function(){
+
+    $bot = new TeleBot(env('TELEGRAM_BOT_TOKEN'));
+
+    $bot->sendMessage([
+        'chat_id' =>'-1002198423534',
+        'text' => 'This is send by bbot'
+    ]);
+
+    return $bot->getUpdates();
 });
 
 Route::get('/env',function(){

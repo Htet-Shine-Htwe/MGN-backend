@@ -11,6 +11,7 @@
         "dede/hydrastorage": "^0.4.6",
         "fakerphp/faker": "^1.9.1",
         "guzzlehttp/guzzle": "^7.2",
+        "laravel-notification-channels/telegram": "^5.0",
         "laravel/framework": "^10.10",
         "laravel/sanctum": "^3.3",
         "laravel/slack-notification-channel": "^3.2",
@@ -19,7 +20,8 @@
         "league/flysystem-aws-s3-v3": "^3.0",
         "predis/predis": "^2.2",
         "spatie/laravel-permission": "^6.4",
-        "staudenmeir/eloquent-eager-limit": "^1.0"
+        "staudenmeir/eloquent-eager-limit": "^1.0",
+        "westacks/telebot-laravel": "^3.2"
     },
     "require-dev": {
         "laravel/pint": "^1.0",

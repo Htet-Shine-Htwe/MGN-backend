@@ -171,6 +171,7 @@ return [
         App\Providers\TelescopeServiceProvider::class,
         Spatie\Permission\PermissionServiceProvider::class,
         HydraStorage\HydraStorage\HydraStorageServiceProvider::class,
+        WeStacks\TeleBot\Laravel\Providers\TeleBotServiceProvider::class,
     ])->toArray(),
 
     /*
@@ -186,6 +187,7 @@ return [
 
     'aliases' => Facade::defaultAliases()->merge([
         // 'Example' => App\Facades\Example::class,
+        'TeleBot' => WeStacks\TeleBot\Laravel\TeleBot::class,
     ])->toArray(),
 
 ];
