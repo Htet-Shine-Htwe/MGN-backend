@@ -31,8 +31,14 @@ jobs:
       - name: Run migrations for testing
         run: php artisan migrate --env=testing --force
 
-      - name: Run Pest tests
-        run: ./vendor/bin/pest --parallel
+      - name: Run Pest Unit tests
+        run: ./vendor/bin/pest --parallel --group=unit
+
+      - name: Run Pest Features tests
+        run: ./vendor/bin/pest --parallel --group=feature
+
+      - name: Run Stress testss
+        run: ./vendor/bin/pest --parallel --group=stress-test
 
       - name: Set up Git user identity
         run: |

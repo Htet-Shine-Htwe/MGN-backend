@@ -1,5 +1,5 @@
 # Use PHP 8.1
-FROM php:8.1-fpm
+FROM php:8.2-fpm
 
 # Install common PHP extension dependencies
 RUN apt-get update && apt-get install -y \
@@ -31,6 +31,8 @@ COPY --from=composer /usr/bin/composer /usr/bin/composer
 
 # Copy source code
 COPY . .
+
+RUN rm composer.lock
 
 # Install composer dependencies
 RUN composer install --no-scripts --no-autoloader
