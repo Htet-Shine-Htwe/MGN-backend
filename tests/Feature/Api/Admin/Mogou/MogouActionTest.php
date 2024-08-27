@@ -69,7 +69,6 @@ test("create mogou body validation",function()
     $response->assertJsonValidationErrors([
         'title',
         'description',
-        'cover',
         'status',
     ]);
 });
@@ -150,7 +149,7 @@ test("mogou can be updated",function($mogou_data)
     $mogou_data['title'] = 'Updated Title';
     $mogou_data['cover'] = UploadedFile::fake()->image('cover.jpg');
 
-    $response = $this->authenticatedAdmin()->putJson(route('api.admin.mogous.update',$mogou['slug']),$mogou_data);
+    $response = $this->authenticatedAdmin()->postJson(route('api.admin.mogous.update',$mogou['slug']),$mogou_data);
     $response->assertOk();
 
     $this->assertDatabaseHas('mogous',[
@@ -186,7 +185,7 @@ test("mogou can't update with duplicate title",function($mogou_data){
     $mogou_data['cover'] = UploadedFile::fake()->image('cover.jpg');
 
 
-    $response = $this->authenticatedAdmin()->putJson(route('api.admin.mogous.update',$mogou['slug']),$mogou_data);
+    $response = $this->authenticatedAdmin()->postJson(route('api.admin.mogous.update',$mogou['slug']),$mogou_data);
 
     $response->assertStatus(422);
     $response->assertJsonValidationErrors([
@@ -204,7 +203,7 @@ test("mogou can't update due to invalid mogou",function($mogou_data){
     $mogou_data['title'] = 'Updated Title';
     $mogou_data['cover'] = UploadedFile::fake()->image('cover.jpg');
 
-    $response = $this->authenticatedAdmin()->putJson(route('api.admin.mogous.update','invalid-slug'),$mogou_data);
+    $response = $this->authenticatedAdmin()->postJson(route('api.admin.mogous.update','invalid-slug'),$mogou_data);
     $response->assertStatus(404);
 })
 ->with('mogou-data-collection');
