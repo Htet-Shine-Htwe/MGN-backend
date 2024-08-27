@@ -3,6 +3,10 @@
 use App\Http\Controllers\Api\User\HomePageController;
 use App\Http\Controllers\Api\User\UserFavoriteController;
 use App\Http\Controllers\Api\User\UserMogouController;
+use App\Models\BotPublisher;
+use App\Services\BotPublisher\Bots\TelegramBotPublisher;
+use App\Services\BotPublisher\Publisher\SocialPublisher;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
 use NotificationChannels\Telegram\Telegram;
@@ -40,16 +44,26 @@ Route::get('/ci-test',function(){
     return 'CI test';
 });
 
-Route::get('/telegram-test',function(){
-
-    $bot = new TeleBot(env('TELEGRAM_BOT_TOKEN'));
+Route::get('/telegram-send',function(Request $request){
+    $publisher = BotPublisher::first();
+    $bot = new TeleBot($publisher->token_key);
 
     $bot->sendMessage([
         'chat_id' =>'-1002198423534',
-        'text' => 'This is send by bbot'
+        'text' => $request->input('message') ?? 'Hello World'
     ]);
 
     return $bot->getUpdates();
+});
+
+Route::get('/telegram-get',function(Request $request){
+    $publisher = BotPublisher::first();
+    $bot =  (new SocialPublisher($publisher));
+
+
+    return response()->json([
+       'bot' => $bot->getInfo()
+    ]);
 });
 
 Route::get('/env',function(){

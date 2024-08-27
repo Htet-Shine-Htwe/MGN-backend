@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\Admin\AdminController;
 use App\Http\Controllers\Api\Admin\ApplicationConfigController;
+use App\Http\Controllers\Api\Admin\BotPublisherController;
 use App\Http\Controllers\Api\Admin\CategoryController;
 use App\Http\Controllers\Api\Admin\MogouController;
 use App\Http\Controllers\Api\Admin\SocialInfoController;
@@ -54,7 +55,7 @@ Route::middleware(['auth:sanctum'])
         Route::post('/mogous/update-status','updateStatus')->name('mogous.updateStatus');
         Route::post('/mogous/add-category','bindCategory')->name('mogous.addCategory');
         Route::post('/mogous/remove-category','unbindCategory')->name('mogous.removeCategory');
-        Route::put('/mogous/{mogou}','update')->name('mogous.update');
+        Route::post('/mogous/{mogou}','update')->name('mogous.update');
         Route::post('/delete/mogous','delete')->name('mogous.delete');
     });
 
@@ -71,6 +72,10 @@ Route::middleware(['auth:sanctum'])
         Route::post('/social-info/{social_info}','delete')->name('social-info.delete');
 
         Route::get('/social-info/banners','banners')->name('social-info.banners');
+    });
+
+    Route::controller(BotPublisherController::class)->name('bot-publisher.')->group(function(){
+        Route::post('/bot-publisher','store')->name('store');
     });
 });
 

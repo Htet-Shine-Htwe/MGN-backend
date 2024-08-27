@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Storage;
 
 if(!function_exists('tryCatch')){
 
-    function tryCatch($callback, $message = null){
+    function tryCatch($callback, $message = null,$withException=false){
         try{
             return $callback();
         }catch(\Exception $e){
@@ -17,10 +17,13 @@ if(!function_exists('tryCatch')){
                     'errors' => $e->errors()
                 ],$status);
             }
-            if($message){
-                return response()->json(['message' => $message],$status);
+
+            if($withException)
+            {
+                $message .= " " . $e->getMessage();
             }
-            return response()->json(['message' => $e->getMessage()],$status);
+
+            return response()->json(['message' => $message],$status);
         }
     }
 
