@@ -3,7 +3,6 @@
 namespace App\Repo\Admin\Mogou;
 
 use App\Models\Mogou;
-use App\Traits\CacheResponse;
 use Illuminate\Http\Request;
 
 class MogouRepo implements \App\Contracts\ModelRepoInterface {

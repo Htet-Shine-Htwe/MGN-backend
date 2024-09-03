@@ -20,7 +20,7 @@ class MogouActionRepo
             'title' => 'unique:mogous,title',
             'cover' => 'required|image'
         ]);
-        $mediaOption = (new MediaOption())->setCustom(100,null,null,"jpg");
+        $mediaOption = MediaOption::create()->setQuality(70)->get();
 
         $data['cover'] = $this->storeMedia($request->file('cover'), 'mogou/cover',false,$mediaOption);
         $data['status'] = MogousStatus::ARCHIVED;
@@ -38,12 +38,15 @@ class MogouActionRepo
     {
         $data = $request->validated();
         $request->validate([
-            'title' => 'unique:mogous,title,' . $mogou->id,
+            'title' => 'unique:mogous,title,' . $mogou->slug . ',slug',
             'cover' => 'nullable|image'
         ]);
 
         if ($request->hasFile('cover')) {
-            $data['cover'] = $this->storeMedia($request->file('cover'), 'mogou/cover',false);
+            $this->removeMedia("public/mogou/cover/{$mogou->cover}");
+
+            $mediaOption =  MediaOption::create()->setQuality(70)->get();
+            $data['cover'] = $this->storeMedia($request->file('cover'), 'mogou/cover',true,$mediaOption);
         }
 
         $mogou->update($data);
