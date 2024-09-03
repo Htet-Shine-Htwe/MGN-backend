@@ -22,9 +22,18 @@ class BotPublisher extends Model
         'type' => SocialMediaType::class,
     ];
 
+    protected $appends = ['bot_type'];
+
 
     public function getAvailableIdsAttribute($value)
     {
         return json_decode($value);
+    }
+
+    public function getBotTypeAttribute()
+    {
+        if($this->type){
+            return SocialMediaType::getKey($this->type);
+        }
     }
 }
