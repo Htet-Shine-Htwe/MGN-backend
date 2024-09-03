@@ -113,3 +113,13 @@ test("change password successfully", function () {
             'message' => 'Password was updated successfully',
         ]);
 });
+
+test('admin can logout with token delete', function () {
+    $this->setupAdmin();
+    $response = $this->authenticatedAdmin($this->admin)->postJson(route('api.admin.logout'));
+
+    $response->assertStatus(200)
+        ->assertJson([
+            'message' => 'Logged out successfully',
+        ]);
+});

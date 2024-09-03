@@ -9,4 +9,5 @@ Route::post('admin/login',[AuthController::class,'login'])->name('admin.login')-
 Route::middleware(['auth:sanctum'])->group(function(){
     // Change Password
     Route::post('/admin/change-password',[AuthController::class,'changePassword'])->name('admin.change-password');
+    Route::post('/admin/logout',[AuthController::class,'logout'])->name('admin.logout');
 });

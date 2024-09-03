@@ -25,4 +25,11 @@ class AuthController extends Controller
 
         return $process->returnResponse('api')->changePassword((new Admin),$request);
     }
+
+    public function logout(Request $request)
+    {
+        $process =  new \App\Services\Auth\Authentication($request);
+
+        return $process->returnResponse('api')->signOut();
+    }
 }
