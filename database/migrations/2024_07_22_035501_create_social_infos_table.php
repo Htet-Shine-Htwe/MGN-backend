@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('type');
             $table->string("icon")->nullable();
+            $table->string("meta")->nullable();
             $table->string("cover_photo")->nullable();
             $table->string("url");
             $table->timestamps();

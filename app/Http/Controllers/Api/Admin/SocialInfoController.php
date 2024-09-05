@@ -28,8 +28,13 @@ class SocialInfoController extends Controller
         ], 201);
     }
 
-    public function update(SocialInfoRequest $request, $id)
+    public function update(Request $request, $id)
     {
+
+        $request->validate([
+        ]);
+
+
         $socialInfo = $this->socialInfoRepo->update($id, $request->all());
         return response()->json([
             'success' => true,

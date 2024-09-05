@@ -4,6 +4,7 @@ namespace App\Repo\Admin\SocialInfo;
 
 use App\Enum\SocialInfoType;
 use App\Models\SocialInfo;
+use HydraStorage\HydraStorage\Service\Option\MediaOption;
 use HydraStorage\HydraStorage\Traits\HydraMedia;
 
 class SocialInfoRepo
@@ -40,13 +41,15 @@ class SocialInfoRepo
     public function update($id, $data)
     {
         $socialInfo = $this->model->findOrfail($id);
-
-        if (isset($data['cover_photo'])) {
-            $data['cover_photo'] = $this->storeMedia($data['cover_photo'], 'social_info');
-            $this->removeMedia(storage_path('app/public/social_info/' . $socialInfo->cover_photo));
+        if ($data['cover_photo']) {
+            $me = MediaOption::create()->setQuality(70)->get();
+            $data['cover_photo'] = $this->storeMedia($data['cover_photo'], 'social_info',true,$me);
+            $this->removeMedia('public/social_info/' . $socialInfo->cover_photo);
         }
 
-        return $socialInfo->update($data);
+        $socialInfo->update($data);
+
+        return $socialInfo;
     }
 
     public function delete($id)

@@ -68,7 +68,7 @@ Route::middleware(['auth:sanctum'])
     Route::controller(SocialInfoController::class)->group(function(){
         Route::get('/social-info','index')->name('social-info.index');
         Route::post('/social-info','store')->name('social-info.store');
-        Route::put('/social-info/{social_info}','update')->name('social-info.update');
+        Route::post('/social-info/update/{social_info}','update')->name('social-info.update');
         Route::post('/social-info/{social_info}','delete')->name('social-info.delete');
 
         Route::get('/social-info/banners','banners')->name('social-info.banners');

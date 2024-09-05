@@ -3,19 +3,21 @@
 namespace App\Models;
 
 use App\Enum\SocialInfoType;
+use HydraStorage\HydraStorage\Traits\HydraMedia;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class SocialInfo extends Model
 {
-    use HasFactory;
+    use HasFactory,HydraMedia;
 
     protected $fillable = [
         'name',
         'type',
         'icon',
         'cover_photo',
-        'url'
+        'url',
+        'meta'
     ];
 
     protected $casts = [
@@ -24,6 +26,6 @@ class SocialInfo extends Model
 
     public function getCoverPhotoAttribute($value)
     {
-        return $value ? asset('storage/social_info/banners/' . $value) : null;
+        return $this->getMedia($value,"public/social_info");
     }
 }

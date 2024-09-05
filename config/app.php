@@ -172,6 +172,7 @@ return [
         Spatie\Permission\PermissionServiceProvider::class,
         HydraStorage\HydraStorage\HydraStorageServiceProvider::class,
         WeStacks\TeleBot\Laravel\Providers\TeleBotServiceProvider::class,
+
     ])->toArray(),
 
     /*
