@@ -2,6 +2,7 @@
 
 use App\Console\Kernel;
 use Database\Seeders\AdminPermissionSeeder;
+use Tests\Support\TestStorage;
 
 /*
 |--------------------------------------------------------------------------

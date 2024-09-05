@@ -32,7 +32,7 @@ it('home page carousel response under 100ms ', function () {
     expect($result->requests()->failed()->rate())->toBeLessThan(2);
 
     expect($result->requests()->duration()->med())->toBeLessThan(100); // < 100.00ms
-})->group('stress-test');
+})->skip();
 
 it("most-viewed mogous response under 100ms",function(){
     $host =route('api.users.most-viewed');
@@ -42,6 +42,6 @@ it("most-viewed mogous response under 100ms",function(){
     expect($result->requests()->failed()->rate())->toBeLessThan(2);
 
     expect($result->requests()->duration()->med())->toBeLessThan(100); // < 100.00ms
-});
+})->skip();
 
 

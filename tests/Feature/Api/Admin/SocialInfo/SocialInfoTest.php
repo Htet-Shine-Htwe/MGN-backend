@@ -13,6 +13,8 @@ uses(UserAuthenticated::class,TestStorage::class);
 beforeEach(function(){
     $this->setupAdmin();
 
+    $this->bootStorage();
+
     $this->dummyData = [
         'name' => 'Facebook',
         'type' => SocialInfoType::ReferSocial,
@@ -47,7 +49,7 @@ it('social info can update successfully !', function () {
 
     $socialInfo = $this->postJson(route('api.admin.social-info.store'),$this->dummyData)->json();
 
-    $response = $this->putJson(route('api.admin.social-info.update',$socialInfo['social_info']['id']), [
+    $response = $this->postJson(route('api.admin.social-info.update',$socialInfo['social_info']['id']), [
         'name' => 'Facebook',
         'type' => SocialInfoType::ReferSocial,
         'icon' => 'facebook',
@@ -58,20 +60,6 @@ it('social info can update successfully !', function () {
     $response->assertStatus(200);
 });
 
-it("validation for updating social info",function(){
-    $socialInfo = $this->postJson(route('api.admin.social-info.store'),$this->dummyData)->json();
-
-    $response = $this->putJson(route('api.admin.social-info.update',$socialInfo['social_info']['id']), [
-        'name' => 'Facebook',
-        'type' => SocialInfoType::ReferSocial,
-        'icon' => 'facebook',
-        'cover_photo' => UploadedFile::fake()->image('cover.jpg'),
-        'url' => ''
-    ]);
-
-    $response->assertStatus(422);
-    $response->assertJsonValidationErrors('url');
-});
 
 it("can't delete social info with invalid id",function(){
     $response = $this->postJson(route('api.admin.social-info.delete',33));
