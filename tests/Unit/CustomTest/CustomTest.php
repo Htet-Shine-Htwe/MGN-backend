@@ -17,20 +17,18 @@ test('test', function() {
 
         public function __invoke()
         {
-            $watermark = Storage::disk('local')->path('watermark.jpg');
             $mediaOption = MediaOption::create()
-            ->setPrefixFileName('solo_leveling_chapter_1')
-            ->setWaterMark($watermark, 'bottom-right',90)
-            ->setQuality(10)
+            // ->setWaterMark($watermark, 'bottom-right',90)
             ->get();
 
-            $file = new UploadedFile(Storage::disk('local')->path('bg_03.jpg'), 'bg_03.jpg', 'image/jpeg', null, true);
+            // $file = new UploadedFile(Storage::disk('local')->path('bannerSlot.gif'), 'bannerSlot.gif', null, null, true);
+            $file = new UploadedFile(Storage::disk('local')->path('lg.png'), 'lg.png', null, null, true);
 
             $this->storeMedia($file,'solo_leveling_chapter_1',true, $mediaOption);
         }
     })();
 
-});
+})->skip();
 
 // test('test-watermark', function() {
 

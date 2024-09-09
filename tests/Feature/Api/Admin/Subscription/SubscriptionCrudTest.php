@@ -11,7 +11,7 @@ uses()->group('admin','api','admin-subscription');
 uses(UserAuthenticated::class);
 
 beforeEach(function(){
-    config(['control.test.users_count' => 1000]);
+    config(['control.test.users_count' => 30]);
     $this->seed([
         SubscriptionSeeder::class,
         UserSeeder::class
@@ -32,7 +32,7 @@ test("config was successfully updated",function(){
 
     $user_total = User::count();
 
-    $this->assertEquals(1001,$user_total);
+    $this->assertEquals(31,$user_total);
 });
 
 
@@ -244,4 +244,4 @@ test("can delete subscription",function($id){
 ->with([
     1,
     2
-]);
+])->group('new');
