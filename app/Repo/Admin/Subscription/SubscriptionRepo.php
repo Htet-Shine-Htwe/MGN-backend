@@ -58,7 +58,6 @@ class SubscriptionRepo implements ModelRepoInterface
 
     public function delete(Subscription $subscription) : bool
     {
-        sleep(2);
         return $subscription->delete();
     }
 
