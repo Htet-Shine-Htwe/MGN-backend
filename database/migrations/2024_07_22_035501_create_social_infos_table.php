@@ -18,7 +18,9 @@ return new class extends Migration
             $table->string("icon")->nullable();
             $table->string("meta")->nullable();
             $table->string("cover_photo")->nullable();
-            $table->string("url");
+            $table->string("text_url")->nullable();
+            $table->string("redirect_url");
+            $table->integer('active')->default(1);
             $table->timestamps();
         });
     }

@@ -29,6 +29,7 @@ Route::prefix('users')->name('users.')->group(function(){
         Route::get('/carousel','carousel')->name('carousel');
         Route::get('/most-viewed','mostViewed')->name('most-viewed');
         Route::get('/last-uploaded','lastUploaded')->name('last-uploaded');
+        Route::get('/banners','banners')->name('banners');
     });
 
     Route::controller(UserMogouController::class)->group(function(){

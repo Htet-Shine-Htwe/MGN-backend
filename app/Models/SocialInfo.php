@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enum\SocialInfoStatus;
 use App\Enum\SocialInfoType;
 use HydraStorage\HydraStorage\Traits\HydraMedia;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -15,17 +16,24 @@ class SocialInfo extends Model
         'name',
         'type',
         'icon',
+        'meta',
         'cover_photo',
-        'url',
-        'meta'
+        "text_url",
+        'redirect_url',
+        'active'
+    ];
+
+    protected $appends = [
+        'cover_photo_url'
     ];
 
     protected $casts = [
         'type' => SocialInfoType::class,
+        'active' => SocialInfoStatus::class
     ];
 
-    public function getCoverPhotoAttribute($value)
+    public function getCoverPhotoUrlAttribute()
     {
-        return $this->getMedia($value,"public/social_info");
+        return $this->getMedia($this->cover_photo,"public/social_info");
     }
 }
