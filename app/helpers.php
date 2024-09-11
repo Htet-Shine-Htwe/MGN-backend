@@ -44,3 +44,10 @@ if(!function_exists('generateSubMogouFolder'))
         return "$prefixFolder/$folder";
     }
 }
+
+
+if(!function_exists("enumValue")){
+    function enumValue($enum){
+        return $enum->value;
+    }
+}
