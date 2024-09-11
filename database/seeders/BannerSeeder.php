@@ -21,21 +21,20 @@ class BannerSeeder extends Seeder
                 'name' => 'Home Page Top Banner',
                 'cover_photo' => 'banner-1.gif',
                 'type' => SocialInfoType::Banner->value,
-                'url' => 'https://google.com'
+                'redirect_url' => 'https://google.com',
             ],
             [
                 'name' => "Home Page Bottom Banner",
                 'cover_photo' => 'banner-2.gif',
                 'type' => SocialInfoType::Banner->value,
-                'url' => 'https://google.com'
+                'redirect_url' => 'https://google.com'
 
             ],
             [
                 'name' => "Home Page Middle Banner",
                 'cover_photo' => 'banner-3.gif',
                 'type' => SocialInfoType::Banner->value,
-                'url' => 'https://google.com'
-
+                'redirect_url' => 'https://google.com'
             ],
         ];
 
