@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\Admin\AdminController;
 use App\Http\Controllers\Api\Admin\ApplicationConfigController;
 use App\Http\Controllers\Api\Admin\BotPublisherController;
 use App\Http\Controllers\Api\Admin\CategoryController;
+use App\Http\Controllers\Api\Admin\MogouChapterController;
 use App\Http\Controllers\Api\Admin\MogouController;
 use App\Http\Controllers\Api\Admin\SocialInfoController;
 use App\Http\Controllers\Api\Admin\SubMogouController;
@@ -57,6 +58,13 @@ Route::middleware(['auth:sanctum'])
         Route::post('/mogous/remove-category','unbindCategory')->name('mogous.removeCategory');
         Route::post('/mogous/{mogou}','update')->name('mogous.update');
         Route::post('/delete/mogous','delete')->name('mogous.delete');
+    });
+
+    Route::controller(MogouChapterController::class)->group(function(){
+        Route::get('/mogous/{mogou}/chapters','index')->name('mogou-chapters.index');
+        Route::post('/mogous/{mogou}/chapters','create')->name('mogou-chapters.store');
+        Route::post('/mogous/{mogou}/chapters/{chapter}','update')->name('mogou-chapters.update');
+        Route::post('/mogous/{mogou}/chapters/{chapter}/delete','delete')->name('mogou-chapters.delete');
     });
 
     Route::controller(SubMogouController::class)->group(function(){
