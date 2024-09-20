@@ -5,7 +5,7 @@ namespace App\Services\Partition;
 class TablePartition
 {
 
-    protected static int $current_locked = 2;
+    protected static int $current_locked = 3;
 
     protected array $rotationPrefix;
 

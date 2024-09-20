@@ -19,6 +19,11 @@ trait DbPartition
         }
     }
 
+    public function getCurrentPartition()
+    {
+        return $this->partition_prefix;
+    }
+
     public function firstOrCreate($table)
     {
         $this->checkTablePartition($table) ? : $this->createPartition();
@@ -29,7 +34,7 @@ trait DbPartition
         return  $rotation_key . '_' . $this->partition_prefix;
     }
 
-    public function createPartition(): void
+    public function createPartition(): string
     {
         $available_tables = TablePartition::availableRotationKey();
         $table_name = $this->partition_prefix;
@@ -40,18 +45,19 @@ trait DbPartition
 
             try {
                 DB::statement($sql);
-                // echo "Table {$table}_{$table_name} created successfully\n";
-                break;
+                return $table . "_" . $table_name;
             } catch (\Exception $e) {
                 if (str_contains($e->getMessage(), 'already exists')) {
-                    // echo "Table {$table}_{$table_name} already exists, trying the next one...\n";
                     continue;
                 } else {
                     throw $e;
                 }
             }
         }
+
+        throw new \Exception("Only " . count($available_tables) . " rotations are allowed for partitioning");
     }
+
 
 
     public function checkTablePartition(string $table):bool
