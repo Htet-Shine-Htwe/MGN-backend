@@ -34,19 +34,18 @@ class MogouRepo implements \App\Contracts\ModelRepoInterface {
         ->orderByRating()
         ->byFinishStatus()
         ->byMogouType()
-        ->byMogouTotalViewCount()
         ->year();
 
         return $this->collection;
     }
 
-    public function withLastFourChapters() : self {
-        $this->collection =  $this->collection->lastFourChapters();
+    public function withCategories() : self {
+        $this->collection = $this->collection->with( 'categories:id,title' );
         return $this;
     }
 
-    public function withCategories() : self {
-        $this->collection = $this->collection->with( 'categories:id,title' );
+    public function publishedOnly() : self {
+        $this->collection = $this->collection->publishedOnly(true);
         return $this;
     }
 

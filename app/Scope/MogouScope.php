@@ -2,18 +2,12 @@
 
 namespace App\Scope;
 
+use App\Enum\MogouFinishStatus;
 use App\Enum\MogouTypeEnum;
 
 trait MogouScope
 {
-    public function scopeLastFourChapters($query)
-    {
-        return $query->with(['subMogous' => function($q){
-            $q->select('id','chapter_number','mogou_id')
-                ->orderBy('id', 'desc')
-                ->limit(3);
-        }]);
-    }
+
 
     public function scopeOrderByRating($query)
     {
@@ -40,8 +34,20 @@ trait MogouScope
     public function scopeByFinishStatus($query)
     {
         $finishStatus = request()->input('finish_status');
+
         return $query->when($finishStatus, function($query) use ($finishStatus){
-            return $query->where('finish_status', $finishStatus);
+             if (is_string($finishStatus) && strpos($finishStatus, ',') !== false) {
+                $finishStatus = explode(',', $finishStatus);
+
+                foreach ($finishStatus as $key => $value) {
+                    $finishStatus[$key] = MogouFinishStatus::getFinishStatus($value);
+                }
+
+                return $query->whereIn('finish_status', $finishStatus);
+            }
+            else{
+                return $query->where('finish_status', MogouFinishStatus::getFinishStatus($finishStatus));
+            }
         });
     }
 
@@ -50,8 +56,18 @@ trait MogouScope
         $mogouType = request()->input('mogou_type');
 
         return $query->when($mogouType, function($query) use ($mogouType){
-            $mogouTypeValue = MogouTypeEnum::getMogouType($mogouType);
-            return $query->where('mogou_type', $mogouTypeValue);
+            if (is_string($mogouType) && strpos($mogouType, ',') !== false) {
+                $mogouType = explode(',', $mogouType);
+
+                foreach ($mogouType as $key => $value) {
+                    $mogouType[$key] = MogouTypeEnum::getMogouType($value);
+                }
+
+                return $query->whereIn('mogou_type', $mogouType);
+            }
+            else{
+                return $query->where('mogou_type', MogouTypeEnum::getMogouType($mogouType));
+            }
         });
     }
 
@@ -85,8 +101,11 @@ trait MogouScope
         });
     }
 
-    public function scopeByMogouTotalViewCount($query)
+    public function scopePublishedOnly($query,bool $strict = false)
     {
-
+        if($strict){
+            return $query->where('status', 1);
+        }
+        return $query;
     }
 }
