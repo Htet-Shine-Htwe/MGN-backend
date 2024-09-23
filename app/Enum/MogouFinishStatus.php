@@ -27,6 +27,15 @@ enum MogouFinishStatus :int implements SmartEnum
         ];
     }
 
+    public static function getFinishStatus(string $value): int
+    {
+        return match ($value) {
+            'Ongoing' => self::ONGOING->value,
+            'Completed' => self::COMPLETED->value,
+            'Dropped' => self::DROPPED->value,
+        };
+    }
+
     public static function getKey(MogouFinishStatus $value): string
     {
         return match ($value) {
