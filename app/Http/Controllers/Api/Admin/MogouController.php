@@ -22,25 +22,25 @@ class MogouController extends Controller
 
     public function index(Request $request)
     {
-
         $collection =  $this->mogouRepo
             ->withCategories()
-            ->withLastFourChapters()
             ->get($request);
 
-        $collection->each(function ($mogou) {
+        if ($request->has('mogou_total_count') == true) {
+            $collection->each(function ($mogou) {
 
-            $key = $mogou->rotation_key;
+                $key = $mogou->rotation_key;
 
-            if(request('mogou_total_count'))
-            {
-                $mogou->append('total_view_count');
-            }
+                if(request('mogou_total_count'))
+                {
+                    $mogou->append('total_view_count');
+                }
 
-            $subMogou = $mogou->subMogous($key)->select('title','views')->latest()->limit(3)->get();
+                $subMogou = $mogou->subMogous($key)->select('title','views')->latest()->limit(3)->get();
 
-            $mogou->setRelation('subMogous', $subMogou);
-        });
+                $mogou->setRelation('subMogous', $subMogou);
+            });
+        }
 
         return response()->json([
             'mogous' => $collection

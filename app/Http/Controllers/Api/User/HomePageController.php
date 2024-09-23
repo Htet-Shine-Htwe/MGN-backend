@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Api\User;
 
 use App\Enum\MogousStatus;
+use App\Enum\SocialInfoType;
 use App\Http\Controllers\Controller;
 use App\Models\Mogou;
+use App\Models\SocialInfo;
 use App\Repo\Admin\Mogou\MogouRepo;
 use Illuminate\Http\Request;
 
@@ -46,7 +48,7 @@ class HomePageController extends Controller
     {
         $collection =  $this->mogouRepo
             ->withCategories()
-            ->withLastFourChapters()
+            ->publishedOnly()
             ->get($request);
 
         $collection->each(function ($mogou) {
@@ -60,6 +62,15 @@ class HomePageController extends Controller
 
         return response()->json([
             'mogous' => $collection
+        ]);
+    }
+
+    public function banners()
+    {
+        $banners = SocialInfo::where('type',SocialInfoType::Banner->value)->get();
+
+        return response()->json([
+            'banners' => $banners
         ]);
     }
 }
