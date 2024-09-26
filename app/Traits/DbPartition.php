@@ -34,7 +34,7 @@ trait DbPartition
         return  $rotation_key . '_' . $this->partition_prefix;
     }
 
-    public function createPartition(): string
+    public function createPartition(): string | bool
     {
         $available_tables = TablePartition::availableRotationKey();
         $table_name = $this->partition_prefix;
@@ -54,8 +54,8 @@ trait DbPartition
                 }
             }
         }
-
-        throw new \Exception("Only " . count($available_tables) . " rotations are allowed for partitioning");
+        return false;
+        // throw new \Exception("Only " . count($available_tables) . " rotations are allowed for partitioning");
     }
 
 
