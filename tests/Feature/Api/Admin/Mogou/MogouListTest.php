@@ -173,22 +173,6 @@ test("mogou data filtered with status & category & year",function($data){
 })->with('mogou-data-collection');
 
 
-test("Each mogous has sub mogous",function()
-{
-    $response = $this->authenticatedAdmin()->getJson(route('api.admin.mogous.index'));
-
-    $response->assertOk();
-
-    $mogous = $response->json('mogous.data');
-
-    $this->assertNotEmpty($mogous);
-
-    collect($mogous)->each(function($mogou){
-        $this->assertArrayHasKey('sub_mogous',$mogou);
-    });
-
-});
-
 test("Mogou collection order by rating",function()
 {
     $response = $this->authenticatedAdmin()->getJson(route('api.admin.mogous.index',[

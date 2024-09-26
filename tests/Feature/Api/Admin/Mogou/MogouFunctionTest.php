@@ -32,11 +32,14 @@ test("Mogou total view is equal to its sub-mogou views",function(){
     $mogou = Mogou::first();  // Eager load the actual relationship
 
     $mogouTotalCount = $mogou->total_view_count;  // Get the total count
+    $rotation_key = $mogou->rotation_key;
 
-    $sub_mogous = (new SubMogou());
-    $sub_mogous->partition_prefix = $mogou->rotation_key . '_sub_mogous';
+    $sub_mogou = new SubMogou();
+    $table = $sub_mogou->getPartition($rotation_key);
 
-    $total_sub_mogou_views = $sub_mogous->where('mogou_id',$mogou->id)->sum('views');
+    $sub_mogou->setTable($table);
+
+    $total_sub_mogou_views = $sub_mogou->where('mogou_id',$mogou->id)->sum('views');
 
     $this->assertEquals($mogouTotalCount,$total_sub_mogou_views);
 });
@@ -47,10 +50,15 @@ test("Mogou total view is equal to its sub-mogou views on collection",function()
     $mogou->each(function($mogou){
         $mogouTotalCount = $mogou->total_view_count;  // Get the total count
 
-        $sub_mogous = (new SubMogou());
-        $sub_mogous->partition_prefix = $mogou->rotation_key . '_sub_mogous';
+        $mogouTotalCount = $mogou->total_view_count;  // Get the total count
+        $rotation_key = $mogou->rotation_key;
 
-        $total_sub_mogou_views = $sub_mogous->where('mogou_id',$mogou->id)->sum('views');
+        $sub_mogou = new SubMogou();
+        $table = $sub_mogou->getPartition($rotation_key);
+
+        $sub_mogou->setTable($table);
+
+        $total_sub_mogou_views = $sub_mogou->where('mogou_id',$mogou->id)->sum('views');
 
         $this->assertEquals($mogouTotalCount,$total_sub_mogou_views);
     });

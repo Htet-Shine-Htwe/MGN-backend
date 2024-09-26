@@ -2,7 +2,7 @@
 
 use App\Enum\SocialInfoType;
 use Illuminate\Http\UploadedFile;
-use Illuminate\Support\Facades\Storage;
+
 use Tests\Support\TestStorage;
 use Tests\Support\UserAuthenticated;
 
@@ -20,7 +20,7 @@ beforeEach(function(){
         'type' => SocialInfoType::ReferSocial,
         'icon' => 'facebook',
         'cover_photo' => UploadedFile::fake()->image('cover.jpg'),
-        'url' => 'https://facebook.com'
+        'redirect_url' => 'https://facebook.com'
     ];
 });
 
@@ -38,11 +38,11 @@ it('new social info can create successfully !', function () {
 });
 
 it("validation for creating new social info",function(){
-    $this->dummyData['url'] = '';
+    $this->dummyData['redirect_url'] = '';
     $response = $this->postJson(route('api.admin.social-info.store'), $this->dummyData);
 
     $response->assertStatus(422);
-    $response->assertJsonValidationErrors('url');
+    $response->assertJsonValidationErrors('redirect_url');
 });
 
 it('social info can update successfully !', function () {
@@ -54,7 +54,7 @@ it('social info can update successfully !', function () {
         'type' => SocialInfoType::ReferSocial,
         'icon' => 'facebook',
         'cover_photo' => UploadedFile::fake()->image('cover.jpg'),
-        'url' => 'https://facebook.com'
+        'redirect_url' => 'https://facebook.com'
     ]);
 
     $response->assertStatus(200);
@@ -82,7 +82,7 @@ it("can create social info start banner",function(){
         'type' => SocialInfoType::Banner,
         'icon' => 'facebook',
         'cover_photo' => UploadedFile::fake()->image('cover.jpg'),
-        'url' => 'https://facebook.com'
+        'redirect_url' => 'https://facebook.com'
     ]);
 
     $response->assertStatus(201);
