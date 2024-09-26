@@ -48,10 +48,15 @@ class SubMogou extends Model
 
         static::creating(function($sub_mogou){
             $sub_mogou->slug = Str::slug($sub_mogou->title);
+            Mogou::where('id',$sub_mogou->mogou_id)->increment('total_chapters');
         });
 
         static::updating(function($sub_mogou){
             $sub_mogou->slug = Str::slug($sub_mogou->title);
+        });
+
+        static::deleting(function($sub_mogou){
+            Mogou::where('id',$sub_mogou->mogou_id)->decrement('total_chapters');
         });
     }
 
@@ -78,12 +83,18 @@ class SubMogou extends Model
     }
 
 
-    public function mogou_images()
+    public function images(string $table_name="alpha")
     {
-        return $this->hasMany(SubMogouImage::class);
+        $instance = new SubMogouImage;
+        // $table_name = "beta";
+        $instance->setTable($table_name."_sub_mogou_images");
+
+        return $this->newHasMany(
+            $instance->newQuery(),$this,$instance->getTable().'.sub_mogou_id','id'
+        );
     }
 
-    public function newRelatedInstance($class)
+    public function newRelatedInstance($class): object
     {
         $instance = new $class;
 

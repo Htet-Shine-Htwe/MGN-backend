@@ -31,6 +31,7 @@ class Mogou extends Model
         'rating',
         'released_year',
         'released_at',
+        'total_chapters',
     ];
 
     protected $casts = [
@@ -103,7 +104,7 @@ class Mogou extends Model
         return $this->belongsToMany(Category::class, 'mogous_categories');
     }
 
-    public function subMogous($table_name="alpha")
+    public function subMogous(string $table_name="alpha")
     {
         $instance = new SubMogou();
         $instance->setTable($table_name."_sub_mogous");
