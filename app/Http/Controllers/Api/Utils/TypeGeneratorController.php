@@ -13,15 +13,19 @@ class TypeGeneratorController extends Controller
     {
         $random_user_name = $this->generateRandomString();
 
-        if(User::where('name', $random_user_name)->exists() ) return $this->generate();
+        if(User::where('name', $random_user_name)->exists() ) { return $this->generate();
+        }
 
-        return response()->json([
+        return response()->json(
+            [
             'random_user_name' => $random_user_name
-        ]);
+            ]
+        );
     }
 
-    private function generateRandomString() {
-        return \Faker\Factory::create()->unique()->name .rand(100,999);
+    private function generateRandomString()
+    {
+        return \Faker\Factory::create()->unique()->name .rand(100, 999);
     }
 
 }

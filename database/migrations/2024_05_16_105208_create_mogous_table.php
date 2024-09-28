@@ -24,6 +24,7 @@ return new class extends Migration
             $table->smallInteger('legal_age')->default(0);
             $table->smallInteger('rating')->default(0);
             $table->smallInteger('mogou_type')->default(0);
+            $table->integer('total_chapters')->default(0);
             $table->year('released_year')->nullable();
             $table->timestamp('released_at')->nullable();
             $table->timestamps();

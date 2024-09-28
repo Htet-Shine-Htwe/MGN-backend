@@ -20,41 +20,51 @@ class AdminController extends Controller
     {
         $roles = $this->alphaRole->setGuard('admin')->getRoles();
 
-        return response()->json([
+        return response()->json(
+            [
             'roles' => $roles
-        ]);
+            ]
+        );
     }
 
     public function createRole(Request $request)
     {
-        $request->validate([
+        $request->validate(
+            [
             'name' => 'required|string',
             'permissions' => 'array'
-        ]);
+            ]
+        );
 
-        $role = $this->alphaRole->setGuard('admin')->createRole($request->name,$request->permissions);
+        $role = $this->alphaRole->setGuard('admin')->createRole($request->name, $request->permissions);
 
-        return response()->json([
+        return response()->json(
+            [
             'role' => $role,
             'message' => 'Role created successfully',
-        ], 201);
+            ], 201
+        );
     }
 
     public function permissions(Request $request)
     {
         $permissions = $this->alphaRole->setGuard('admin')->getPermissions();
 
-        return response()->json([
+        return response()->json(
+            [
             'permissions' => $permissions
-        ]);
+            ]
+        );
     }
 
     public function members(Request $request)
     {
         $members =  Admin::with('roles')->get();
 
-        return response()->json([
+        return response()->json(
+            [
             'members' => $members
-        ]);
+            ]
+        );
     }
 }

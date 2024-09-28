@@ -46,24 +46,30 @@ class SubMogou extends Model
 
         static::dbConstructing();
 
-        static::creating(function($sub_mogou){
-            $sub_mogou->slug = Str::slug($sub_mogou->title);
-            Mogou::where('id',$sub_mogou->mogou_id)->increment('total_chapters');
-        });
+        static::creating(
+            function ($sub_mogou) {
+                $sub_mogou->slug = Str::slug($sub_mogou->title);
+                Mogou::where('id', $sub_mogou->mogou_id)->increment('total_chapters');
+            }
+        );
 
-        static::updating(function($sub_mogou){
-            $sub_mogou->slug = Str::slug($sub_mogou->title);
-        });
+        static::updating(
+            function ($sub_mogou) {
+                $sub_mogou->slug = Str::slug($sub_mogou->title);
+            }
+        );
 
-        static::deleting(function($sub_mogou){
-            Mogou::where('id',$sub_mogou->mogou_id)->decrement('total_chapters');
-        });
+        static::deleting(
+            function ($sub_mogou) {
+                Mogou::where('id', $sub_mogou->mogou_id)->decrement('total_chapters');
+            }
+        );
     }
 
     public function getFullCoverPathAttribute()
     {
         // return asset('storage/'.generateStorageFolder("sub_mogou",$this->slug.'/cover') . '/' . $this->cover);
-        return $this->getMedia(generateStorageFolder("sub_mogou",$this->slug.'/cover') . '/' . $this->cover);
+        return $this->getMedia(generateStorageFolder("sub_mogou", $this->slug.'/cover') . '/' . $this->cover);
     }
 
     public function getCreatedAtAttribute($value)
@@ -90,7 +96,7 @@ class SubMogou extends Model
         $instance->setTable($table_name."_sub_mogou_images");
 
         return $this->newHasMany(
-            $instance->newQuery(),$this,$instance->getTable().'.sub_mogou_id','id'
+            $instance->newQuery(), $this, $instance->getTable().'.sub_mogou_id', 'id'
         );
     }
 

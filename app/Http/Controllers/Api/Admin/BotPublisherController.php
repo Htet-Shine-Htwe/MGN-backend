@@ -15,25 +15,30 @@ class BotPublisherController extends Controller
     public function index()
     {
         $bots = BotPublisher::all();
-        return response()->json([
+        return response()->json(
+            [
             'success' => true,
             'data' => $bots
-        ]);
+            ]
+        );
     }
 
 
     public function store(StoreBotPublisherRequest $request)
     {
-        return tryCatch(function() use ($request){
-            $bot = CreateBot::create($request->validated());
+        return tryCatch(
+            function () use ($request) {
+                $bot = CreateBot::create($request->validated());
 
-            return response()->json([
-                'message' => "Bot was created Successfully",
-                'bot' => $bot
-            ]);
-        },
-        "Failed to generate new bot"
-    );
+                return response()->json(
+                    [
+                    'message' => "Bot was created Successfully",
+                    'bot' => $bot
+                    ]
+                );
+            },
+            "Failed to generate new bot"
+        );
     }
 
     /**

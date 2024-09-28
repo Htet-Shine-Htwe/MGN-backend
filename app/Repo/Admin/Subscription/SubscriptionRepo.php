@@ -20,7 +20,7 @@ class SubscriptionRepo implements ModelRepoInterface
 
     public function getOne($subscription)
     {
-        return Subscription::where('id',$subscription)->firstOrFail();
+        return Subscription::where('id', $subscription)->firstOrFail();
     }
 
     public function collection() : mixed
@@ -40,18 +40,22 @@ class SubscriptionRepo implements ModelRepoInterface
 
     public function create(SubscriptionActionRequest $request) : Subscription
     {
-        $request->validate([
+        $request->validate(
+            [
             'title' => 'unique:subscriptions,title'
-        ]);
+            ]
+        );
 
         return Subscription::create($request->validated());
     }
 
     public function update(SubscriptionActionRequest $request, Subscription $subscription) : Subscription
     {
-        $request->validate([
+        $request->validate(
+            [
             'title' => 'unique:subscriptions,title,'.$subscription->id
-        ]);
+            ]
+        );
         $subscription->update($request->validated());
         return $subscription;
     }

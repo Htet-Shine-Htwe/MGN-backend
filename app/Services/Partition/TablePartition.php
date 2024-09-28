@@ -5,7 +5,7 @@ namespace App\Services\Partition;
 class TablePartition
 {
 
-    protected static int $current_locked = 3;
+    protected static int $current_locked = 2;
 
     protected array $rotationPrefix;
 
@@ -23,7 +23,7 @@ class TablePartition
 
     public static function availableRotationKey()
     {
-        return array_slice(self::getRotationKeys(),0,self::$current_locked);
+        return array_slice(self::getRotationKeys(), 0, self::$current_locked);
     }
 
     public static function getRandomRotationKey()

@@ -29,6 +29,6 @@ class TelegramBotPublisher implements  PublisherInterface
 
     public function individualChannel(string $channel_id) : SingleChannel
     {
-        return new SingleChannel($this->serviceBot,$channel_id);
+        return new SingleChannel($this->serviceBot, $channel_id);
     }
 }

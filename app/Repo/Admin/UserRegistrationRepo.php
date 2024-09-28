@@ -12,9 +12,11 @@ class UserRegistrationRepo
 {
     public static function registerUser(UserRegistrationRequest $request) :User
     {
-        $request->validate([
+        $request->validate(
+            [
             'email' => 'unique:users,email'
-        ]);
+            ]
+        );
 
         $data = $request->validated();
         $data = self::mutateDataSubscription($data);
@@ -34,35 +36,39 @@ class UserRegistrationRepo
 
     public function show(string $id)
     {
-        return User::where('user_code',$id)
+        return User::where('user_code', $id)
         ->firstOrFail();
     }
 
     public function updateUser(UserRegistrationRequest $request,string $id) :User
     {
 
-        $request->validate([
+        $request->validate(
+            [
             'email' => 'unique:users,email,'.$id
-        ]);
+            ]
+        );
 
         $data = $request->validated();
-        $user = User::where('user_code',$id)->firstOrFail();
+        $user = User::where('user_code', $id)->firstOrFail();
 
-        UserSubscription::create([
+        UserSubscription::create(
+            [
             'user_id' => $user->id,
             'subscription_id' => $data['current_subscription_id'],
-        ]);
+            ]
+        );
 
 
-        $data = self::updateDataSubscription($data,$user);
+        $data = self::updateDataSubscription($data, $user);
         $user->update($data);
         return $user;
     }
 
     protected static function mutateDataSubscription($data)
     {
-        if(isset($data['current_subscription_id'])){
-            $end_date = Subscription::where('id',$data['current_subscription_id'])->first()->max;
+        if(isset($data['current_subscription_id'])) {
+            $end_date = Subscription::where('id', $data['current_subscription_id'])->first()->max;
 
 
 
@@ -74,13 +80,15 @@ class UserRegistrationRepo
     protected static function updateDataSubscription($data,$user)
     {
 
-        if($user->current_subscription_id != $data['current_subscription_id']){
-            $end_date = Subscription::where('id',$data['current_subscription_id'])->first()->max;
+        if($user->current_subscription_id != $data['current_subscription_id']) {
+            $end_date = Subscription::where('id', $data['current_subscription_id'])->first()->max;
 
-            UserSubscription::create([
+            UserSubscription::create(
+                [
                 'user_id' => $user->id,
                 'subscription_id' => $data['current_subscription_id'],
-            ]);
+                ]
+            );
 
             $data['subscription_end_date'] = now()->addDays($end_date);
         }

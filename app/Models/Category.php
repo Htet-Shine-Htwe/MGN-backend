@@ -19,13 +19,17 @@ class Category extends Model
     {
         parent::boot();
 
-        static::creating(function($category){
-            $category->slug = Str::slug($category->title);
-        });
+        static::creating(
+            function ($category) {
+                $category->slug = Str::slug($category->title);
+            }
+        );
 
-        static::updating(function($category){
-            $category->slug = Str::slug($category->title);
-        });
+        static::updating(
+            function ($category) {
+                $category->slug = Str::slug($category->title);
+            }
+        );
     }
 
     public function scopeSearch($query, $search)
@@ -40,17 +44,21 @@ class Category extends Model
 
     public function scopeWithMogousCount($query)
     {
-        return $query->when(request('with_mogous_count'), function($query){
-            return $query->withCount('mogous');
-        });
+        return $query->when(
+            request('with_mogous_count'), function ($query) {
+                return $query->withCount('mogous');
+            }
+        );
     }
 
     public function scopeOrderByMogousCount($query)
     {
-        return $query->when(request('order_by_mogous_count'), function($query){
-            return $query->withCount('mogous')->orderBy('mogous_count', request('order_by_mogous_count'))
-            ->orderBy('id', 'desc');
-        });
+        return $query->when(
+            request('order_by_mogous_count'), function ($query) {
+                return $query->withCount('mogous')->orderBy('mogous_count', request('order_by_mogous_count'))
+                    ->orderBy('id', 'desc');
+            }
+        );
     }
 
 }

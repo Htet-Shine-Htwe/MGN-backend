@@ -22,42 +22,52 @@ class SocialInfoController extends Controller
     public function store(SocialInfoRequest $request)
     {
         $socialInfo = $this->socialInfoRepo->create($request->all());
-        return response()->json([
+        return response()->json(
+            [
             'success' => true,
             'social_info' => $socialInfo
-        ], 201);
+            ], 201
+        );
     }
 
     public function update(Request $request, $id)
     {
 
-        $request->validate([
-        ]);
+        $request->validate(
+            [
+            ]
+        );
 
 
         $socialInfo = $this->socialInfoRepo->update($id, $request->all());
-        return response()->json([
+        return response()->json(
+            [
             'success' => true,
             'social_info' => $socialInfo
-        ], 200);
+            ], 200
+        );
     }
 
     public function delete(Request $request,$id)
     {
          $this->socialInfoRepo->delete($id);
 
-        return response()->json([
+        return response()->json(
+            [
             'success' => true,
-        ], 200);
+            ], 200
+        );
     }
 
 
     public function banners(Request $request)
     {
         $banners = $this->socialInfoRepo->getBanners();
-        return response()->json([
+        return response()->json(
+            [
             'success' => true,
             'social_info' => $banners
-        ], 200);
+            ], 200
+        );
     }
 }

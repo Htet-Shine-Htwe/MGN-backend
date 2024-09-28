@@ -5,9 +5,9 @@ namespace Database\Factories;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\SubMogouImage>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Report>
  */
-class SubMogouImageFactory extends Factory
+class ReportFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -17,9 +17,7 @@ class SubMogouImageFactory extends Factory
     public function definition(): array
     {
         return [
-            'sub_mogou_id' => rand(),
-            'path' => 'image.jpg',
-            'page_number' => rand()
+            //
         ];
     }
 }

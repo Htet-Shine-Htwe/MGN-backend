@@ -12,7 +12,7 @@ class ExtractZipService
     {
         $zip = new \ZipArchive;
         $res = $zip->open($zipFile);
-        if ($res === TRUE) {
+        if ($res === true) {
             $zip->extractTo($destination);
             $zip->close();
             return true;

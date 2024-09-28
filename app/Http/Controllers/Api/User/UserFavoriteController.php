@@ -16,9 +16,11 @@ class UserFavoriteController extends Controller
 
     public function index(Request $request)
     {
-        return response()->json([
+        return response()->json(
+            [
             'favorites' => $this->userFavoriteRepo->getFavorites()
-        ]);
+            ]
+        );
     }
 
     public function create(UserFavoriteRequest $request)

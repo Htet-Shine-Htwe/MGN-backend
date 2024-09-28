@@ -16,6 +16,7 @@ trait UserAuthenticated
     public function setupUser(array $body = [])
     {
         $this->user = User::factory()->create($body);
+
         return $this->authenticated($this->user);
     }
 

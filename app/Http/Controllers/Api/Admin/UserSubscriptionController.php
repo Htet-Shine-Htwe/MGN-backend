@@ -14,8 +14,7 @@ class UserSubscriptionController extends Controller
     public function __construct(
         protected UserRegistrationRepo $userRegistrationRepo,
         protected UserSubscriptionRepo $userSubscriptionRepo
-    )
-    {
+    ) {
     }
 
     public function index(Request $request) :JsonResponse
@@ -24,31 +23,41 @@ class UserSubscriptionController extends Controller
 
 
 
-        return response()->json([
+        return response()->json(
+            [
             'users' => $users
-        ]);
+            ]
+        );
     }
 
     public function create(UserRegistrationRequest $request) :JsonResponse
     {
-       return tryCatch(function() use($request){
-            $user =  $this->userRegistrationRepo->registerUser($request);
-            return response()->json([
-                'message' => 'User registered successfully',
-                'user' => $user
-            ]);
-        });
+        return tryCatch(
+            function () use ($request) {
+                $user =  $this->userRegistrationRepo->registerUser($request);
+                return response()->json(
+                    [
+                    'message' => 'User registered successfully',
+                    'user' => $user
+                    ]
+                );
+            }
+        );
     }
 
     public function update(UserRegistrationRequest $request) :JsonResponse
     {
         $id = $request->input('user_code');
-        return tryCatch(function() use($request,$id){
-            $this->userRegistrationRepo->updateUser($request,$id);
-            return response()->json([
-                'message' => 'User updated successfully'
-            ]);
-        },'User update failed');
+        return tryCatch(
+            function () use ($request,$id) {
+                $this->userRegistrationRepo->updateUser($request, $id);
+                return response()->json(
+                    [
+                    'message' => 'User updated successfully'
+                    ]
+                );
+            }, 'User update failed'
+        );
     }
 
     public function show(Request $request) :JsonResponse
@@ -57,18 +66,22 @@ class UserSubscriptionController extends Controller
 
         $user_subscriptions = $this->userSubscriptionRepo->setUser($user->user_code)->subscriptions();
 
-        return response()->json([
+        return response()->json(
+            [
             'user' => $user,
             'subscriptions' => $user_subscriptions
-        ]);
+            ]
+        );
     }
 
     public function subscriptions(string $user_code) :JsonResponse
     {
         $user_subscriptions = $this->userSubscriptionRepo->setUser($user_code)->subscriptions();
 
-        return response()->json([
+        return response()->json(
+            [
             'subscriptions' => $user_subscriptions
-        ]);
+            ]
+        );
     }
 }

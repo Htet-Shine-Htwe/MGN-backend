@@ -26,10 +26,12 @@ class UserFavoriteRepo
             return false;
         }
 
-        UserFavorite::create([
+        UserFavorite::create(
+            [
             'user_id' => $this->user->id,
             'mogou_id' => $mogou_id
-        ]);
+            ]
+        );
 
         return true;
     }

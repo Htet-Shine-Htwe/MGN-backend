@@ -28,12 +28,16 @@ class AuthRequestThrottle
 
         $seconds = RateLimiter::availableIn($this->key);
 
-        throw ValidationException::withMessages([
-            'message' => trans('auth.throttle', [
+        throw ValidationException::withMessages(
+            [
+            'message' => trans(
+                'auth.throttle', [
                 'seconds' => $seconds,
                 'minutes' => ceil($seconds / 60),
-            ]),
-        ]);
+                ]
+            ),
+            ]
+        );
     }
 
     /**

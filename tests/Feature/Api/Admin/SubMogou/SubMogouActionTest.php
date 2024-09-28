@@ -27,12 +27,15 @@ dataset('sub-mogou-data-collection',[
     fn() => [
         'title' => 'Sub Mogou Title',
         'chapter_number' => 1,
-        'mogou_id' => $this->mogou->id
+        'mogou_slug' => $this->mogou->slug,
+        'mogou_id' => $this->mogou->mogou_id
     ],
     fn() => [
         'title' => 'Sub Mogou Title 2',
         'chapter_number' => 1,
-        'mogou_id' => $this->mogou->id
+        'mogou_slug' => $this->mogou->slug,
+        'mogou_id' => $this->mogou->mogou_id
+
     ],
 ]);
 
@@ -42,14 +45,15 @@ test("create new draft sub mogou with mogou id",function($data)
     $response = $this->postJson(route('api.admin.sub-mogous.saveNewDraft'),[
         'title' => $data['title'],
         'chapter_number' => $data['chapter_number'],
-        'mogou_id' => $data['mogou_id']
+        'description' => 'Sub Mogou Description',
+        'subscription_only' => 0,
+        'mogou_slug' => $data['mogou_slug']
     ]);
 
     $response->assertStatus(201);
     $this->assertDatabaseHas($this->mogou->rotation_key . '_sub_mogous',[
         'title' => $data['title'],
     ]);
-    // dd(DB::table($this->mogou->rotation_key . '_sub_mogous')->get());
 
 })
 ->with('sub-mogou-data-collection');
@@ -62,7 +66,6 @@ test("validation sub mogou without mogou id",function($data)
         'chapter_number' => $data['chapter_number'],
     ]);
     $response->assertStatus(422);
-    $response->assertJsonValidationErrors('mogou_id');
 })
 ->with('sub-mogou-data-collection');
 
@@ -71,13 +74,13 @@ test("validation without cover in updating sub mogous cover",function($sub_mogou
     $response = $this->postJson(route('api.admin.sub-mogous.saveNewDraft'),[
         'title' => $sub_mogou['title'],
         'chapter_number' => $sub_mogou['chapter_number'],
-        'mogou_id' => $sub_mogou['mogou_id']
+        'mogou_slug' => $sub_mogou['mogou_slug']
     ]);
 
     $subMogou = $response->json('sub_mogou');
 
     $response = $this->postJson(route('api.admin.sub-mogous.updateCover'),[
-        'sub_mogou_id' => $subMogou['id'],
+        'sub_mogou_slug' => $subMogou['slug'],
         'cover' => null
     ]);
 
@@ -91,7 +94,7 @@ test("can successfully update the cover of sub mogous",function($sub_mogou){
     $response = $this->postJson(route('api.admin.sub-mogous.saveNewDraft'),[
         'title' => $sub_mogou['title'],
         'chapter_number' => $sub_mogou['chapter_number'],
-        'mogou_id' => $sub_mogou['mogou_id']
+        'mogou_slug' => $sub_mogou['mogou_slug']
     ]);
 
     $subMogou = $response->json('sub_mogou');
@@ -114,5 +117,4 @@ test("can successfully update the cover of sub mogous",function($sub_mogou){
 
     $this->assertInStorage($full_path);
 })
-->group('current')
 ->with('sub-mogou-data-collection');

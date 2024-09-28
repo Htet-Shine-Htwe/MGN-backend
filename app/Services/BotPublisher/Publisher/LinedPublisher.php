@@ -6,7 +6,8 @@ use App\Contracts\PublisherInterface;
 
 class LinedPublisher
 {
-    public function __construct(protected PublisherInterface $publisher){
+    public function __construct(protected PublisherInterface $publisher)
+    {
 
     }
 

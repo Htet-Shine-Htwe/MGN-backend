@@ -20,6 +20,7 @@ return new class extends Migration
             $table->timestamp('subscription_end_date')->nullable();
             $table->string('user_code',125)->unique();
             $table->string('password');
+            $table->timestamp('last_login_at')->nullable();
             $table->rememberToken();
             $table->timestamps();
 

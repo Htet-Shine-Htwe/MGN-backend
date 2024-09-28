@@ -33,13 +33,11 @@ class AlphaRole
     public function createRole(array|string $roles,?array $permissons = null ):  Collection|Role
     {
         $collection = [];
-        if(is_array($roles))
-        {
+        if(is_array($roles)) {
             foreach($roles as $role)
             {
                 $new_role = Role::create(['name' => $role, 'guard_name' => $this->guard]);
-                if($permissons)
-                {
+                if($permissons) {
                     $new_role->syncPermissions($permissons);
                 }
                 $collection[] = $new_role;
@@ -49,8 +47,7 @@ class AlphaRole
         else{
             $new_role = Role::create(['name' => $roles, 'guard_name' => $this->guard]);
 
-            if($permissons)
-            {
+            if($permissons) {
                 $new_role->syncPermissions($permissons);
             }
 

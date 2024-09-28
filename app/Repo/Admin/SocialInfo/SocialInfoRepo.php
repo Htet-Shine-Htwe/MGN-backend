@@ -41,7 +41,7 @@ class SocialInfoRepo
     {
         $socialInfo = $this->model->findOrfail($id);
         if (isset($data['cover_photo'])) {
-            $data['cover_photo'] = $this->storeMedia($data['cover_photo'], 'social_info',false);
+            $data['cover_photo'] = $this->storeMedia($data['cover_photo'], 'social_info', false);
             $this->removeMedia('public/social_info/' . $socialInfo->cover_photo);
             $socialInfo->text_url = null;
         }

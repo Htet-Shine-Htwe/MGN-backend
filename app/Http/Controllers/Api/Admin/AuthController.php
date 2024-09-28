@@ -16,14 +16,14 @@ class AuthController extends Controller
         $process =  new \App\Services\Auth\Authentication($request);
 
 
-        return $process->returnResponse('api')->signIn('admin','');
+        return $process->returnResponse('api')->signIn('admin', '');
     }
 
     public function changePassword(ChangePasswordRequest $request)
     {
         $process =  new \App\Services\Auth\Authentication($request);
 
-        return $process->returnResponse('api')->changePassword((new Admin),$request);
+        return $process->returnResponse('api')->changePassword((new Admin), $request);
     }
 
     public function logout(Request $request)

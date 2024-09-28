@@ -9,7 +9,7 @@ class DataClient
     {
         $client = app('MangaTestClient');
 
-        $response = $client->get('manga/top/all' );
+        $response = $client->get('manga/top/all');
 
         return json_decode($response->getBody()->getContents(), true);
     }

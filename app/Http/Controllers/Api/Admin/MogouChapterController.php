@@ -15,8 +15,7 @@ class MogouChapterController extends Controller
     public function __construct(
         protected readonly MogouChapterRepo $mogouChapterRepo,
         protected readonly SubMogouActionRepo $subMogouActionRepo
-    )
-    {
+    ) {
 
     }
 
@@ -26,9 +25,11 @@ class MogouChapterController extends Controller
 
         $mogouChapters = $subMogouQuery->paginate(10);
 
-        return response()->json([
+        return response()->json(
+            [
             'mogou_chapters' => $mogouChapters
-        ]);
+            ]
+        );
     }
 
     public function chapterAnalysis(Request $request)
@@ -52,9 +53,11 @@ class MogouChapterController extends Controller
             ]
         ];
 
-        return response()->json([
+        return response()->json(
+            [
             'chapter_analysis' => $res
-        ]);
+            ]
+        );
 
     }
 }

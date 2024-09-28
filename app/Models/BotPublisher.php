@@ -32,7 +32,7 @@ class BotPublisher extends Model
 
     public function getBotTypeAttribute()
     {
-        if($this->type){
+        if($this->type) {
             return SocialMediaType::getKey($this->type);
         }
     }

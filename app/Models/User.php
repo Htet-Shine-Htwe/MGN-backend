@@ -24,7 +24,8 @@ class User extends Authenticatable
         'password',
         'user_code',
         'current_subscription_id',
-        'subscription_end_date'
+        'subscription_end_date' ,
+        'last_login_at'
     ];
 
     // appends
@@ -61,10 +62,12 @@ class User extends Authenticatable
     {
         parent::boot();
 
-        static::creating(function($user){
-            // with current time and unique id
-            $user->user_code = time() . uniqid();
-        });
+        static::creating(
+            function ($user) {
+                // with current time and unique id
+                $user->user_code = time() . uniqid();
+            }
+        );
     }
 
     /*
@@ -73,7 +76,7 @@ class User extends Authenticatable
 
     public function subscription()
     {
-        return $this->belongsTo(Subscription::class,'current_subscription_id','id');
+        return $this->belongsTo(Subscription::class, 'current_subscription_id', 'id');
     }
 
     public function subscriptions()
@@ -86,33 +89,33 @@ class User extends Authenticatable
         return $this->hasMany(UserFavorite::class);
     }
 
-
-    /**
-     * Scope a query to search users
-     *
-     */
-
     public function scopeSearch($query,$search) : Builder
     {
-        return $query->when($search, function($query,$search){
-            return $query->where('name','like','%'.$search.'%')
-            ->orWhere('email','like','%'.$search.'%');
-        });
+        return $query->when(
+            $search, function ($query,$search) {
+                return $query->where('name', 'like', '%'.$search.'%')
+                    ->orWhere('email', 'like', '%'.$search.'%');
+            }
+        );
     }
 
     public function scopeFilter($query,$filter) : Builder
     {
-        return $query->when($filter, function($query,$filter){
-            return $query->where('current_subscription_id',$filter);
-        });
+        return $query->when(
+            $filter, function ($query,$filter) {
+                return $query->where('current_subscription_id', $filter);
+            }
+        );
     }
 
     public function scopeExpiredSubscription($query,$expired) : Builder
     {
-        return $query->when($expired,function($query) use ($expired){
+        return $query->when(
+            $expired, function ($query) use ($expired) {
 
-            return $query->where('subscription_end_date','<',now());
-        });
+                return $query->where('subscription_end_date', '<', now());
+            }
+        );
     }
 
     public function getSubscriptionNameAttribute() : string | null

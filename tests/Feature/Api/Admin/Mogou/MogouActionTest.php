@@ -28,7 +28,6 @@ beforeEach(function(){
         'description',
         'author',
         'cover',
-        'status',
         'finish_status',
         'legal_age',
         'rating',
@@ -69,7 +68,6 @@ test("create mogou body validation",function()
     $response->assertJsonValidationErrors([
         'title',
         'description',
-        'status',
     ]);
 });
 
@@ -81,7 +79,6 @@ test("prevent creating mogou with invalid status and invalid finish status",func
     $response = $this->authenticatedAdmin()->postJson(route('api.admin.mogous.store'),$mogou_data);
     $response->assertStatus(422);
     $response->assertJsonValidationErrors([
-        'status',
         'finish_status'
     ]);
 })

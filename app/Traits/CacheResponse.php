@@ -19,7 +19,7 @@ trait CacheResponse
         if ($data === null) {
             $process = $callback;
 
-            return Cache::remember($key, $minutes,$process);
+            return Cache::remember($key, $minutes, $process);
 
         }
         return $data;

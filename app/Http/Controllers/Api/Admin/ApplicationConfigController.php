@@ -16,9 +16,11 @@ class ApplicationConfigController extends Controller
     {
 
         $key = $this->generateCacheKey('application_config');
-        $app = $this->cacheResponse($key, 300, function () {
-            return ApplicationConfig::first();
-        });
+        $app = $this->cacheResponse(
+            $key, 300, function () {
+                return ApplicationConfig::first();
+            }
+        );
 
         return response()->json($app);
     }

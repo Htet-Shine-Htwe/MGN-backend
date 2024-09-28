@@ -62,6 +62,7 @@ Route::middleware(['auth:sanctum'])
 
     Route::controller(MogouChapterController::class)->group(function(){
         Route::get('/mogous/{mogou}/chapters','index')->name('mogou-chapters.index');
+        Route::get("/mogous/{mogou}/analysis",'chapterAnalysis')->name('mogou-chapters.chapterAnalysis');
         Route::post('/mogous/{mogou}/chapters','create')->name('mogou-chapters.store');
         Route::post('/mogous/{mogou}/chapters/{chapter}','update')->name('mogou-chapters.update');
         Route::post('/mogous/{mogou}/chapters/{chapter}/delete','delete')->name('mogou-chapters.delete');

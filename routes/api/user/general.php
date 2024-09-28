@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\User\HomePageController;
 use App\Http\Controllers\Api\User\UserFavoriteController;
 use App\Http\Controllers\Api\User\UserMogouController;
+use App\Http\Controllers\Api\User\UserReportController;
 use App\Models\BotPublisher;
 use App\Services\BotPublisher\Bots\TelegramBotPublisher;
 use App\Services\BotPublisher\Publisher\SocialPublisher;
@@ -33,12 +34,13 @@ Route::prefix('users')->name('users.')->group(function(){
     });
 
     Route::controller(UserMogouController::class)->group(function(){
-
         Route::get('/mogous/{mogou}','show')->name('mogous.show');
         Route::get('/mogous/{mogou}/related','relatedPostPerMogou')->name('mogous.relateMogou');
-
     });
 
+    Route::controller(UserReportController::class)->group(function(){
+        Route::post('/create-report','create')->name("reports.create");
+    });
 });
 
 Route::get('/ci-test',function(){

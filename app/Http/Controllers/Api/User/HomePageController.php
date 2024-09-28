@@ -20,15 +20,17 @@ class HomePageController extends Controller
 
     public function carousel()
     {
-        $mogou = Mogou::select("id", "title", "slug", "cover", "rotation_key", "description", "finish_status", 'mogou_type', 'status',"rating")
+        $mogou = Mogou::select("id", "title", "slug", "cover", "rotation_key", "description", "finish_status", 'mogou_type', 'status', "rating")
             ->where('status', MogousStatus::PUBLISHED->value)
             ->with('categories:title')
             ->take(8)
             ->get();
 
-        return response()->json([
+        return response()->json(
+            [
             'mogous' => $mogou
-        ]);
+            ]
+        );
     }
 
     public function mostViewed()
@@ -39,9 +41,11 @@ class HomePageController extends Controller
             ->take(20)
             ->get();
 
-        return response()->json([
+        return response()->json(
+            [
             'mogous' => $mogous
-        ]);
+            ]
+        );
     }
 
     public function lastUploaded(Request $request)
@@ -51,26 +55,32 @@ class HomePageController extends Controller
             ->publishedOnly()
             ->get($request);
 
-        $collection->each(function ($mogou) {
+        $collection->each(
+            function ($mogou) {
 
-            $key = $mogou->rotation_key;
+                $key = $mogou->rotation_key;
 
-            $subMogou = $mogou->subMogous($key)->select('title')->latest()->limit(3)->get();
+                $subMogou = $mogou->subMogous($key)->select('title')->latest()->limit(3)->get();
 
-            $mogou->setRelation('subMogous', $subMogou);
-        });
+                $mogou->setRelation('subMogous', $subMogou);
+            }
+        );
 
-        return response()->json([
+        return response()->json(
+            [
             'mogous' => $collection
-        ]);
+            ]
+        );
     }
 
     public function banners()
     {
-        $banners = SocialInfo::where('type',SocialInfoType::Banner->value)->get();
+        $banners = SocialInfo::where('type', SocialInfoType::Banner->value)->get();
 
-        return response()->json([
+        return response()->json(
+            [
             'banners' => $banners
-        ]);
+            ]
+        );
     }
 }

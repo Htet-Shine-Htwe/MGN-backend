@@ -49,14 +49,18 @@ class Mogou extends Model
     {
         parent::boot();
 
-        static::creating(function($mogou){
-            $mogou->slug = Str::slug($mogou->title);
-            $mogou->rotation_key = TablePartition::getRandomRotationKey();
-        });
+        static::creating(
+            function ($mogou) {
+                $mogou->slug = Str::slug($mogou->title);
+                $mogou->rotation_key = TablePartition::getRandomRotationKey();
+            }
+        );
 
-        static::updating(function($mogou){
-            $mogou->slug = Str::slug($mogou->title);
-        });
+        static::updating(
+            function ($mogou) {
+                $mogou->slug = Str::slug($mogou->title);
+            }
+        );
     }
 
     public function getRouteKeyName()
@@ -66,34 +70,31 @@ class Mogou extends Model
 
     protected function getStatusNameAttribute()
     {
-        if($this->status)
-        {
+        if($this->status) {
             return MogousStatus::getStatusName($this->status);
         }
     }
 
     protected function getCoverAttribute($value)
     {
-        return $this->getMedia($value,'public/mogou/cover');
+        return $this->getMedia($value, 'public/mogou/cover');
     }
 
     protected function getMogouTypeNameAttribute()
     {
-        if($this->mogou_type)
-        {
+        if($this->mogou_type) {
             return MogouTypeEnum::getMogouTypeName($this->mogou_type);
         }
     }
 
     protected function getFinishStatusNameAttribute()
     {
-        if($this->finish_status)
-        {
+        if($this->finish_status) {
             return MogouFinishStatus::getKey($this->finish_status);
         }
     }
 
-     public function getTotalViewCountAttribute()
+    public function getTotalViewCountAttribute()
     {
         return (int) $this->subMogous()->sum('views');
     }
@@ -110,7 +111,7 @@ class Mogou extends Model
         $instance->setTable($table_name."_sub_mogous");
 
         return $this->newHasMany(
-            $instance->newQuery(),$this,$instance->getTable().'.mogou_id','id'
+            $instance->newQuery(), $this, $instance->getTable().'.mogou_id', 'id'
         );
     }
 

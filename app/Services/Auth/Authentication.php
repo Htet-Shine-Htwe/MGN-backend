@@ -11,15 +11,19 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 
-class Authentication {
+class Authentication
+{
     protected string $authType = 'web';
 
-    public function __construct(protected Request $request) {}
+    public function __construct(protected Request $request)
+    {
+    }
 
     /**
      * Set the authentication type (web or API).
      */
-    public function returnResponse(string $authType = 'web'): self {
+    public function returnResponse(string $authType = 'web'): self
+    {
         $this->authType = $authType;
         return $this;
     }
@@ -27,7 +31,8 @@ class Authentication {
     /**
      * Handle the sign-in process and generate an appropriate response.
      */
-    public function signIn(string $guard = 'web', string $path = '/dashboard'): RedirectResponse|JsonResponse {
+    public function signIn(string $guard = 'web', string $path = '/dashboard'): RedirectResponse|JsonResponse
+    {
         try {
             $this->authenticate($guard);
             return $this->signInResponse($path, $guard);
@@ -39,7 +44,8 @@ class Authentication {
     /**
      * Handle the sign-up process and generate a redirect response.
      */
-    public function signUp(Model $model, array $body, string $redirect, string $message = 'Registered Successfully!'): RedirectResponse {
+    public function signUp(Model $model, array $body, string $redirect, string $message = 'Registered Successfully!'): RedirectResponse
+    {
         try {
             $model::create($body);
             return $this->signUpSuccessResponse($redirect, $message);
@@ -51,7 +57,8 @@ class Authentication {
     /**
      * Handle the sign-out process and generate a response based on the authentication type.
      */
-    public function signOut(string $path = '/'): RedirectResponse|JsonResponse {
+    public function signOut(string $path = '/'): RedirectResponse|JsonResponse
+    {
         return match ($this->authType) {
             'web' => $this->handleWebSignOut($path),
             'api' => $this->handleApiSignOut(),
@@ -61,29 +68,37 @@ class Authentication {
     /**
      * Handle the password change process and generate a JSON response.
      */
-    public function changePassword(Model $model, FormRequest $request): JsonResponse {
+    public function changePassword(Model $model, FormRequest $request): JsonResponse
+    {
         $this->matchPassword($model, $request->old_password);
 
-        $model::find(auth()->id())->update([
+        $model::find(auth()->id())->update(
+            [
             'password' => bcrypt($request->password)
-        ]);
+            ]
+        );
 
-        return response()->json([
+        return response()->json(
+            [
             'message' => 'Password was updated successfully'
-        ]);
+            ]
+        );
     }
 
     /**
      * Authenticate the user using the specified guard.
      */
-    protected function authenticate(string $guard): void {
+    protected function authenticate(string $guard): void
+    {
         $throttle = $this->initializeThrottle();
 
         if (!$this->attemptLogin($guard)) {
             $throttle->hit();
-            throw ValidationException::withMessages([
+            throw ValidationException::withMessages(
+                [
                 'message' => trans('auth.failed'),
-            ]);
+                ]
+            );
         }
 
         $throttle->clear();
@@ -92,7 +107,8 @@ class Authentication {
     /**
      * Generate a response for successful sign-in.
      */
-    protected function signInResponse(string $path, string $guard = 'web'): RedirectResponse|JsonResponse {
+    protected function signInResponse(string $path, string $guard = 'web'): RedirectResponse|JsonResponse
+    {
         return $this->fnResponse(
             fn() => $this->regenerateSessionAndRedirect($path),
             $this->generateApiResponseData($guard)
@@ -102,48 +118,61 @@ class Authentication {
     /**
      * Handle the validation exception and generate a JSON response.
      */
-    protected function handleValidationException(ValidationException $e): JsonResponse {
-        return response()->json([
+    protected function handleValidationException(ValidationException $e): JsonResponse
+    {
+        return response()->json(
+            [
             'message' => $e->getMessage(),
-        ], $e->status ?? 403);
+            ], $e->status ?? 403
+        );
     }
 
     /**
      * Handle the sign-up exception and throw a validation exception.
      */
-    protected function handleSignUpException(\Exception $e): RedirectResponse {
-        throw ValidationException::withMessages([
+    protected function handleSignUpException(\Exception $e): RedirectResponse
+    {
+        throw ValidationException::withMessages(
+            [
             'message' => $e->getMessage(),
-        ]);
+            ]
+        );
     }
 
     /**
      * Generate a success response for sign-up.
      */
-    protected function signUpSuccessResponse(string $redirect, string $message): RedirectResponse {
-        return redirect($redirect)->with([
+    protected function signUpSuccessResponse(string $redirect, string $message): RedirectResponse
+    {
+        return redirect($redirect)->with(
+            [
             'alert' => [
                 'type' => 'success',
                 'message' => $message,
             ]
-        ]);
+            ]
+        );
     }
 
     /**
      * Check if the old password matches the current user's password.
      */
-    protected function matchPassword(Model $model, string $old_password): void {
+    protected function matchPassword(Model $model, string $old_password): void
+    {
         if (!Hash::check($old_password, $model::find(auth()->id())->password)) {
-            throw ValidationException::withMessages([
+            throw ValidationException::withMessages(
+                [
                 'message' => 'Old Password is Incorrect'
-            ]);
+                ]
+            );
         }
     }
 
     /**
      * Attempt to log in the user with the provided credentials.
      */
-    protected function attemptLogin(string $guard): bool {
+    protected function attemptLogin(string $guard): bool
+    {
         return Auth::guard($guard)->attempt(
             $this->request->only('email', 'password'),
             $this->request->boolean('remember')
@@ -153,7 +182,8 @@ class Authentication {
     /**
      * Regenerate the session and redirect the user to the intended path.
      */
-    protected function regenerateSessionAndRedirect(string $path): RedirectResponse {
+    protected function regenerateSessionAndRedirect(string $path): RedirectResponse
+    {
         $this->request->session()->regenerate();
         return redirect()->intended($path);
     }
@@ -161,7 +191,8 @@ class Authentication {
     /**
      * Generate the API response data.
      */
-    protected function generateApiResponseData(string $guard): array {
+    protected function generateApiResponseData(string $guard): array
+    {
         return [
             'token' => auth()->guard($guard)->user()->createToken($guard)->plainTextToken,
             'user' => auth()->guard($guard)->user()
@@ -171,7 +202,8 @@ class Authentication {
     /**
      * Handle the response based on the authentication type (web or API).
      */
-    protected function fnResponse(callable $callback, array $data = []): JsonResponse|RedirectResponse {
+    protected function fnResponse(callable $callback, array $data = []): JsonResponse|RedirectResponse
+    {
         return match ($this->authType) {
             'web' => $callback(),
             'api' => response()->json($data)
@@ -181,14 +213,16 @@ class Authentication {
     /**
      * Initialize the throttle object.
      */
-    protected function initializeThrottle(): AuthRequestThrottle {
+    protected function initializeThrottle(): AuthRequestThrottle
+    {
         return new AuthRequestThrottle($this->request->input('email'), $this->request->ip());
     }
 
     /**
      * Invalidate and regenerate the session token.
      */
-    protected function invalidateSession(): void {
+    protected function invalidateSession(): void
+    {
         $this->request->session()->invalidate();
         $this->request->session()->regenerateToken();
     }
@@ -196,7 +230,8 @@ class Authentication {
     /**
      * Handle web sign-out process.
      */
-    protected function handleWebSignOut(string $path): RedirectResponse {
+    protected function handleWebSignOut(string $path): RedirectResponse
+    {
         Auth::guard('web')->logout();
         $this->invalidateSession();
         return redirect($path);
@@ -205,10 +240,13 @@ class Authentication {
     /**
      * Handle API sign-out process.
      */
-    protected function handleApiSignOut(): JsonResponse {
+    protected function handleApiSignOut(): JsonResponse
+    {
         auth()->user()->tokens()->delete();
-        return response()->json([
+        return response()->json(
+            [
             'message' => 'Logged out successfully'
-        ]);
+            ]
+        );
     }
 }

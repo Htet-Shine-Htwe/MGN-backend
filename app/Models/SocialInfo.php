@@ -34,6 +34,6 @@ class SocialInfo extends Model
 
     public function getCoverPhotoUrlAttribute()
     {
-        return $this->getMedia($this->cover_photo,"public/social_info");
+        return $this->getMedia($this->cover_photo, "public/social_info");
     }
 }

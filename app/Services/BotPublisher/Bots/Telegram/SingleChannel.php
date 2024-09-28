@@ -11,9 +11,11 @@ class SingleChannel
 
     public function getTotalMembers() : mixed
     {
-        return $this->service_bot->getChatMemberCount([
+        return $this->service_bot->getChatMemberCount(
+            [
             'chat_id' => $this->channel_id
-        ]);
+            ]
+        );
     }
 
 

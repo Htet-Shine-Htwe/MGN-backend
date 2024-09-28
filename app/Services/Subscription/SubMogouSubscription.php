@@ -16,15 +16,17 @@ class SubMogouSubscription
     {
         $ids = $this->subMogou->subscription_collection;
 
-        if(is_array($id)){
-            $ids = array_merge($ids,$id);
+        if(is_array($id)) {
+            $ids = array_merge($ids, $id);
         }else{
             $ids[] = $id;
         }
 
-        $this->subMogou->update([
+        $this->subMogou->update(
+            [
             'subscription_collection' => json_encode($ids)
-        ]);
+            ]
+        );
 
         $this->subMogou->refresh();
 
@@ -35,12 +37,14 @@ class SubMogouSubscription
         $ids = $this->subMogou->subscription_collection;
 
 
-        is_array($id) ? $ids = array_diff($ids,$id) : $ids = array_filter($ids, fn($i) => $i != $id);
+        is_array($id) ? $ids = array_diff($ids, $id) : $ids = array_filter($ids, fn($i) => $i != $id);
         $ids = array_values($ids);
 
-        $this->subMogou->update([
+        $this->subMogou->update(
+            [
             'subscription_collection' => json_encode($ids)
-        ]);
+            ]
+        );
 
         $this->subMogou->refresh();
 

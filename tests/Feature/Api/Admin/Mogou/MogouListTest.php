@@ -223,7 +223,7 @@ test("Only Age Legal Mogou returned",function(){
 test("Only Completed Mogou returned",function(){
 
     $response = $this->authenticatedAdmin()->getJson(route('api.admin.mogous.index',[
-        'finish_status' => MogouFinishStatus::COMPLETED->value
+        'finish_status' => "Completed"
     ]));
 
     $response->assertOk();
@@ -263,7 +263,7 @@ test("Only Completed Manhwa Mogou returned",function(){
 
     $response = $this->authenticatedAdmin()->getJson(route('api.admin.mogous.index',[
         'mogou_type' => "Manhwa",
-        'finish_status' => MogouFinishStatus::COMPLETED->value
+        'finish_status' => "Completed"
     ]));
 
     $response->assertOk();

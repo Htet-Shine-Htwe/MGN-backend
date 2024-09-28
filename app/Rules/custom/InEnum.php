@@ -12,7 +12,7 @@ class InEnum
         return implode(',', $enumClass::getValues());
     }
 
-    public static function createRule(string $enumClass,bool $nullable = false)
+    public static function createRule(string $enumClass,bool $nullable = true)
     {
         return ($nullable ? 'nullable|' : 'required|') . 'in:' . self::getEnumValuesAsString($enumClass);
     }

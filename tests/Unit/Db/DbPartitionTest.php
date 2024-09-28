@@ -56,11 +56,11 @@ test("prevent creating partition table over locked",function(){
     $dbPartition = $this->model;
 
 
-        $dbPartition->createPartition(); // creating alpha partition table
-        $dbPartition->createPartition();  // creating beta partition table
-        $dbPartition->createPartition();  // creating gamma partition table
+    $dbPartition->createPartition(); // creating alpha partition table
+    $dbPartition->createPartition();  // creating beta partition table
+    $dbPartition->createPartition();  // creating gamma partition table
 
-        $this->assertFalse($dbPartition->checkTablePartition('gamma_sub_mogous'));
+    $this->assertFalse($dbPartition->checkTablePartition('gamma_sub_mogous'));
 });
 
 test("increase the locked partition table to 3",function(){

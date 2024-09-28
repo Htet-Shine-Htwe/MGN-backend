@@ -16,9 +16,11 @@ class MogouImage
 
     public function addImage($image)
     {
-        $this->mogou->mogou_images()->create([
+        $this->mogou->mogou_images()->create(
+            [
             'image' => $image
-        ]);
+            ]
+        );
     }
 
     public function removeImage($image)

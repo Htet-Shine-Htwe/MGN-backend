@@ -26,18 +26,22 @@ class CategoryRepo  implements \App\Contracts\ModelRepoInterface
 
     public function create(CategoryActionRequest $request) : Category
     {
-        $request->validate([
+        $request->validate(
+            [
             'title' => 'unique:categories,title'
-        ]);
+            ]
+        );
 
         return Category::create($request->validated());
     }
 
     public function update(CategoryActionRequest $request, Category $category) : Category
     {
-        $request->validate([
+        $request->validate(
+            [
             'title' => 'unique:categories,title,'.$category->id
-        ]);
+            ]
+        );
         $category->update($request->validated());
         return $category;
     }

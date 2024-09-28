@@ -24,22 +24,28 @@ class CategoryController extends Controller
     public function all(Request $request)
     {
         $key = $this->cacheKey;
-        $categories = $this->cacheResponse($key, 300, function () use ($request) {
-            return $this->categoryRepo->get($request);
-        });
+        $categories = $this->cacheResponse(
+            $key, 300, function () use ($request) {
+                return $this->categoryRepo->get($request);
+            }
+        );
 
-        return response()->json([
+        return response()->json(
+            [
             'categories' => $categories
-        ]);
+            ]
+        );
     }
 
     public function index(Request $request)  : JsonResponse
     {
         $categories =  $this->categoryRepo->get($request);
 
-        return response()->json([
+        return response()->json(
+            [
             'categories' => $categories
-        ]);
+            ]
+        );
     }
 
     public function create(CategoryActionRequest $request)  : JsonResponse
@@ -48,10 +54,12 @@ class CategoryController extends Controller
         $key = $this->cacheKey;
 
         $this->forgetCache($key);
-        return response()->json([
+        return response()->json(
+            [
             'category' => $category,
             'message' => 'Category created successfully.'
-        ],Response::HTTP_CREATED);
+            ], Response::HTTP_CREATED
+        );
     }
 
     public function update(CategoryActionRequest $request,Category $category)  : JsonResponse
@@ -60,10 +68,12 @@ class CategoryController extends Controller
         $key = $this->cacheKey;
         $this->forgetCache($key);
 
-        return response()->json([
+        return response()->json(
+            [
             'category' => $updated_category,
             'message' => 'Category updated successfully.'
-        ],Response::HTTP_OK);
+            ], Response::HTTP_OK
+        );
     }
 
     public function delete(Category $category)  : JsonResponse
@@ -72,9 +82,11 @@ class CategoryController extends Controller
         $key = $this->cacheKey;
         $this->forgetCache($key);
 
-        return response()->json([
+        return response()->json(
+            [
             'message' => 'Category deleted successfully.'
-        ],Response::HTTP_OK);
+            ], Response::HTTP_OK
+        );
     }
 
 
