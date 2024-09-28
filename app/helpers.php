@@ -2,43 +2,45 @@
 
 use Illuminate\Support\Facades\Storage;
 
-if(!function_exists('tryCatch')){
+if(!function_exists('tryCatch')) {
 
-    function tryCatch($callback, $message = null,$withException=false){
+    function tryCatch($callback, $message = null,$withException=false)
+    {
         try{
             return $callback();
         }catch(\Exception $e){
 
             $status = 500;
-            if($e instanceof \Illuminate\Validation\ValidationException){
+            if($e instanceof \Illuminate\Validation\ValidationException) {
                 $status = 422;
-                return response()->json([
+                return response()->json(
+                    [
                     'message' => 'Validation failed',
                     'errors' => $e->errors()
-                ],$status);
+                    ], $status
+                );
             }
 
-            if($withException)
-            {
+            if($withException) {
                 $message .= " " . $e->getMessage();
             }
 
-            return response()->json(['message' => $message],$status);
+            return response()->json(['message' => $message], $status);
         }
     }
 
 }
 
-if(!function_exists('appDriver')){
+if(!function_exists('appDriver')) {
 
-    function appDriver(){
+    function appDriver()
+    {
         return Storage::disk(config('control.mongou_storage'));
     }
 
 }
 
-if(!function_exists('generateSubMogouFolder'))
-{
+if(!function_exists('generateSubMogouFolder')) {
     function generateStorageFolder($prefixFolder,$folder) :string
     {
         return "$prefixFolder/$folder";
@@ -46,8 +48,9 @@ if(!function_exists('generateSubMogouFolder'))
 }
 
 
-if(!function_exists("enumValue")){
-    function enumValue($enum){
+if(!function_exists("enumValue")) {
+    function enumValue($enum)
+    {
         return $enum->value;
     }
 }

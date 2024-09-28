@@ -12,10 +12,10 @@ class TestController extends Controller
 
     public function test(Request $request)
     {
-        $option = (new MediaOption('import',20,400,400,'png'));
+        $option = (new MediaOption('import', 20, 400, 400, 'png'));
 
 
-        $media = $this->storeMedia($request->file('file'), 'new',true,$option);
+        $media = $this->storeMedia($request->file('file'), 'new', true, $option);
 
         return response()->json($media);
 
@@ -23,8 +23,10 @@ class TestController extends Controller
 
     public function testRequest(Request $request)
     {
-        return response()->json([
+        return response()->json(
+            [
             'message' => "request was successful"
-        ]);
+            ]
+        );
     }
 }

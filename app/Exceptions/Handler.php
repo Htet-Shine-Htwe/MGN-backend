@@ -27,26 +27,32 @@ class Handler extends ExceptionHandler
      */
     public function register(): void
     {
-        $this->reportable(function (Throwable $e) {
+        $this->reportable(
+            function (Throwable $e) {
 
-            if(env('APP_ENV') === 'production'){
-                Log::channel('slack')->error($e->getMessage(),[
-                    'file' => $e->getFile(),
-                    'Line' => $e->getLine(),
-                    'code' => $e->getCode(),
-                ]);
+                if(env('APP_ENV') === 'production') {
+                    Log::channel('slack')->error(
+                        $e->getMessage(), [
+                        'file' => $e->getFile(),
+                        'Line' => $e->getLine(),
+                        'code' => $e->getCode(),
+                        ]
+                    );
+                }
+
+
             }
-
-
-        });
+        );
     }
 
     public function render($request,Throwable $e)
     {
-        if($e instanceof \Illuminate\Database\Eloquent\ModelNotFoundException){
-            return response()->json([
+        if($e instanceof \Illuminate\Database\Eloquent\ModelNotFoundException) {
+            return response()->json(
+                [
                 'message' => "{$this->prettyModelNotFound($e)} not found"
-            ],Response::HTTP_NOT_FOUND);
+                ], Response::HTTP_NOT_FOUND
+            );
         }
 
         return parent::render($request, $e);
