@@ -21,8 +21,6 @@ class UserSubscriptionController extends Controller
     {
         $users = $this->userRegistrationRepo->list($request);
 
-
-
         return response()->json(
             [
             'users' => $users

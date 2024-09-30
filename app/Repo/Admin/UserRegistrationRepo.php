@@ -28,6 +28,7 @@ class UserRegistrationRepo
         $users = User::search($request->search)
         ->expiredSubscription($request->expired)
         ->filter($request->filter)
+        ->orderBy($request->order_by ?? 'id', $request->order ?? 'desc')
         ->paginate($request->limit ?? 10)
         ->withQueryString();
 

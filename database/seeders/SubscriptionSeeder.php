@@ -13,29 +13,32 @@ class SubscriptionSeeder extends Seeder
     public function run(): void
     {
         $subscription_collection = [
-            "Free",
-            "Basic",
-            "Premium",
-            "Thrive Club",
-            "Level Up",
-            "The Inner Circle",
-            "Mastery Mode",
-            "Curated Collection",
-            "The Monthly Muse",
-            "Fuel Your Focus",
-            "Self-Care Sanctuary",
-            "Adventure Awaits",
-            "The VIP Vault",
-            "Endless Escape",
-            "The Knowledge Box",
-            "Maker's Playground",
-            "The Sustainable Switch",
-            "The Early Bird Club"
+            [
+                "title" => "Free",
+                "duration" => 30,
+            ],
+            [
+                "title" => "Basic",
+                "duration" => 60,
+            ],
+            [
+                "title" => "Premium",
+                "duration" => 90,
+            ],
+            [
+                "title" => "Promotion",
+                "duration" => 10,
+            ],
+            [
+                "title" => "Special",
+                "duration" => 180,
+            ]
         ];
 
         foreach ($subscription_collection as $subscription) {
             \App\Models\Subscription::factory()->create([
-                'title' => $subscription,
+                'title' => $subscription['title'],
+                'duration' => $subscription['duration'],
             ]);
         }
     }
