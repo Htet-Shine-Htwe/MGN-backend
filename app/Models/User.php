@@ -62,12 +62,12 @@ class User extends Authenticatable
     {
         parent::boot();
 
-        static::creating(
-            function ($user) {
-                // with current time and unique id
-                $user->user_code = time() . uniqid();
-            }
-        );
+        // static::creating(
+        //     function ($user) {
+        //         // with current time and unique id
+        //         $user->user_code = time() . uniqid();
+        //     }
+        // );
     }
 
     /*
