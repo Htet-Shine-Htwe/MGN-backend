@@ -28,7 +28,7 @@ beforeEach(function(){
 it("mogou chapters can be fetched", function(){
     $mogou = \App\Models\Mogou::first();
 
-    $tables = PartitionFactory::createInstancePartition('sub_mogou_images', 2);
+    $tables = PartitionFactory::createInstancePartition('SubMogou', 2);
 
     \App\Models\SubMogouImage::factory()->count(20)->create([
         'sub_mogou_id' => 1

@@ -4,25 +4,19 @@ namespace App\Services\Partition;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
+use InvalidArgumentException;
 
 class PartitionFactory
 {
-    public static function createInstancePartition(string $table, int $index_count): array
+    public static function createInstancePartition(string $instanceClass, int $index_count): array
     {
         $tables = [];
-        $db = new class($table) extends Model {
 
-            use \App\Traits\DbPartition;
+        $db = new $instanceClass();
 
-            protected string $baseTable;
-            protected string $partition_prefix;
-
-            public function __construct(string $table)
-            {
-                $this->baseTable = $table;
-                $this->partition_prefix = $table;
-            }
-        };
+        if (!in_array(\App\Traits\DbPartition::class, class_uses($db))) {
+            throw new InvalidArgumentException("Class must use DbPartition trait.");
+        }
 
         for ($i = 1; $i <= $index_count; $i++) {
             $tables[] =$db->createPartition();

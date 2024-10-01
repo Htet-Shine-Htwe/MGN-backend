@@ -6,7 +6,7 @@ use Database\Seeders\MogouSeeder;
 use Database\Seeders\SubMogouSeeder;
 use Database\Seeders\SubscriptionSeeder;
 
-uses()->group('unit','mogou-subscription');
+uses()->group('unit','mogou-subscription-test');
 
 beforeEach(function(){
 

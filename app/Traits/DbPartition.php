@@ -8,14 +8,13 @@ use Illuminate\Support\Facades\Schema;
 
 trait DbPartition
 {
-
     public static function dbConstructing(): void
     {
         $available_tables = TablePartition::availableRotationKey();
-        $table_name = (new self())->partition_prefix;
 
-        foreach ($available_tables as $table) {
-            (new self())->firstOrCreate($table."_".$table_name);
+        foreach ($available_tables as $av) {
+            $modelInstance = self::class;
+            (new $modelInstance)->firstOrCreate($av . "_" . (new $modelInstance)->getTable());
         }
     }
 
@@ -24,10 +23,16 @@ trait DbPartition
         return $this->partition_prefix;
     }
 
+    public function setCurrentPartition(string $partition): void
+    {
+        $this->partition_prefix = $partition;
+    }
+
     public function firstOrCreate(string $table): void
     {
         $this->checkTablePartition($table) ? : $this->createPartition();
     }
+
 
     public function getPartition(string $rotation_key): string
     {
@@ -36,16 +41,14 @@ trait DbPartition
 
     public function createPartition(): string | bool
     {
-        $available_tables = TablePartition::availableRotationKey();
-        $table_name = $this->partition_prefix;
-        $base_table = $this->baseTable;
+        $available_partitions = TablePartition::availableRotationKey();
 
-        foreach ($available_tables as $table) {
-            $sql = $this->createPartitionTableConnectionQuery($table, $table_name, $base_table);
+        foreach ($available_partitions as $partition) {
+            $sql = $this->createPartitionTableConnectionQuery($partition);
 
             try {
                 DB::statement($sql);
-                return $table . "_" . $table_name;
+                return $partition . "_" . $this->getTable();
             } catch (\Exception $e) {
                 if (str_contains($e->getMessage(), 'already exists')) {
                     continue;
@@ -65,12 +68,13 @@ trait DbPartition
         return Schema::hasTable($table);
     }
 
-    public function createPartitionTableConnectionQuery(string $table,string $table_name,string $base_table): string
+    public function createPartitionTableConnectionQuery(string $partition): string
     {
+        $table = $this->getTable();
         $query = match (config('database.default')) {
-            'mysql' => "CREATE TABLE  {$table}_{$table_name} LIKE {$base_table}",
-            'sqlite' => "CREATE TABLE  {$table}_{$table_name} AS SELECT * FROM {$base_table} WHERE 0",
-            default => "CREATE TABLE  {$table}_{$table_name} LIKE {$base_table}",
+            'mysql' => "CREATE TABLE {$partition}_{$table} LIKE {$table}",
+            'sqlite' => "CREATE TABLE {$partition}_{$table} AS SELECT * FROM {$table} WHERE 0",
+            default => "CREATE TABLE {$partition}_{$table} LIKE {$table}",
         };
 
         return $query;

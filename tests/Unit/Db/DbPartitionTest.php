@@ -9,13 +9,11 @@ uses()->group('unit', 'dbTablePartition');
 beforeEach(function(){
     TablePartition::setLockedRotation(2);
 
-    $this->model = new class extends Model {
+    $this->model = new class() extends Model {
 
         use App\Traits\DbPartition;
 
-        protected string $baseTable = 'sub_mogous';
-
-        protected string $partition_prefix = 'sub_mogous';
+        protected $table = 'sub_mogous';
     };
 });
 

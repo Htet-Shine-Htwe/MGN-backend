@@ -17,7 +17,7 @@ class SubMogouSeeder extends Seeder
      */
     public function run(): void
     {
-        PartitionFactory::createInstancePartition('sub_mogous', 2);
+        PartitionFactory::createInstancePartition(SubMogou::class, 2);
 
 
         if(config('database.default') == 'sqlite') {
