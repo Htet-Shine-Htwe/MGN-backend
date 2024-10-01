@@ -28,7 +28,7 @@ class UserFavoriteRepo
 
         UserFavorite::create(
             [
-            'user_id' => $this->user->id,
+            'user_id' => $this->user?->id,
             'mogou_id' => $mogou_id
             ]
         );
@@ -39,7 +39,7 @@ class UserFavoriteRepo
     public function removeFavorite(int $mogou_id): bool
     {
         try{
-            $this->user->favorites()->where('mogou_id', $mogou_id)->delete();
+            $this->user?->favorites()->where('mogou_id', $mogou_id)->delete();
             return true;
         }
         catch (\Exception $e){
@@ -47,14 +47,19 @@ class UserFavoriteRepo
         }
     }
 
+    /**
+     * getFavorites
+     *
+     * @return array<mixed>
+     */
     public function getFavorites(): array
     {
-        return $this->user->favorites()->pluck('mogou_id')->toArray();
+        return $this->user?->favorites()->pluck('mogou_id')->toArray() ?? [];
     }
 
     public function isFavorite(int $mogou_id): bool
     {
-        return $this->user->favorites()->where('mogou_id', $mogou_id)->exists();
+        return $this->user?->favorites()->where('mogou_id', $mogou_id)->exists() ? true : false;
     }
 
 }

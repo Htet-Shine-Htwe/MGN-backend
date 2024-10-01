@@ -8,7 +8,7 @@ class ExtractZipService
     {
     }
 
-    public function extract($zipFile, $destination)
+    public function extract(string $zipFile,string $destination): bool
     {
         $zip = new \ZipArchive;
         $res = $zip->open($zipFile);

@@ -12,6 +12,9 @@ class SubMogouSubscription
     }
 
 
+    /**
+     * @param array<int> $id
+     */
     public function appendSubscriptionId(int|array $id) :void
     {
         $ids = $this->subMogou->subscription_collection;
@@ -32,6 +35,9 @@ class SubMogouSubscription
 
     }
 
+    /**
+     * @param array<int> $id
+     */
     public function removeSubscriptionId(int|array $id) :void
     {
         $ids = $this->subMogou->subscription_collection;

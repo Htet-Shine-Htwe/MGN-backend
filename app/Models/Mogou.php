@@ -10,6 +10,8 @@ use App\Services\Partition\TablePartition;
 use HydraStorage\HydraStorage\Traits\HydraMedia;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Str;
 class Mogou extends Model
 {
@@ -45,12 +47,12 @@ class Mogou extends Model
 
     protected $appends = ['status_name','mogou_type_name','finish_status_name'];
 
-    protected static function boot()
+    protected static function boot(): void
     {
         parent::boot();
 
         static::creating(
-            function ($mogou) {
+            function ($mogou): void {
                 $mogou->slug = Str::slug($mogou->title);
                 $mogou->rotation_key = TablePartition::getRandomRotationKey();
             }
@@ -63,49 +65,53 @@ class Mogou extends Model
         );
     }
 
-    public function getRouteKeyName()
+    public function getRouteKeyName(): string
     {
         return 'slug';
     }
 
-    protected function getStatusNameAttribute()
+    protected function getStatusNameAttribute(): string
     {
         if($this->status) {
             return MogousStatus::getStatusName($this->status);
         }
+
+        return '';
     }
 
-    protected function getCoverAttribute($value)
+    protected function getCoverAttribute($value): string
     {
         return $this->getMedia($value, 'public/mogou/cover');
     }
 
-    protected function getMogouTypeNameAttribute()
+    protected function getMogouTypeNameAttribute(): string
     {
         if($this->mogou_type) {
             return MogouTypeEnum::getMogouTypeName($this->mogou_type);
         }
+        return '';
     }
 
-    protected function getFinishStatusNameAttribute()
+    protected function getFinishStatusNameAttribute(): string
     {
         if($this->finish_status) {
             return MogouFinishStatus::getKey($this->finish_status);
         }
+        return '';
     }
 
-    public function getTotalViewCountAttribute()
+    public function getTotalViewCountAttribute(): int
     {
         return (int) $this->subMogous()->sum('views');
     }
 
     // relationship
-    public function categories()
+    public function categories(): BelongsToMany
     {
         return $this->belongsToMany(Category::class, 'mogous_categories');
     }
 
-    public function subMogous(string $table_name="alpha")
+    public function subMogous(string $table_name="alpha"): HasMany
     {
         $instance = new SubMogou();
         $instance->setTable($table_name."_sub_mogous");
@@ -116,12 +122,12 @@ class Mogou extends Model
     }
 
 
-    public function getReleasedAtAttribute($value)
+    public function getReleasedAtAttribute($value): string
     {
         return date('d M,Y', strtotime($value));
     }
 
-    public function getCreatedAtAttribute($value)
+    public function getCreatedAtAttribute($value): string
     {
         return date('d M,Y', strtotime($value));
     }

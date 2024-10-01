@@ -16,6 +16,7 @@ class MogouController extends Controller
 {
 
     use CacheResponse;
+
     public function __construct(protected MogouRepo $mogouRepo, protected MogouActionRepo $mogouActionRepo)
     {
     }

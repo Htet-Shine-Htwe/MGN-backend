@@ -20,14 +20,14 @@ final class SocialPublisher
         $this->linedPublisher = new LinedPublisher($publisherType);
     }
 
-    public function getPublisherType(BotPublisher $publisher) : PublisherInterface
+    public function getPublisherType(BotPublisher $publisher): PublisherInterface
     {
-        return match($publisher->type->value){
-            SocialMediaType::Telegram->value => new TelegramBotPublisher($publisher->token_key),
-            SocialMediaType::Discord->value => new DiscordBotPublisher(),
-            default => throw new InvalidPublisherType($publisher->type->value . ' is not a valid publisher type')
+        return match ($publisher->type) {
+            SocialMediaType::Telegram => new TelegramBotPublisher($publisher->token_key),
+            SocialMediaType::Discord => new DiscordBotPublisher()
         };
     }
+
 
     public function getInfo() : mixed
     {

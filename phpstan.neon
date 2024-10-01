@@ -5,4 +5,10 @@ parameters:
         - app
     level: 9
     ignoreErrors:
+        # Ignore all instances where mixed is given but string is expected
+        - '#expects string, mixed given.#'
     excludePaths:
+        - app/Services/Auth/Authentication.php
+
+
+

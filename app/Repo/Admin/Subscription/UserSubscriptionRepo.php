@@ -20,7 +20,7 @@ class UserSubscriptionRepo
         return $this;
     }
 
-    public function subscriptions()
+    public function subscriptions(): mixed
     {
         return $this->user->subscriptions->map(
             function ($subscription) {

@@ -41,8 +41,15 @@ class Authentication
         }
     }
 
-    /**
+     /**
      * Handle the sign-up process and generate a redirect response.
+     *
+     * @param Model $model The model where the user data is being saved
+     * @param array<string, mixed> $body The body data to create a new user (field names and values)
+     * @param string $redirect The URL to redirect after successful sign-up
+     * @param string $message The success message to display (default: 'Registered Successfully!')
+     *
+     * @return RedirectResponse
      */
     public function signUp(Model $model, array $body, string $redirect, string $message = 'Registered Successfully!'): RedirectResponse
     {
@@ -62,6 +69,7 @@ class Authentication
         return match ($this->authType) {
             'web' => $this->handleWebSignOut($path),
             'api' => $this->handleApiSignOut(),
+            default => throw new \InvalidArgumentException('Invalid auth type')
         };
     }
 
@@ -70,13 +78,17 @@ class Authentication
      */
     public function changePassword(Model $model, FormRequest $request): JsonResponse
     {
+
         $this->matchPassword($model, $request->old_password);
 
-        $model::find(auth()->id())->update(
-            [
-            'password' => bcrypt($request->password)
-            ]
-        );
+        $user = $model::find(auth()->id());
+        if ($user) {
+            $user->update([
+                'password' => bcrypt( $request->password)
+            ]);
+        } else {
+            throw ValidationException::withMessages(['message' => 'User not found']);
+        }
 
         return response()->json(
             [
@@ -118,11 +130,11 @@ class Authentication
     /**
      * Handle the validation exception and generate a JSON response.
      */
-    protected function handleValidationException(ValidationException $e): JsonResponse
+    protected function handleValidationException(ValidationException $e = null): JsonResponse
     {
         return response()->json(
             [
-            'message' => $e->getMessage(),
+            'message' => $e->getMessage() ?? 'Validation failed',
             ], $e->status ?? 403
         );
     }
@@ -206,7 +218,8 @@ class Authentication
     {
         return match ($this->authType) {
             'web' => $callback(),
-            'api' => response()->json($data)
+            'api' => response()->json($data),
+            default => throw new \InvalidArgumentException('Invalid auth type')
         };
     }
 

@@ -2,9 +2,12 @@
 
 namespace App\Services\BotPublisher\Bots\Telegram;
 
+use WeStacks\TeleBot\TeleBot;
+
+
 class SingleChannel
 {
-    public function __construct(protected $service_bot,protected string $channel_id)
+    public function __construct(protected TeleBot $service_bot,protected string $channel_id)
     {
 
     }

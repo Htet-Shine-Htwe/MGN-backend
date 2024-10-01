@@ -8,18 +8,31 @@ use InvalidArgumentException;
 
 class PartitionFactory
 {
+     /**
+     * Set the number of locked rotation keys.
+     *
+     * @return array<string>
+     */
     public static function createInstancePartition(string $instanceClass, int $index_count): array
     {
         $tables = [];
 
         $db = new $instanceClass();
 
+        if (!$db instanceof Model) {
+            throw new InvalidArgumentException("Class must be an instance of Model.");
+        }
+
         if (!in_array(\App\Traits\DbPartition::class, class_uses($db))) {
             throw new InvalidArgumentException("Class must use DbPartition trait.");
         }
 
+        if (!method_exists($db, 'createPartition')) {
+            throw new InvalidArgumentException("Method createPartition not found.");
+        }
+
         for ($i = 1; $i <= $index_count; $i++) {
-            $tables[] =$db->createPartition();
+            $tables[] = $db->createPartition();
         }
 
         return $tables;

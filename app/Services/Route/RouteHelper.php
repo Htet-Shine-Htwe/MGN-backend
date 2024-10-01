@@ -4,7 +4,7 @@ namespace App\Services\Route;
 
 class RouteHelper
 {
-    public static function includedRouteFiles(string $folder)
+    public static function includedRouteFiles(string $folder): void
     {
         $dirIterator = new \RecursiveDirectoryIterator($folder);
 
@@ -15,10 +15,12 @@ class RouteHelper
 
         while ($it->valid())
         {
-            if (!$it->isDot()
-                && $it->isFile()
-                && $it->isReadable()
-                && $it->current()->getExtension() === 'php'
+            $current = $it->current();
+            if ($current instanceof \SplFileInfo // Check if it's an instance of SplFileInfo
+            && !$it->isDot()
+            && $it->isFile()
+            && $it->isReadable()
+            && $current->getExtension() === 'php'
             ) {
                 include $it->key();
             }

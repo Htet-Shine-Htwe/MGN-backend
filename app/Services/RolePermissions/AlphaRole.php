@@ -5,6 +5,7 @@ namespace App\Services\RolePermissions;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Role;
+use Spatie\Permission\Contracts\Role as RoleContract;
 
 class AlphaRole
 {
@@ -20,40 +21,61 @@ class AlphaRole
         return $this;
     }
 
-    public function getRoles() : Collection
+    /**
+     * Get roles.
+     *
+     * @return Collection<int, \stdClass>
+     */
+    public function getRoles(): Collection
     {
-        return DB::table('roles')->where('guard_name', $this->guard)->get();
+        // Assuming DB::table()->get() returns a collection of objects.
+        return DB::table('roles')
+            ->where('guard_name', $this->guard)
+            ->get();
     }
 
-    public function getPermissions() : Collection
+    /**
+     * Get permissions.
+     *
+     * @return Collection<int, \stdClass>
+     */
+    public function getPermissions(): Collection
     {
-        return DB::table('permissions')->where('guard_name', $this->guard)->get();
+        // Assuming DB::table()->get() returns a collection of objects.
+        return DB::table('permissions')
+            ->where('guard_name', $this->guard)
+            ->get();
     }
 
-    public function createRole(array|string $roles,?array $permissons = null ):  Collection|Role
+    /**
+     * Create a role.
+     *
+     * @param  array<string>|string $roles
+     * @param  array<string>|null $permissions
+     * @return Collection<int, RoleContract>|RoleContract
+     */
+    public function createRole(array|string $roles, ?array $permissions = null): Collection|RoleContract
     {
         $collection = [];
-        if(is_array($roles)) {
-            foreach($roles as $role)
-            {
+
+        if (is_array($roles)) {
+            foreach ($roles as $role) {
                 $new_role = Role::create(['name' => $role, 'guard_name' => $this->guard]);
-                if($permissons) {
-                    $new_role->syncPermissions($permissons);
+                if ($permissions) {
+                    $new_role->syncPermissions(permissions: $permissions);
                 }
                 $collection[] = $new_role;
             }
-            $collection = collect($collection);
-        }
-        else{
+
+            return collect($collection); // Returns a Collection of Roles.
+        } else {
             $new_role = Role::create(['name' => $roles, 'guard_name' => $this->guard]);
 
-            if($permissons) {
-                $new_role->syncPermissions($permissons);
+            if ($permissions) {
+                $new_role->syncPermissions($permissions);
             }
 
-            $collection = $new_role;
+            return $new_role; // Return a single Role instance.
         }
-
-        return $collection;
     }
 }

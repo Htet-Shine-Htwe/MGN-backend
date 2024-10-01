@@ -1,14 +1,16 @@
 <?php
 
 namespace App\Traits;
+
+use Closure;
 use Illuminate\Support\Facades\Cache;
 
 trait CacheResponse
 {
+    public bool $cacheMode = true;
 
-    public $cacheMode = true;
-
-    public function cacheResponse($key, $minutes=300 , $callback = null)
+    public function cacheResponse(string $key,int $minutes ,Closure $callback
+     ): mixed
     {
         if (!$this->cacheMode) {
             return $callback();
@@ -17,15 +19,21 @@ trait CacheResponse
         $data = Cache::get($key);
 
         if ($data === null) {
-            $process = $callback;
+            $process = $callback();
 
-            return Cache::remember($key, $minutes, $process);
+            if (is_array($process) || is_object($process)) {
+                $process = serialize($process);
+            }
+
+            return Cache::remember($key, $minutes, function () use ($process) {
+                return $process;
+            });
 
         }
         return $data;
     }
 
-    public function updateCache($key, $data, $minutes = null)
+    public function updateCache(string $key,mixed $data,int|null $minutes = null): void
     {
         if ($minutes) {
             Cache::put($key, $data, $minutes);
@@ -34,32 +42,60 @@ trait CacheResponse
         }
     }
 
-    public function forgetCache($key)
+    public function forgetCache(string $key): void
     {
         Cache::forget($key);
     }
 
-    public function clearCache()
+    public function clearCache(): void
     {
         Cache::flush();
     }
 
-    public function generateCacheKey($key)
+    public function generateCacheKey(string $key): string
     {
-        return sprintf("%s-%s", config('app.name'), $key);
+        $appName = config('app.name');
+
+        if (!is_string($appName)) {
+            $appName = 'default-app';
+        }
+
+        return sprintf("%s-%s", $appName, $key);
     }
 
-    public function cacheTags($tags, $key, $minutes = 300, $callback = null)
+/**
+     * Cache data with tags.
+     *
+     * @param array<string>|string $tags The cache tags
+     * @param string $key The cache key
+     * @param int $minutes Time in minutes to cache
+     * @param Closure $callback The callback to generate cache data
+     *
+     * @return mixed The cached data
+     */
+    public function cacheTags(array|string $tags, string $key, int $minutes , Closure $callback): mixed
     {
-        return Cache::tags($tags)->remember($key, $minutes, $callback);
+        return Cache::tags($tags)->remember($key, $minutes, function () use ($callback) {
+            return $callback();
+        });
     }
-
-    public function forgetCacheTags($tags, $key)
+   /**
+     * Forget cached data by tags.
+     *
+     * @param array<string>|string $tags The cache tags
+     * @param string $key The cache key
+     */
+    public function forgetCacheTags(array|string $tags, string $key): void
     {
         Cache::tags($tags)->forget($key);
     }
 
-    public function clearCacheTags($tags)
+    /**
+     * Clear cache by tags.
+     *
+     * @param array<string>|string $tags The cache tags
+     */
+    public function clearCacheTags(array|string $tags): void
     {
         Cache::tags($tags)->flush();
     }

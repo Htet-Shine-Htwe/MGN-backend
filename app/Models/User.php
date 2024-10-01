@@ -9,6 +9,9 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+
 class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable,HasRoles;
@@ -42,7 +45,7 @@ class User extends Authenticatable
         'subscription'
     ];
 
-    public function getRouteKeyName()
+    public function getRouteKeyName(): string
     {
         return 'user_code';
     }
@@ -58,7 +61,7 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
-    protected static function boot()
+    protected static function boot(): void
     {
         parent::boot();
 
@@ -74,22 +77,29 @@ class User extends Authenticatable
     * Relationships
     */
 
-    public function subscription()
+    public function subscription(): BelongsTo
     {
         return $this->belongsTo(Subscription::class, 'current_subscription_id', 'id');
     }
 
-    public function subscriptions()
+    public function subscriptions(): HasMany
     {
         return $this->hasMany(UserSubscription::class);
     }
 
-    public function favorites()
+    public function favorites(): HasMany
     {
         return $this->hasMany(UserFavorite::class);
     }
 
-    public function scopeSearch($query,$search) : Builder
+    /**
+     * scopeSearch
+     *
+     * @param  Builder<static> $query
+     * @param  mixed $search
+     * @return Builder<static>
+     */
+    public function scopeSearch(Builder $query,string $search) : Builder
     {
         return $query->when(
             $search, function ($query,$search) {
@@ -99,7 +109,14 @@ class User extends Authenticatable
         );
     }
 
-    public function scopeFilter($query,$filter) : Builder
+     /**
+     * scopeFilter
+     *
+     * @param  Builder<static> $query
+     * @param mixed $filter
+     * @return Builder<static>
+     */
+    public function scopeFilter(Builder $query,mixed $filter) : Builder
     {
         return $query->when(
             $filter, function ($query,$filter) {
@@ -108,7 +125,14 @@ class User extends Authenticatable
         );
     }
 
-    public function scopeExpiredSubscription($query,$expired) : Builder
+    /**
+     * scopeExpiredSubscription
+     *
+     * @param  Builder<static> $query
+     * @param  mixed $expired
+     * @return Builder<static>
+     */
+    public function scopeExpiredSubscription(Builder $query,mixed $expired) : Builder
     {
         return $query->when(
             $expired, function ($query) use ($expired) {

@@ -3,11 +3,14 @@
 namespace App\Services\Report;
 
 use App\Models\Mogou;
+use App\Models\SubMogou;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class ChapterReport
 {
 
-    protected $submogouCollection;
+    /** @var HasMany<SubMogou> */
+    protected HasMany $submogouCollection;
 
     public function __construct(protected Mogou $mogou)
     {
@@ -15,12 +18,12 @@ class ChapterReport
         $this->submogouCollection = $mogou->subMogous($mogou->rotation_key);
     }
 
-    public function getTotalViews()
+    public function getTotalViews(): int
     {
-        return $this->submogouCollection->sum('views');
+        return (int) $this->submogouCollection->sum('views');
     }
 
-    public function getTotalChapters()
+    public function getTotalChapters(): int
     {
         return $this->submogouCollection->count();
     }
