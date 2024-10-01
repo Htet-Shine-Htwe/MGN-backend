@@ -1,10 +1,11 @@
 <?php
 
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\Rules\Enum;
 
 if(!function_exists('tryCatch')) {
 
-    function tryCatch($callback, $message = null,$withException=false)
+    function tryCatch(callable $callback,?string $message = null,bool $withException=false)  : mixed
     {
         try{
             return $callback();
@@ -33,24 +34,28 @@ if(!function_exists('tryCatch')) {
 
 if(!function_exists('appDriver')) {
 
-    function appDriver()
-    {
-        return Storage::disk(config('control.mongou_storage'));
+    function appDriver(): \Illuminate\Contracts\Filesystem\Filesystem
+{
+    $disk = config('control.mongou_storage');
+    if (!is_string($disk)) {
+        $disk = 'local';
     }
+    return Storage::disk($disk);
+}
 
 }
 
 if(!function_exists('generateSubMogouFolder')) {
-    function generateStorageFolder($prefixFolder,$folder) :string
+    function generateStorageFolder(string $prefixFolder,string $folder) :string
     {
         return "$prefixFolder/$folder";
     }
 }
 
 
-if(!function_exists("enumValue")) {
-    function enumValue($enum)
+if (!function_exists("enumValue")) {
+    function enumValue(mixed $enum): mixed
     {
-        return $enum->value;
+        return ($enum instanceof \BackedEnum ? $enum->value : $enum);
     }
 }

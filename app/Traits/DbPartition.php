@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Schema;
 trait DbPartition
 {
 
-    public static function dbConstructing()
+    public static function dbConstructing(): void
     {
         $available_tables = TablePartition::availableRotationKey();
         $table_name = (new self())->partition_prefix;
@@ -19,12 +19,12 @@ trait DbPartition
         }
     }
 
-    public function getCurrentPartition()
+    public function getCurrentPartition(): string
     {
         return $this->partition_prefix;
     }
 
-    public function firstOrCreate($table)
+    public function firstOrCreate(string $table): void
     {
         $this->checkTablePartition($table) ? : $this->createPartition();
     }
@@ -65,7 +65,7 @@ trait DbPartition
         return Schema::hasTable($table);
     }
 
-    public function createPartitionTableConnectionQuery($table, $table_name, $base_table)
+    public function createPartitionTableConnectionQuery(string $table,string $table_name,string $base_table): string
     {
         $query = match (config('database.default')) {
             'mysql' => "CREATE TABLE  {$table}_{$table_name} LIKE {$base_table}",
