@@ -35,6 +35,7 @@ enum SocialInfoType :string implements SmartEnum
             'Image' => self::Image->value,
             'Refer Social' => self::ReferSocial->value,
             'Banner' => self::Banner->value,
+            default => self::Image->value,
         };
     }
 

@@ -19,8 +19,8 @@ enum AdminRole : string implements SmartEnum
     public static function getValues(): array
     {
         return [
-            self::Admin => 'Admin',
-            self::Moderator => 'Moderator'
+            'admin',
+            'moderator'
         ];
     }
 

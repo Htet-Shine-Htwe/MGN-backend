@@ -9,14 +9,6 @@ enum MogouFinishStatus :int implements SmartEnum
     case COMPLETED = 1;
     case DROPPED = 2;
 
-    public static function getKeyAndValue(): array
-    {
-        return [
-            self::ONGOING => 0,
-            self::COMPLETED => 1,
-            self::DROPPED => 2,
-        ];
-    }
 
     public static function getValues(): array
     {
@@ -33,6 +25,7 @@ enum MogouFinishStatus :int implements SmartEnum
             'Ongoing' => self::ONGOING->value,
             'Completed' => self::COMPLETED->value,
             'Dropped' => self::DROPPED->value,
+            default => self::ONGOING->value,
         };
     }
 

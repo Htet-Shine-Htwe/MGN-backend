@@ -25,7 +25,6 @@ enum MogouTypeEnum :int implements SmartEnum
             self::MANGA => 'Manga',
             self::MANHWA => 'Manhwa',
             self::COMIC => 'Comic',
-            default => 'Unknown',
         };
     }
 
@@ -45,6 +44,7 @@ enum MogouTypeEnum :int implements SmartEnum
             'manga' => self::MANGA->value,
             'manhwa' => self::MANHWA->value,
             'comic' => self::COMIC->value,
+            default => self::MANGA->value,
         };
     }
 

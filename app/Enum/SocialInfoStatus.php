@@ -22,6 +22,7 @@ enum SocialInfoStatus : int
         return match ($this->value) {
             self::Active => 'Active',
             self::Inactive => 'Inactive',
+            default => 'Unknown',
         };
     }
 

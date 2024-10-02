@@ -42,6 +42,7 @@ enum MogousStatus : int implements SmartEnum
             "Draft" => self::DRAFT->value,
             "Published" => self::PUBLISHED->value,
             "Archived" => self::ARCHIVED->value,
+            default => self::DRAFT->value,
         };
     }
 
