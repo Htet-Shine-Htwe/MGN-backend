@@ -17,7 +17,7 @@ class SubMogouActionRepo
     {
     }
 
-    protected function setSubMogouTable($key="id",$value)
+    protected function setSubMogouTable(string $key="id",string $value =null): SubMogou
     {
         $this->parentMogou = Mogou::where($key, $value)->first();
 

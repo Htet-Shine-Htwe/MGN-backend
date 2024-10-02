@@ -96,7 +96,7 @@ class User extends Authenticatable
      * scopeSearch
      *
      * @param  Builder<static> $query
-     * @param  mixed $search
+     * @param  string $search
      * @return Builder<static>
      */
     public function scopeSearch(Builder $query,string $search) : Builder
@@ -134,9 +134,7 @@ class User extends Authenticatable
      */
     public function scopeExpiredSubscription(Builder $query,mixed $expired) : Builder
     {
-        return $query->when(
-            $expired, function ($query) use ($expired) {
-
+        return $query->when($expired, function ($query)  {
                 return $query->where('subscription_end_date', '<', now());
             }
         );

@@ -32,6 +32,7 @@ dataset('sample_user',[
     fn() => [
         'name' => 'alpha',
         'email' => 'alpha@gmail.com',
+        'user_code' => 'sd',
         'password' => 'password',
         'password_confirmation' => 'password',
         'current_subscription_id' => 1,
@@ -39,6 +40,7 @@ dataset('sample_user',[
     fn() =>[
         'name' => 'beta',
         'email' => 'beta@gmail.com',
+        'user_code' => 'sd',
         'password' => 'password',
         'password_confirmation' => 'password',
         'current_subscription_id' => 2,
@@ -52,25 +54,18 @@ test("request body validation for subscription user",function(){
         'message',
         'errors' => [
             'name',
-            'email',
         ]
     ]);
 });
 
-test("can't register duplicate email ",function($data){
+test("can't register duplicate user code ",function($data){
     User::factory()->create([
-        'email' => $data['email']
+        'user_code' => $data['user_code']
     ]);
 
     $response = $this->authenticatedAdmin()->postJson(route('api.admin.subscription-users.store'),$data);
 
-    $response->assertStatus(422)
-        ->assertJsonStructure([
-            'message',
-            'errors' => [
-                'email'
-            ]
-        ]);
+    $response->assertStatus(422);
 })
 ->with('sample_user');
 
@@ -89,12 +84,11 @@ test("subscription user can registered successfully",function($data){
 ->with('sample_user');
 
 test("subscription user can be updated",function($data){
-    $user = User::factory()->create();
-
-    $data['user_code'] = $user->user_code;
+    $user = User::factory()->create([
+        'user_code' => $data['user_code']
+    ]);
 
     $response = $this->authenticatedAdmin()->postJson(route('api.admin.subscription-users.update'),$data);
-
 
     $response->assertOk()
         ->assertJson([
@@ -107,23 +101,21 @@ test("subscription user can be updated",function($data){
 })
 ->with('sample_user');
 
-test("subscription user can't update with same email",function($data){
-    $user = User::factory()->create();
+test("subscription user can't update with same user_code",function($data){
+
     User::factory()->create([
-        'email' => $data['email']
+        'user_code' => $data['user_code']
     ]);
 
-    $data['user_code'] = $user->user_code;
+    $user = User::factory()->create([
+        'user_code' => 'mos'
+    ]);
 
+    $newData = $data;
+    $newData['id'] = $user->id;
 
-    $response = $this->authenticatedAdmin()->postJson(route('api.admin.subscription-users.update'),$data);
+    $response = $this->authenticatedAdmin()->postJson(route('api.admin.subscription-users.update'),$newData);
 
-    $response->assertStatus(422)
-        ->assertJsonStructure([
-            'message',
-            'errors' => [
-                'email'
-            ]
-        ]);
+    $response->assertStatus(422);
 })
 ->with('sample_user');

@@ -9,7 +9,7 @@ class RouteHelper
         $dirIterator = new \RecursiveDirectoryIterator($folder);
 
         /**
-         * @var \RecursiveDirectoryIterator
+         * @var \RecursiveDirectoryIterator $dirIterator
          */
         $it = new \RecursiveIteratorIterator($dirIterator);
 

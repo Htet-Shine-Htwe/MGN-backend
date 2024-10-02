@@ -72,32 +72,25 @@ class Mogou extends Model
 
     protected function getStatusNameAttribute(): string
     {
-        if($this->status) {
-            return MogousStatus::getStatusName($this->status);
-        }
-
-        return '';
+        return  $this->status ? MogousStatus::getStatusName($this->status) : "";
     }
 
-    protected function getCoverAttribute($value): string
+    protected function getCoverAttribute(string $value): string
     {
         return $this->getMedia($value, 'public/mogou/cover');
     }
 
     protected function getMogouTypeNameAttribute(): string
     {
-        if($this->mogou_type) {
-            return MogouTypeEnum::getMogouTypeName($this->mogou_type);
-        }
-        return '';
+
+        return $this->mogou_type ?  MogouTypeEnum::getMogouTypeName($this->mogou_type) : "";
+
     }
 
     protected function getFinishStatusNameAttribute(): string
     {
-        if($this->finish_status) {
-            return MogouFinishStatus::getKey($this->finish_status);
-        }
-        return '';
+        return $this->finish_status ? MogouFinishStatus::getKey($this->finish_status) : "";
+
     }
 
     public function getTotalViewCountAttribute(): int
@@ -122,12 +115,12 @@ class Mogou extends Model
     }
 
 
-    public function getReleasedAtAttribute($value): string
+    public function getReleasedAtAttribute(string $value): string
     {
         return date('d M,Y', strtotime($value));
     }
 
-    public function getCreatedAtAttribute($value): string
+    public function getCreatedAtAttribute(string $value): string
     {
         return date('d M,Y', strtotime($value));
     }

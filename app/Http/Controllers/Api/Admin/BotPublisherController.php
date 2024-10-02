@@ -9,9 +9,7 @@ use App\Services\BotPublisher\CreateBot;
 
 class BotPublisherController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+
     public function index()
     {
         $bots = BotPublisher::all();
@@ -41,9 +39,7 @@ class BotPublisherController extends Controller
         );
     }
 
-    /**
-     * Display the specified resource.
-     */
+
     public function show(BotPublisher $botPublisher)
     {
         //
@@ -57,9 +53,7 @@ class BotPublisherController extends Controller
         //
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
+
     public function destroy(BotPublisher $botPublisher)
     {
         //

@@ -130,7 +130,7 @@ class Authentication
     /**
      * Handle the validation exception and generate a JSON response.
      */
-    protected function handleValidationException(ValidationException $e = null): JsonResponse
+    protected function handleValidationException(ValidationException $e ): JsonResponse
     {
         return response()->json(
             [

@@ -6,6 +6,7 @@ use App\Http\Requests\UserRegistrationRequest;
 use App\Models\Subscription;
 use App\Models\User;
 use App\Models\UserSubscription;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Http\Request;
 
 class UserRegistrationRepo
@@ -18,12 +19,12 @@ class UserRegistrationRepo
             ]
         );
 
-        $data = $request->validated();
+        $data =  $request->validated();
         $data = self::mutateDataSubscription($data);
         return User::create($data);
     }
 
-    public function list(Request $request)
+    public function list(Request $request): LengthAwarePaginator
     {
         $users = User::search($request->search)
         ->expiredSubscription($request->expired)
@@ -41,17 +42,10 @@ class UserRegistrationRepo
         ->firstOrFail();
     }
 
-    public function updateUser(UserRegistrationRequest $request,string $id) :User
+    public function updateUser(UserRegistrationRequest $request,string $user_code) :User
     {
-
-        $request->validate(
-            [
-            'email' => 'unique:users,email,'.$id
-            ]
-        );
-
         $data = $request->validated();
-        $user = User::where('user_code', $id)->firstOrFail();
+        $user = User::where('user_code', $user_code)->firstOrFail();
 
         UserSubscription::create(
             [
@@ -66,7 +60,7 @@ class UserRegistrationRepo
         return $user;
     }
 
-    protected static function mutateDataSubscription($data)
+    protected static function mutateDataSubscription(mixed $data): mixed
     {
         if(isset($data['current_subscription_id'])) {
             $end_date = Subscription::where('id', $data['current_subscription_id'])->first()->max;
@@ -78,7 +72,7 @@ class UserRegistrationRepo
         return $data;
     }
 
-    protected static function updateDataSubscription($data,$user)
+    protected static function updateDataSubscription(mixed $data,User $user)
     {
 
         if($user->current_subscription_id != $data['current_subscription_id']) {

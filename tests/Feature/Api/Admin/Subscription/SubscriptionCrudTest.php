@@ -36,11 +36,11 @@ test("config was successfully updated",function(){
 });
 
 
-test("check subscription have expected count 10",function(){
+test("check subscription have expected count 5",function(){
 
     $this->subscriptions->assertOk();
 
-    $this->subscriptions->assertJsonCount(10,'subscriptions.data');
+    $this->subscriptions->assertJsonCount(5,'subscriptions.data');
 });
 
 test("total sum of user count on each subscription is equal to total user count",function(){

@@ -14,7 +14,7 @@ class UserFavoriteController extends Controller
     {
     }
 
-    public function index(Request $request)
+    public function index()
     {
         return response()->json(
             [

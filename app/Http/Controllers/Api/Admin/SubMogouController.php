@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\SubMogouZipUploadRequest;
 use App\Repo\Admin\SubMogouRepo\SubMogouActionRepo;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -15,7 +16,7 @@ class SubMogouController extends Controller
 
     }
 
-    public function saveNewDraft(Request $request)
+    public function saveNewDraft(Request $request): JsonResponse
     {
         $data = $request->validate(
             [
@@ -38,7 +39,7 @@ class SubMogouController extends Controller
         );
     }
 
-    public function updateCover(Request $request)
+    public function updateCover(Request $request): JsonResponse
     {
         $data = $request->validate(
             [
@@ -58,11 +59,18 @@ class SubMogouController extends Controller
         );
     }
 
-    public function uploadZipFile(SubMogouZipUploadRequest $request)
+    public function uploadZipFile(SubMogouZipUploadRequest $request): JsonResponse
     {
         DB::beginTransaction();
         try{
-
+            $data = $request->validated();
+            $mogou = [];
+            DB::commit();
+            return response()->json(
+                [
+                'sub_mogou' => $mogou
+                ], 200
+            );
         }
         catch(\Exception $e){
             return response()->json(
@@ -73,7 +81,7 @@ class SubMogouController extends Controller
         }
     }
 
-    public function show($mogous_id, $sub_mogou_id)
+    public function show(string $mogous_id,string $sub_mogou_id): JsonResponse
     {
         $subMogou = $this->subMogouActionRepo->show($mogous_id, $sub_mogou_id);
 

@@ -30,10 +30,8 @@ class BotPublisher extends Model
         return json_decode($value);
     }
 
-    public function getBotTypeAttribute()
+    public function getBotTypeAttribute(): string
     {
-        if($this->type) {
-            return SocialMediaType::getKey($this->type);
-        }
+        return SocialMediaType::getKey($this->type);
     }
 }

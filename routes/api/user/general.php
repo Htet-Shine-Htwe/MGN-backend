@@ -43,37 +43,34 @@ Route::prefix('users')->name('users.')->group(function(){
     });
 });
 
-Route::get('/ci-test',function(){
-    return 'CI test';
-});
+// Route::get('/ci-test',function(){
+//     return 'CI test';
+// });
 
-Route::get('/telegram-send',function(Request $request){
-    $publisher = BotPublisher::first();
-    $bot = new TeleBot($publisher->token_key);
+// Route::get('/telegram-send',function(Request $request){
+//     $publisher = BotPublisher::first();
+//     $bot = new TeleBot($publisher->token_key);
 
-    $bot->sendMessage([
-        'chat_id' =>'-1002198423534',
-        'text' => $request->input('message') ?? 'Hello World'
-    ]);
+//     $bot->sendMessage([
+//         'chat_id' =>'-1002198423534',
+//         'text' => $request->input('message') ?? 'Hello World'
+//     ]);
 
-    return $bot->getUpdates();
-});
+//     return $bot->getUpdates();
+// });
 
-Route::get('/telegram-get',function(Request $request){
-    $publisher = BotPublisher::first();
-    $bot =  (new SocialPublisher($publisher));
+// Route::get('/telegram-get',function(){
+//     $publisher = BotPublisher::first();
+//     $bot =  (new SocialPublisher($publisher));
 
 
-    return response()->json([
-       'bot' => $bot->getInfo()
-    ]);
-});
+//     return response()->json([
+//        'bot' => $bot->getInfo()
+//     ]);
+// });
 
-Route::get('/env',function(){
-    dd(env('APP_ENV'));
-});
 
-Route::get('/throw-slack-exception',function(){
-     throw new \Exception('This is a slack exception');
-});
+// Route::get('/throw-slack-exception',function(){
+//      throw new \Exception('This is a slack exception');
+// });
 

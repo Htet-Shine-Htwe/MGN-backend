@@ -30,6 +30,10 @@ class UserSubscriptionController extends Controller
 
     public function create(UserRegistrationRequest $request) :JsonResponse
     {
+        $request->validate([
+            'user_code' => "unique:users,user_code"
+        ]);
+
         return tryCatch(
             function () use ($request) {
                 $user =  $this->userRegistrationRepo->registerUser($request);
@@ -45,10 +49,14 @@ class UserSubscriptionController extends Controller
 
     public function update(UserRegistrationRequest $request) :JsonResponse
     {
-        $id = $request->input('user_code');
+        $request->validate([
+            'user_code' => "unique:users,user_code ,".$request->input('user_code')
+        ]);
+
+        $user_code = $request->input('user_code');
         return tryCatch(
-            function () use ($request,$id) {
-                $this->userRegistrationRepo->updateUser($request, $id);
+            function () use ($request,$user_code) {
+                $this->userRegistrationRepo->updateUser($request, $user_code);
                 return response()->json(
                     [
                     'message' => 'User updated successfully'

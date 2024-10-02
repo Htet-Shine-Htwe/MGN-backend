@@ -18,7 +18,7 @@ class UserMogouController extends Controller
             ->select('id', 'title', 'slug', 'chapter_number', 'created_at')
             ->latest()->limit(5)->get();
 
-        $isFavorite = $request?->user()?->favorites()->where('mogou_id', $mogou->id)->exists();
+        $isFavorite = $request->user()?->favorites()->where('mogou_id', $mogou->id)->exists();
 
         return response()->json(
             [

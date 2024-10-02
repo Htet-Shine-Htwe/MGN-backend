@@ -8,7 +8,6 @@ class AdminMemberRepo
 {
     public function __construct()
     {
-        //
     }
 
     public function getMember(Admin $admin)
