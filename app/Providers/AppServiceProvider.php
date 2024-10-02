@@ -11,7 +11,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
     }
 
     /**
@@ -19,10 +18,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        // $this->app->make('App\Http\Controllers\Controller')->add
-
-        // DbPartitionInterface
-
         $this->app->singleton(
             'MangaTestClient', function () {
                 $client = new \GuzzleHttp\Client(
