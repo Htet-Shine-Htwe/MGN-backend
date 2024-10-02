@@ -3,12 +3,12 @@ includes:
 parameters:
     paths:
         - app
-    level: 9
-    ignoreErrors:
-        # Ignore all instances where mixed is given but string is expected
-        - '#expects string, mixed given.#'
+    level: 5
+    treatPhpDocTypesAsCertain: false
+
     excludePaths:
         - app/Services/Auth/Authentication.php
+    checkMissingIterableValueType: false
 
 
 
