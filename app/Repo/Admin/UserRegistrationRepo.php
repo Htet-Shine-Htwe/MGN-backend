@@ -24,6 +24,12 @@ class UserRegistrationRepo
         return User::create($data);
     }
 
+    /**
+     * list
+     *
+     * @param  Request $request
+     * @return LengthAwarePaginator<User>
+     */
     public function list(Request $request): LengthAwarePaginator
     {
         $users = User::search($request->search)
@@ -36,26 +42,19 @@ class UserRegistrationRepo
         return $users;
     }
 
-    public function show(string $id)
+    public function show(string $key): User
     {
-        return User::where('user_code', $id)
+        $haystack = $key == 'user_code' ? 'user_code' : 'id';
+        return User::where($haystack, $key)
         ->firstOrFail();
     }
 
-    public function updateUser(UserRegistrationRequest $request,string $user_code) :User
+    public function updateUser(UserRegistrationRequest $request,string $id) :User
     {
         $data = $request->validated();
-        $user = User::where('user_code', $user_code)->firstOrFail();
+        $user = User::where('id', $id)->firstOrFail();
 
-        UserSubscription::create(
-            [
-            'user_id' => $user->id,
-            'subscription_id' => $data['current_subscription_id'],
-            ]
-        );
-
-
-        $data = self::updateDataSubscription($data, $user);
+        // $data = self::updateDataSubscription($data, $user);
         $user->update($data);
         return $user;
     }
@@ -65,14 +64,12 @@ class UserRegistrationRepo
         if(isset($data['current_subscription_id'])) {
             $end_date = Subscription::where('id', $data['current_subscription_id'])->first()->max;
 
-
-
             $data['subscription_end_date'] = now()->addDays($end_date);
         }
         return $data;
     }
 
-    protected static function updateDataSubscription(mixed $data,User $user)
+    protected static function updateDataSubscription(mixed $data,User $user): mixed
     {
 
         if($user->current_subscription_id != $data['current_subscription_id']) {

@@ -13,7 +13,7 @@ class MogouActionRepo
 
     use HydraMedia;
 
-    public function create(MogouActionRequest $request)
+    public function create(MogouActionRequest $request): Mogou
     {
         $data = $request->validated();
         $request->validate(
@@ -36,7 +36,7 @@ class MogouActionRepo
         return $mogou;
     }
 
-    public function update(MogouActionRequest $request, Mogou $mogou)
+    public function update(MogouActionRequest $request, Mogou $mogou): Mogou
     {
         $data = $request->validated();
         $request->validate(
@@ -63,7 +63,7 @@ class MogouActionRepo
     }
 
 
-    public function delete(Mogou $mogou)
+    public function delete(Mogou $mogou): void
     {
 
         $cover_prefix = config('control.mogou.cover.path');
@@ -75,19 +75,19 @@ class MogouActionRepo
         $mogou->delete();
     }
 
-    public function updateStatus(Mogou $mogou, $status)
+    public function updateStatus(Mogou $mogou,string $status): Mogou
     {
         $mogou->update(['status' => $status]);
 
         return $mogou;
     }
 
-    public function addNewCategory(Mogou $mogou, $category_id)
+    public function addNewCategory(Mogou $mogou,string $category_id): void
     {
         $mogou->categories()->attach($category_id);
     }
 
-    public function removeCategory(Mogou $mogou, $category_id)
+    public function removeCategory(Mogou $mogou,string $category_id): void
     {
         $mogou->categories()->detach($category_id);
     }

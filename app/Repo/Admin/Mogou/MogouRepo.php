@@ -3,6 +3,7 @@
 namespace App\Repo\Admin\Mogou;
 
 use App\Models\Mogou;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 
 class MogouRepo implements \App\Contracts\ModelRepoInterface
@@ -10,6 +11,9 @@ class MogouRepo implements \App\Contracts\ModelRepoInterface
 
     protected Request $request;
 
+    /**
+     * @var Builder<Mogou>
+     */
     protected $collection;
 
     public function __construct()

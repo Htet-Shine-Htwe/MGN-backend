@@ -5,13 +5,14 @@ namespace App\Repo\Admin\SubMogouRepo;
 use App\Models\Mogou;
 use App\Models\SubMogou;
 use HydraStorage\HydraStorage\Traits\HydraMedia;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\DB;
 
 class SubMogouActionRepo
 {
     use HydraMedia;
 
-    protected $parentMogou;
+    protected Mogou $parentMogou;
 
     public function __construct()
     {
@@ -32,7 +33,7 @@ class SubMogouActionRepo
         return $sub_mogou;
     }
 
-    public function generateSubMogouFolder($sub_mogou) :string
+    public function generateSubMogouFolder(SubMogou $sub_mogou) :string
     {
         $folder = 'sub_mogou/'.$sub_mogou['slug']."/cover";
 
@@ -65,7 +66,7 @@ class SubMogouActionRepo
         return $sub_mogou;
     }
 
-    public function show($mogous_id, $sub_mogou_id) :SubMogou
+    public function show(string $mogous_id,string $sub_mogou_id) :SubMogou
     {
         $sub_mogou = $this->setSubMogouTable("id", $mogous_id);
 
@@ -74,7 +75,13 @@ class SubMogouActionRepo
         return $sub_mogou;
     }
 
-    public function getChaptersQuery(string $mogou_slug)
+    /**
+     * getChaptersQuery
+     *
+     * @param  string $mogou_slug
+     * @return Builder<SubMogou>
+     */
+    public function getChaptersQuery(string $mogou_slug): Builder
     {
         // enable to trace the query
         $mogou = Mogou::where('slug', $mogou_slug)->first();
@@ -90,7 +97,6 @@ class SubMogouActionRepo
 
         return $sub_mogou
             ->select("id", "title", "slug", "cover", "created_at", 'chapter_number', 'views', 'subscription_only')
-        // add select of count of images for each sub mogou
             ->addSelect(DB::raw("(SELECT COUNT(*) FROM ".$rotation_key."_sub_mogou_images WHERE ".$rotation_key."_sub_mogou_images.sub_mogou_id = ".$rotation_key."_sub_mogous.id) as images_count"))
             ->where('mogou_id', $mogou->id);
     }

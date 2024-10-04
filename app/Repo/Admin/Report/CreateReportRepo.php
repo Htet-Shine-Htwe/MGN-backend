@@ -11,7 +11,7 @@ class CreateReportRepo
 {
     use HydraMedia;
 
-    public function create(ReportActionRequest $request)
+    public function create(ReportActionRequest $request): Report
     {
         $report = new Report();
         $report->title = $request->title;

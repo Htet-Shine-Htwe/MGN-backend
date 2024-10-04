@@ -18,7 +18,7 @@ class SubscriptionRepo implements ModelRepoInterface
         return $this->collection();
     }
 
-    public function getOne($subscription)
+    public function getOne(string $subscription): Subscription
     {
         return Subscription::where('id', $subscription)->firstOrFail();
     }
