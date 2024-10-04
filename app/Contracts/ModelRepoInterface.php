@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 
 interface ModelRepoInterface
 {
-    public function get(Request $request);
+    public function get(Request $request) : mixed;
 
     public function collection(): mixed;
 

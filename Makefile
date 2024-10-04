@@ -6,3 +6,6 @@ run:
 
 seed:
 	@php artisan migrate:fresh --seed
+
+phpstan:
+	./vendor/bin/phpstan analyse
