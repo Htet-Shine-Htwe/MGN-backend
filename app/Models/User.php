@@ -47,7 +47,7 @@ class User extends Authenticatable
 
     public function getRouteKeyName(): string
     {
-        return 'user_code';
+        return 'id';
     }
 
 
@@ -77,16 +77,31 @@ class User extends Authenticatable
     * Relationships
     */
 
+    /**
+     * subscription
+     *
+     * @return BelongsTo<Subscription, User>
+     */
     public function subscription(): BelongsTo
     {
         return $this->belongsTo(Subscription::class, 'current_subscription_id', 'id');
     }
 
+    /**
+     * subscriptions
+     *
+     * @return HasMany<UserSubscription>
+     */
     public function subscriptions(): HasMany
     {
         return $this->hasMany(UserSubscription::class);
     }
 
+    /**
+     * favorites
+     *
+     * @return HasMany<UserFavorite>
+     */
     public function favorites(): HasMany
     {
         return $this->hasMany(UserFavorite::class);
@@ -96,10 +111,9 @@ class User extends Authenticatable
      * scopeSearch
      *
      * @param  Builder<static> $query
-     * @param  string $search
      * @return Builder<static>
      */
-    public function scopeSearch(Builder $query,string $search) : Builder
+    public function scopeSearch(Builder $query,?string $search) : Builder
     {
         return $query->when(
             $search, function ($query,$search) {

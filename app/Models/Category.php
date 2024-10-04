@@ -2,8 +2,10 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Support\Str;
 class Category extends Model
 {
@@ -32,17 +34,34 @@ class Category extends Model
         );
     }
 
-    public function scopeSearch($query, $search)
+    /**
+     * scopeSearch
+     *
+     * @param Builder<Category> $query
+     * @return Builder<Category>
+     */
+    public function scopeSearch($query,string|null $search): Builder
     {
         return $query->where('title', 'like', '%'.$search.'%');
     }
 
-    public function mogous()
+    /**
+     * mogous
+     *
+     * @return BelongsToMany<Mogou>
+     */
+    public function mogous(): BelongsToMany
     {
         return $this->belongsToMany(Mogou::class, 'mogous_categories');
     }
 
-    public function scopeWithMogousCount($query)
+    /**
+     * scopeWithMogousCount
+     *
+     * @param  Builder<Category> $query
+     * @return Builder<Category>
+     */
+    public function scopeWithMogousCount($query) : Builder
     {
         return $query->when(
             request('with_mogous_count'), function ($query) {
@@ -51,6 +70,12 @@ class Category extends Model
         );
     }
 
+    /**
+     * scopeOrderByMogousCount
+     *
+     * @param  Builder<Category> $query
+     * @return Builder<Category>
+     */
     public function scopeOrderByMogousCount($query)
     {
         return $query->when(

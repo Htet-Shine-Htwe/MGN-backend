@@ -6,6 +6,8 @@ use App\Traits\DbPartition;
 use HydraStorage\HydraStorage\Traits\HydraMedia;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Str;
 
 
@@ -66,30 +68,41 @@ class SubMogou extends Model
         );
     }
 
-    public function getFullCoverPathAttribute()
+    public function getFullCoverPathAttribute(): string
     {
         // return asset('storage/'.generateStorageFolder("sub_mogou",$this->slug.'/cover') . '/' . $this->cover);
         return $this->getMedia(generateStorageFolder("sub_mogou", $this->slug.'/cover') . '/' . $this->cover);
     }
 
-    public function getCreatedAtAttribute($value)
+    public function getCreatedAtAttribute(string $value): string
     {
         return date('d M,Y', strtotime($value));
     }
 
 
-    public function getSubscriptionCollectionAttribute($value)
+    public function getSubscriptionCollectionAttribute(string $value): array
     {
         return json_decode($value, true);
     }
 
-    public function mogou()
+    /**
+     * mogou
+     *
+     * @return BelongsTo<Mogou, SubMogou>
+     */
+    public function mogou(): BelongsTo
     {
         return $this->belongsTo(Mogou::class);
     }
 
 
-    public function images(string $table_name="alpha")
+    /**
+     * images
+     *
+     * @param string $table_name
+     * @return HasMany<SubMogouImage>
+     */
+    public function images(string $table_name="alpha"): HasMany
     {
         $instance = new SubMogouImage;
         // $table_name = "beta";
@@ -99,47 +112,4 @@ class SubMogou extends Model
             $instance->newQuery(), $this, $instance->getTable().'.sub_mogou_id', 'id'
         );
     }
-
-    public function newRelatedInstance($class): object
-    {
-        $instance = new $class;
-
-
-        if ($this->relationLoaded('mogou')) {
-            $mogou = $this->getRelation('mogou');
-            $rotationKey = $mogou->title;
-
-            if ($rotationKey == 'alpha') {
-                $instance->setTable('alpha_sub_mogous');
-            } elseif ($rotationKey == 'beta') {
-                $instance->setTable('beta_sub_mogous');
-            }
-        }
-
-        return $instance;
-    }
-
-    // when this model is loaded, it will check the parent model and set the table name accordingly
-
-    // public function newQuery()
-    // {
-
-    //     $query = parent::newQuery();
-
-    //     // current loaded model
-
-    //         $rotationKey = $this->mogou()->first()->title;
-
-    //         // if ($rotationKey == 'alpha') {
-    //         //    $this->setTable('alpha_sub_mogous');
-    //         // } elseif ($rotationKey == 'beta') {
-    //         //     $this->setTable('beta_sub_mogous');
-    //         // }
-
-    //     if
-
-
-    //     return $query;
-    // }
-
 }

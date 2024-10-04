@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class UserFavorite extends Model
 {
@@ -11,12 +12,22 @@ class UserFavorite extends Model
 
     protected $fillable = ['user_id', 'mogou_id'];
 
-    public function user()
+    /**
+     * user
+     *
+     * @return BelongsTo<User, UserFavorite>
+     */
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
-    public function mogou()
+    /**
+     * mogou
+     *
+     * @return BelongsTo<Mogou, UserFavorite>
+     */
+    public function mogou(): BelongsTo
     {
         return $this->belongsTo(Mogou::class);
     }

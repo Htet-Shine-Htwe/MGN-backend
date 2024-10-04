@@ -25,7 +25,7 @@ class BotPublisher extends Model
     protected $appends = ['bot_type'];
 
 
-    public function getAvailableIdsAttribute($value)
+    public function getAvailableIdsAttribute(string $value): mixed
     {
         return json_decode($value);
     }

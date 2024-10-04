@@ -6,6 +6,7 @@ use App\Traits\DbPartition;
 use HydraStorage\HydraStorage\Traits\HydraMedia;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class SubMogouImage extends Model
 {
@@ -30,7 +31,12 @@ class SubMogouImage extends Model
         'page_number'
     ];
 
-    public function subMogou()
+    /**
+     * subMogou
+     *
+     * @return BelongsTo<SubMogou, SubMogouImage>
+     */
+    public function subMogou(): BelongsTo
     {
         return $this->belongsTo(SubMogou::class);
     }

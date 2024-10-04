@@ -1,8 +1,10 @@
 <?php
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Subscription extends Model
 {
@@ -12,12 +14,26 @@ class Subscription extends Model
 
     public $timestamps = false;
 
-    public function scopeSearch($query, $search): \Illuminate\Database\Eloquent\Builder
+    /**
+     * scopeSearch
+     *
+     * @param  Builder<Subscription> $query
+     * @param  string|null $search
+     * @return Builder<Subscription>
+     */
+    public function scopeSearch($query, $search): Builder
     {
         return $query->where('title', 'like', '%' . $search . '%');
     }
 
-    public function scopeCountBy($query, $countBy): \Illuminate\Database\Eloquent\Builder
+    /**
+     * scopeCountBy
+     *
+     * @param  Builder<Subscription> $query
+     * @param  string|null $countBy
+     * @return Builder<Subscription>
+     */
+    public function scopeCountBy($query, $countBy): Builder
     {
         return $query->when(
             $countBy, function ($q) use ($countBy) {
@@ -26,7 +42,14 @@ class Subscription extends Model
         );
     }
 
-    public function scopePriceBy($query, $price): \Illuminate\Database\Eloquent\Builder
+    /**
+     * scopePriceBy
+     *
+     * @param Builder<Subscription> $query
+     * @param string|null $price
+     * @return Builder<Subscription>
+     */
+    public function scopePriceBy($query, $price): Builder
     {
         return $query->when(
             $price, function ($q) use ($price) {
@@ -35,7 +58,12 @@ class Subscription extends Model
         );
     }
 
-    public function users(): \Illuminate\Database\Eloquent\Relations\HasMany
+    /**
+     * users
+     *
+     * @return HasMany<User>
+     */
+    public function users(): HasMany
     {
         return $this->hasMany(User::class, 'current_subscription_id');
     }

@@ -15,11 +15,22 @@ class UserSubscription extends Model
         'subscription_id'
     ];
 
+
+    /**
+     * user
+     *
+     * @return BelongsTo<User, UserSubscription>
+     */
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
+    /**
+     * user
+     *
+     * @return BelongsTo<Subscription, UserSubscription>
+     */
     public function subscription(): BelongsTo
     {
         return $this->belongsTo(Subscription::class);

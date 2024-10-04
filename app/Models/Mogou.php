@@ -99,11 +99,23 @@ class Mogou extends Model
     }
 
     // relationship
+
+    /**
+     * categories
+     *
+     * @return BelongsToMany<Category>
+     */
     public function categories(): BelongsToMany
     {
         return $this->belongsToMany(Category::class, 'mogous_categories');
     }
 
+    /**
+     * subMogous
+     *
+     * @param string $table_name
+     * @return HasMany<SubMogou>
+     */
     public function subMogous(string $table_name="alpha"): HasMany
     {
         $instance = new SubMogou();
@@ -115,12 +127,12 @@ class Mogou extends Model
     }
 
 
-    public function getReleasedAtAttribute(string $value): string
+    public function getReleasedAtAttribute(?string $value): string
     {
         return date('d M,Y', strtotime($value));
     }
 
-    public function getCreatedAtAttribute(string $value): string
+    public function getCreatedAtAttribute(?string $value): string
     {
         return date('d M,Y', strtotime($value));
     }
