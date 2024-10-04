@@ -3,11 +3,12 @@
 namespace App\Http\Controllers\Api\Admin;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class AdminReportController extends Controller
 {
-    public function index()
+    public function index(): JsonResponse
     {
         return response()->json(
             [
@@ -16,7 +17,7 @@ class AdminReportController extends Controller
         );
     }
 
-    public function show($id)
+    public function show(string $id): JsonResponse
     {
         return response()->json(
             [
@@ -25,7 +26,7 @@ class AdminReportController extends Controller
         );
     }
 
-    public function updateStatus(Request $request, $id)
+    public function updateStatus(Request $request,string $id): JsonResponse
     {
         return response()->json(
             [
@@ -34,7 +35,7 @@ class AdminReportController extends Controller
         );
     }
 
-    public function delete($id)
+    public function delete(string $id): JsonResponse
     {
         return response()->json(
             [

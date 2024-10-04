@@ -6,11 +6,12 @@ use App\Http\Requests\StoreBotPublisherRequest;
 use App\Http\Requests\UpdateBotPublisherRequest;
 use App\Models\BotPublisher;
 use App\Services\BotPublisher\CreateBot;
+use Illuminate\Http\JsonResponse;
 
 class BotPublisherController extends Controller
 {
 
-    public function index()
+    public function index(): JsonResponse
     {
         $bots = BotPublisher::all();
         return response()->json(
@@ -22,7 +23,7 @@ class BotPublisherController extends Controller
     }
 
 
-    public function store(StoreBotPublisherRequest $request)
+    public function store(StoreBotPublisherRequest $request) : JsonResponse
     {
         return tryCatch(
             function () use ($request) {
@@ -40,7 +41,7 @@ class BotPublisherController extends Controller
     }
 
 
-    public function show(BotPublisher $botPublisher)
+    public function show(BotPublisher $botPublisher): void
     {
         //
     }
@@ -48,13 +49,13 @@ class BotPublisherController extends Controller
 
     /**
      */
-    public function update(UpdateBotPublisherRequest $request, BotPublisher $botPublisher)
+    public function update(UpdateBotPublisherRequest $request, BotPublisher $botPublisher): void
     {
         //
     }
 
 
-    public function destroy(BotPublisher $botPublisher)
+    public function destroy(BotPublisher $botPublisher): void
     {
         //
     }

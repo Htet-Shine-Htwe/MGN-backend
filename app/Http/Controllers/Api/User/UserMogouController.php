@@ -4,11 +4,12 @@ namespace App\Http\Controllers\Api\User;
 
 use App\Http\Controllers\Controller;
 use App\Models\Mogou;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class UserMogouController extends Controller
 {
-    public function show(Request $request)
+    public function show(Request $request): JsonResponse
     {
         $mogou = $request->mogou;
 
@@ -29,7 +30,7 @@ class UserMogouController extends Controller
         );
     }
 
-    public function relatedPostPerMogou(Request $request)
+    public function relatedPostPerMogou(Request $request): JsonResponse
     {
         $mogou = $request->mogou;
 

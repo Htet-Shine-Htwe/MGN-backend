@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\UserFavoriteRequest;
 use App\Models\User;
 use App\Repo\User\Favorite\UserFavoriteRepo;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class UserFavoriteController extends Controller
@@ -14,7 +15,7 @@ class UserFavoriteController extends Controller
     {
     }
 
-    public function index()
+    public function index(): JsonResponse
     {
         return response()->json(
             [
@@ -23,7 +24,7 @@ class UserFavoriteController extends Controller
         );
     }
 
-    public function create(UserFavoriteRequest $request)
+    public function create(UserFavoriteRequest $request): JsonResponse
     {
         // make auth user as User
         $user = $request->user();
@@ -40,7 +41,7 @@ class UserFavoriteController extends Controller
 
     }
 
-    public function delete(UserFavoriteRequest $request)
+    public function delete(UserFavoriteRequest $request): JsonResponse
     {
         $user = $request->user();
 

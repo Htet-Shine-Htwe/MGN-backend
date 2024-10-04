@@ -30,7 +30,7 @@ class SubscriptionController extends Controller
         );
     }
 
-    public function show($subscription)
+    public function show(string $subscription): JsonResponse
     {
         $sub = $this->subscriptionRepo->getOne($subscription);
 

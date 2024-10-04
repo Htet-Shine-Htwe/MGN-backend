@@ -9,6 +9,7 @@ use App\Repo\Admin\Mogou\MogouActionRepo;
 use App\Repo\Admin\Mogou\MogouRepo;
 use App\Traits\CacheResponse;
 use App\Vaildations\MogouValidation;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
@@ -21,7 +22,7 @@ class MogouController extends Controller
     {
     }
 
-    public function index(Request $request)
+    public function index(Request $request): JsonResponse
     {
         $collection =  $this->mogouRepo
             ->withCategories()
@@ -51,7 +52,7 @@ class MogouController extends Controller
         );
     }
 
-    public function show(Mogou $mogou)
+    public function show(Mogou $mogou): JsonResponse
     {
         $mogou->load('categories');
 
@@ -62,7 +63,7 @@ class MogouController extends Controller
         );
     }
 
-    public function create(MogouActionRequest $request)
+    public function create(MogouActionRequest $request): JsonResponse
     {
         $mogou = $this->mogouActionRepo->create($request);
 
@@ -73,7 +74,7 @@ class MogouController extends Controller
         );
     }
 
-    public function update(MogouActionRequest $request, Mogou $mogou)
+    public function update(MogouActionRequest $request, Mogou $mogou): JsonResponse
     {
             $mogou = $this->mogouActionRepo->update($request, $mogou);
             return response()->json(
@@ -84,7 +85,7 @@ class MogouController extends Controller
 
     }
 
-    public function updateStatus(Request $request)
+    public function updateStatus(Request $request): JsonResponse
     {
         $request->validate(
             [
@@ -104,7 +105,7 @@ class MogouController extends Controller
         );
     }
 
-    public function bindCategory(Request $request)
+    public function bindCategory(Request $request): JsonResponse
     {
         $request->validate(
             [
@@ -125,7 +126,7 @@ class MogouController extends Controller
         );
     }
 
-    public function unbindCategory(Request $request)
+    public function unbindCategory(Request $request): JsonResponse
     {
         $mogou = Mogou::findOrFail($request->input('mogou_id'));
         $request->validate(
@@ -145,7 +146,7 @@ class MogouController extends Controller
         );
     }
 
-    public function delete(Request $request)
+    public function delete(Request $request): JsonResponse
     {
         $mogou = Mogou::find($request->input('mogou_id'));
 

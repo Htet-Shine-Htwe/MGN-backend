@@ -16,12 +16,12 @@ class CategoryController extends Controller
 
     use CacheResponse;
 
-    public function __construct(protected CategoryRepo $categoryRepo,private $cacheKey = "")
+    public function __construct(protected CategoryRepo $categoryRepo,private string $cacheKey = "")
     {
         $this->cacheKey = $this->generateCacheKey('all-categories');
     }
 
-    public function all(Request $request)
+    public function all(Request $request): JsonResponse
     {
         $key = $this->cacheKey;
         $categories = $this->cacheResponse(

@@ -31,7 +31,8 @@ class UserSubscriptionController extends Controller
     public function create(UserRegistrationRequest $request) :JsonResponse
     {
         $request->validate([
-            'user_code' => "unique:users,user_code"
+            'user_code' => "unique:users,user_code",
+            'password' => 'required|string|min:8'
         ]);
 
         return tryCatch(
@@ -50,25 +51,41 @@ class UserSubscriptionController extends Controller
     public function update(UserRegistrationRequest $request) :JsonResponse
     {
         $request->validate([
-            'user_code' => "unique:users,user_code ,".$request->input('user_code')
+            'id' => 'required|exists:users,id',
+            'user_code' => "unique:users,user_code,".$request->input('id'),
+            'password' => 'nullable|string|min:8'
         ]);
 
-        $user_code = $request->input('user_code');
+        $id = $request->input('id');
         return tryCatch(
-            function () use ($request,$user_code) {
-                $this->userRegistrationRepo->updateUser($request, $user_code);
+            function () use ($request,$id) {
+                $this->userRegistrationRepo->updateUser($request, $id);
                 return response()->json(
                     [
                     'message' => 'User updated successfully'
                     ]
                 );
-            }, 'User update failed'
+            },null,true
         );
     }
 
     public function show(Request $request) :JsonResponse
     {
         $user = $this->userRegistrationRepo->show($request->user_code);
+
+        $user_subscriptions = $this->userSubscriptionRepo->setUser($user->user_code)->subscriptions();
+
+        return response()->json(
+            [
+            'user' => $user,
+            'subscriptions' => $user_subscriptions
+            ]
+        );
+    }
+
+    public function showById(Request $request) :JsonResponse
+    {
+        $user = $this->userRegistrationRepo->show($request->id);
 
         $user_subscriptions = $this->userSubscriptionRepo->setUser($user->user_code)->subscriptions();
 

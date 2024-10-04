@@ -6,6 +6,7 @@ use App\Enum\AdminRole;
 use App\Http\Controllers\Controller;
 use App\Models\Admin;
 use App\Services\RolePermissions\AlphaRole;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class AdminController extends Controller
@@ -16,7 +17,7 @@ class AdminController extends Controller
 
     }
 
-    public function roles(Request $request)
+    public function roles(Request $request): JsonResponse
     {
         $roles = $this->alphaRole->setGuard('admin')->getRoles();
 
@@ -27,7 +28,7 @@ class AdminController extends Controller
         );
     }
 
-    public function createRole(Request $request)
+    public function createRole(Request $request): JsonResponse
     {
         $request->validate(
             [
@@ -46,7 +47,7 @@ class AdminController extends Controller
         );
     }
 
-    public function permissions(Request $request)
+    public function permissions(Request $request): JsonResponse
     {
         $permissions = $this->alphaRole->setGuard('admin')->getPermissions();
 
@@ -57,7 +58,7 @@ class AdminController extends Controller
         );
     }
 
-    public function members(Request $request)
+    public function members(Request $request): JsonResponse
     {
         $members =  Admin::with('roles')->get();
 

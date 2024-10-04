@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Mogou;
 use App\Models\SocialInfo;
 use App\Repo\Admin\Mogou\MogouRepo;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class HomePageController extends Controller
@@ -18,7 +19,7 @@ class HomePageController extends Controller
         //
     }
 
-    public function carousel()
+    public function carousel(): JsonResponse
     {
         $mogou = Mogou::select("id", "title", "slug", "cover", "rotation_key", "description", "finish_status", 'mogou_type', 'status', "rating")
             ->where('status', MogousStatus::PUBLISHED->value)
@@ -33,7 +34,7 @@ class HomePageController extends Controller
         );
     }
 
-    public function mostViewed()
+    public function mostViewed(): JsonResponse
     {
         $mogous = Mogou::select("id", "title", "slug", "cover",)
             ->where('status', MogousStatus::PUBLISHED->value)
@@ -48,7 +49,7 @@ class HomePageController extends Controller
         );
     }
 
-    public function lastUploaded(Request $request)
+    public function lastUploaded(Request $request): JsonResponse
     {
         $collection =  $this->mogouRepo
             ->withCategories()
@@ -73,7 +74,7 @@ class HomePageController extends Controller
         );
     }
 
-    public function banners()
+    public function banners(): JsonResponse
     {
         $banners = SocialInfo::where('type', SocialInfoType::Banner->value)->get();
 

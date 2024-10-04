@@ -8,6 +8,7 @@ use App\Models\SubMogou;
 use App\Repo\Admin\MogouChapter\MogouChapterRepo;
 use App\Repo\Admin\SubMogouRepo\SubMogouActionRepo;
 use App\Services\Report\ChapterReport;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class MogouChapterController extends Controller
@@ -19,7 +20,7 @@ class MogouChapterController extends Controller
 
     }
 
-    public function index(Request $request)
+    public function index(Request $request): JsonResponse
     {
         $subMogouQuery = $this->subMogouActionRepo->getChaptersQuery($request->mogou);
 
@@ -32,7 +33,7 @@ class MogouChapterController extends Controller
         );
     }
 
-    public function chapterAnalysis(Request $request)
+    public function chapterAnalysis(Request $request): JsonResponse
     {
         $mogou = Mogou::where('slug', $request->mogou)->first();
 

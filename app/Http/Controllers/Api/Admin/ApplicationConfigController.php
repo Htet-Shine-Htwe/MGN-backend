@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\ApplicationConfig;
 use App\Traits\CacheResponse;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 
@@ -12,7 +13,7 @@ class ApplicationConfigController extends Controller
 {
     use CacheResponse;
 
-    public function index()
+    public function index(): JsonResponse
     {
 
         $key = $this->generateCacheKey('application_config');
@@ -25,7 +26,7 @@ class ApplicationConfigController extends Controller
         return response()->json($app);
     }
 
-    public function update(Request $request)
+    public function update(Request $request): JsonResponse
     {
         $app = ApplicationConfig::first();
         $app->update($request->all());
