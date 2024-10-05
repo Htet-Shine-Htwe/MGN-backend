@@ -1,5 +1,7 @@
 <?php
 
+use App\Models\SubMogou;
+use App\Models\SubMogouImage;
 use App\Services\Partition\PartitionFactory;
 use Database\Seeders\CategorySeeder;
 use Database\Seeders\MogousCategorySeeder;
@@ -28,7 +30,7 @@ beforeEach(function(){
 it("mogou chapters can be fetched", function(){
     $mogou = \App\Models\Mogou::first();
 
-    $tables = PartitionFactory::createInstancePartition('SubMogou', 2);
+    $tables = ((new SubMogouImage())->getCreatedPartitions());
 
     \App\Models\SubMogouImage::factory()->count(20)->create([
         'sub_mogou_id' => 1

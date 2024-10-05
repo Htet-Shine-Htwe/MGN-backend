@@ -94,7 +94,9 @@ test("can successfully update the cover of sub mogous",function($sub_mogou){
     $response = $this->postJson(route('api.admin.sub-mogous.saveNewDraft'),[
         'title' => $sub_mogou['title'],
         'chapter_number' => $sub_mogou['chapter_number'],
-        'mogou_slug' => $sub_mogou['mogou_slug']
+        'mogou_slug' => $sub_mogou['mogou_slug'],
+        'description' => "Sub Mogou Description",
+        "subscription_only" => 0
     ]);
 
     $subMogou = $response->json('sub_mogou');
@@ -105,6 +107,8 @@ test("can successfully update the cover of sub mogous",function($sub_mogou){
         'slug' => $subMogou['slug'],
         'cover' => UploadedFile::fake()->image('cover.jpg')
     ]);
+
+    dd($response->json());
 
     $folder = (new SubMogouActionRepo())->generateSubMogouFolder($subMogou);
 
@@ -117,4 +121,5 @@ test("can successfully update the cover of sub mogous",function($sub_mogou){
 
     $this->assertInStorage($full_path);
 })
-->with('sub-mogou-data-collection');
+->with('sub-mogou-data-collection')
+->group('hi');

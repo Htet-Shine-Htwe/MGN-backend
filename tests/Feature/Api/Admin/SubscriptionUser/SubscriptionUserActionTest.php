@@ -88,6 +88,8 @@ test("subscription user can be updated",function($data){
         'user_code' => $data['user_code']
     ]);
 
+    $data['id'] = $user->id;
+
     $response = $this->authenticatedAdmin()->postJson(route('api.admin.subscription-users.update'),$data);
 
     $response->assertOk()
@@ -118,4 +120,5 @@ test("subscription user can't update with same user_code",function($data){
 
     $response->assertStatus(422);
 })
-->with('sample_user');
+->with('sample_user')
+->group("sd");

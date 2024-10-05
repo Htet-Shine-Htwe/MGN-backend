@@ -11,7 +11,7 @@ uses()->group('admin','api','admin-subscription-list','users-subscription');
 uses(UserAuthenticated::class);
 
 beforeEach(function(){
-    config(['control.test.users_count' => 30]);
+    config(['control.test.users_count' => 20]);
     $this->seed([
         SubscriptionSeeder::class,
         UserSeeder::class
