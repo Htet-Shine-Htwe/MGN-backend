@@ -3,7 +3,6 @@ namespace App\Http\Controllers\Api\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreBotPublisherRequest;
-use App\Http\Requests\UpdateBotPublisherRequest;
 use App\Models\BotPublisher;
 use App\Services\BotPublisher\CreateBot;
 use Illuminate\Http\JsonResponse;
@@ -38,25 +37,5 @@ class BotPublisherController extends Controller
             },
             "Failed to generate new bot"
         );
-    }
-
-
-    public function show(BotPublisher $botPublisher): void
-    {
-        //
-    }
-
-
-    /**
-     */
-    public function update(UpdateBotPublisherRequest $request, BotPublisher $botPublisher): void
-    {
-        //
-    }
-
-
-    public function destroy(BotPublisher $botPublisher): void
-    {
-        //
     }
 }

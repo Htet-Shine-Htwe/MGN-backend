@@ -35,18 +35,14 @@ class SubMogouActionRepo
 
     public function generateSubMogouFolder(SubMogou $sub_mogou) :string
     {
-        $folder = 'sub_mogou/'.$sub_mogou['slug']."/cover";
-
-        return $folder;
+        return 'sub_mogou/'.$sub_mogou['slug']."/cover";
     }
 
     public function saveNewDraft(array $data) :SubMogou | array
     {
         $sub_mogou = $this->setSubMogouTable("slug", $data['mogou_slug']);
         $data['mogou_id'] = $this->parentMogou->id;
-        $sub_mogou = $sub_mogou->create($data);
-
-        return $sub_mogou;
+        return $sub_mogou->create($data);
     }
 
     public function updateCover(array $data) :SubMogou

@@ -32,14 +32,12 @@ class UserRegistrationRepo
      */
     public function list(Request $request): LengthAwarePaginator
     {
-        $users = User::search($request->search)
+        return User::search($request->search)
         ->expiredSubscription($request->expired)
         ->filter($request->filter)
         ->orderBy($request->order_by ?? 'id', $request->order ?? 'desc')
         ->paginate($request->limit ?? 10)
         ->withQueryString();
-
-        return $users;
     }
 
     public function show(string $key): User
