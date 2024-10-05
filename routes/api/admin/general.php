@@ -46,6 +46,7 @@ Route::middleware(['auth:sanctum'])
 
         Route::get('/users/{user_code}/subscriptions','subscriptions')->name('subscription-users.subscriptions');
         Route::get('/users/show/{user_code}','show')->name('subscription-users.show');
+        Route::get('/users/show/{id}','showById')->name('subscription-users.show');
     });
 
     Route::controller(MogouController::class)->group(function(){
