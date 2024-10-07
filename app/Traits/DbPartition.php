@@ -39,16 +39,22 @@ trait DbPartition
         return  $rotation_key . '_' . $this->partition_prefix;
     }
 
-    public function createPartition(): string | bool
+    /**
+     * createPartition
+     *
+     * @return array<string>
+     */
+    public function createPartition(): array
     {
         $available_partitions = TablePartition::availableRotationKey();
 
+        $created_partitions = [];
         foreach ($available_partitions as $partition) {
             $sql = $this->createPartitionTableConnectionQuery($partition);
 
             try {
-                DB::statement($sql);
-                return $partition . "_" . $this->getTable();
+                $success = DB::statement($sql);
+                $created_partitions[] = $partition . "_" . $this->getTable();
             } catch (\Exception $e) {
                 if (str_contains($e->getMessage(), 'already exists')) {
                     continue;
@@ -57,11 +63,8 @@ trait DbPartition
                 }
             }
         }
-        return false;
-        // throw new \Exception("Only " . count($available_tables) . " rotations are allowed for partitioning");
+        return $created_partitions;
     }
-
-
 
     public function checkTablePartition(string $table):bool
     {
@@ -71,13 +74,26 @@ trait DbPartition
     public function createPartitionTableConnectionQuery(string $partition): string
     {
         $table = $this->getTable();
-        $query = match (config('database.default')) {
+
+        return match (config('database.default')) {
             'mysql' => "CREATE TABLE {$partition}_{$table} LIKE {$table}",
             'sqlite' => "CREATE TABLE {$partition}_{$table} AS SELECT * FROM {$table} WHERE 0",
             default => "CREATE TABLE {$partition}_{$table} LIKE {$table}",
         };
 
-        return $query;
+    }
+
+    public function getCreatedPartitions(): array
+    {
+        $available_partitions = TablePartition::availableRotationKey();
+
+        $created_partitions = [];
+        foreach ($available_partitions as $partition) {
+            if ($this->checkTablePartition($partition . "_" . $this->getTable())) {
+                $created_partitions[] = $partition . "_" . $this->getTable();
+            }
+        }
+        return $created_partitions;
     }
 
 }

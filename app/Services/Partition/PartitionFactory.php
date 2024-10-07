@@ -31,9 +31,7 @@ class PartitionFactory
             throw new InvalidArgumentException("Method createPartition not found.");
         }
 
-        for ($i = 1; $i <= $index_count; $i++) {
-            $tables[] = $db->createPartition();
-        }
+        $tables = $db->createPartition();
 
         return $tables;
     }
