@@ -76,6 +76,7 @@ class SubMogou extends Model
 
     public function getCreatedAtAttribute(string $value): string
     {
+
         return date('d M,Y', strtotime($value));
     }
 
