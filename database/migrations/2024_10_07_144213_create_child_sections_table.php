@@ -16,7 +16,6 @@ return new class extends Migration
             $table->string("pivot_key", 115);
             $table->foreignId("base_section_id")->constrained()->onDelete('cascade');
             $table->index('pivot_key');
-            $table->timestamps();
         });
     }
 

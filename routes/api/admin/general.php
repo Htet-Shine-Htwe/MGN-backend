@@ -1,11 +1,11 @@
 <?php
 
 use App\Http\Controllers\Api\Admin\AdminController;
-use App\Http\Controllers\Api\Admin\ApplicationConfigController;
 use App\Http\Controllers\Api\Admin\BotPublisherController;
 use App\Http\Controllers\Api\Admin\CategoryController;
 use App\Http\Controllers\Api\Admin\MogouChapterController;
 use App\Http\Controllers\Api\Admin\MogouController;
+use App\Http\Controllers\Api\Admin\SectionManagementController;
 use App\Http\Controllers\Api\Admin\SocialInfoController;
 use App\Http\Controllers\Api\Admin\SubMogouController;
 use App\Http\Controllers\Api\Admin\SubscriptionController;
@@ -46,7 +46,7 @@ Route::middleware(['auth:sanctum'])
 
         Route::get('/users/{user_code}/subscriptions','subscriptions')->name('subscription-users.subscriptions');
         Route::get('/users/show/{user_code}','show')->name('subscription-users.show');
-        Route::get('/users/show/{id}','showById')->name('subscription-users.show');
+        Route::get('/users/showById/{id}','showById')->name('subscription-users.showById');
     });
 
     Route::controller(MogouController::class)->group(function(){
@@ -82,6 +82,12 @@ Route::middleware(['auth:sanctum'])
         Route::post('/social-info/{social_info}','delete')->name('social-info.delete');
 
         Route::get('/social-info/banners','banners')->name('social-info.banners');
+    });
+
+    Route::controller(SectionManagementController::class)->group(function(){
+        Route::get('/sections/{section}','index')->name('sections.index');
+        Route::post('/sections/{section}','attachNewChild')->name('sections.update');
+        Route::post('/sections/{section}/delete','removeChild')->name('sections.delete');
     });
 
     Route::controller(BotPublisherController::class)->name('bot-publisher.')->group(function(){

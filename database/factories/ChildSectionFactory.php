@@ -17,7 +17,8 @@ class ChildSectionFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'pivot_key' => random_int( 1, 10),
+            'base_section_id' => 1,
         ];
     }
 }
