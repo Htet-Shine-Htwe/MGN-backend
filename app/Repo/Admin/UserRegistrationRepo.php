@@ -13,11 +13,6 @@ class UserRegistrationRepo
 {
     public static function registerUser(UserRegistrationRequest $request) :User
     {
-        $request->validate(
-            [
-            'email' => 'unique:users,email'
-            ]
-        );
 
         $data =  $request->validated();
         $data = self::mutateDataSubscription($data);
@@ -40,10 +35,9 @@ class UserRegistrationRepo
         ->withQueryString();
     }
 
-    public function show(string $key): User
+    public function show(string $haystack,string $value): User
     {
-        $haystack = $key == 'user_code' ? 'user_code' : 'id';
-        return User::where($haystack, $key)
+        return User::where($haystack, $value)
         ->firstOrFail();
     }
 

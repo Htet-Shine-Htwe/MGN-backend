@@ -44,7 +44,7 @@ class UserSubscriptionController extends Controller
                     'user' => $user
                     ]
                 );
-            }
+            },null,true
         );
     }
 
@@ -71,7 +71,7 @@ class UserSubscriptionController extends Controller
 
     public function show(Request $request) :JsonResponse
     {
-        $user = $this->userRegistrationRepo->show($request->user_code);
+        $user = $this->userRegistrationRepo->show('user_code',$request->user_code);
 
         $user_subscriptions = $this->userSubscriptionRepo->setUser($user->user_code)->subscriptions();
 
@@ -85,7 +85,7 @@ class UserSubscriptionController extends Controller
 
     public function showById(Request $request) :JsonResponse
     {
-        $user = $this->userRegistrationRepo->show($request->id);
+        $user = $this->userRegistrationRepo->show('id',$request->id);
 
         $user_subscriptions = $this->userSubscriptionRepo->setUser($user->user_code)->subscriptions();
 

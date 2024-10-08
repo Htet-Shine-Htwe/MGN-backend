@@ -47,6 +47,7 @@ class SubMogouSeeder extends Seeder
                 $sub_mogou_images_insert = [];
                 for($i = 0; $i < count($mogou); $i++) {
                     $total_chapter = rand(1, 20);
+                    Mogou::where('id', $mogou[$i])->update(['total_chapters' => $total_chapter]);
                     for($j = 1; $j <= $total_chapter; $j++) {
                         $sub_mogou_insert[] = [
                             'title' => 'Chapter ' . $j . ' of Mogou ' . $mogou[$i],
@@ -54,6 +55,7 @@ class SubMogouSeeder extends Seeder
                             'cover' => 'cover.jpg',
                             'mogou_id' => $mogou[$i],
                             'chapter_number' => $j,
+                            'created_at' => now()->subDays(rand(1, 100)),
                         ];
 
                         $total_images = rand(20, 40);

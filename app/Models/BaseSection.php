@@ -10,7 +10,7 @@ class BaseSection extends Model
 {
     use HasFactory;
 
-    protected bool $guarded = false;
+    protected $guarded=[];
 
 
     /**

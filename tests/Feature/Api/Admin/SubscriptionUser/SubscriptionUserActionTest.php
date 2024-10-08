@@ -40,7 +40,7 @@ dataset('sample_user',[
     fn() =>[
         'name' => 'beta',
         'email' => 'beta@gmail.com',
-        'user_code' => 'sd',
+        'user_code' => 'sde',
         'password' => 'password',
         'password_confirmation' => 'password',
         'current_subscription_id' => 2,

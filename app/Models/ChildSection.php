@@ -9,6 +9,8 @@ class ChildSection extends Model
 {
     use HasFactory;
 
-    protected bool $guarded = false;
+    protected $guarded=[];
+
+    public $timestamps = false;
 
 }

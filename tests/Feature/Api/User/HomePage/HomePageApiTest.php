@@ -1,5 +1,6 @@
 <?php
 
+use Database\Seeders\BaseSectionSeeder;
 use Database\Seeders\CategorySeeder;
 use Database\Seeders\MogousCategorySeeder;
 use Database\Seeders\MogouSeeder;
@@ -21,6 +22,7 @@ beforeEach(function() {
         MogouSeeder::class,
         MogousCategorySeeder::class,
         SubMogouSeeder::class,
+        BaseSectionSeeder::class,
     ]);
 
     $this->setupUser();
@@ -31,7 +33,7 @@ test("carousel data for homepage can fetched successfully",function(){
 
     $response->assertOk();
     $count = count($response->json('mogous'));
-    $this->assertTrue($count > 1);
+    $this->assertTrue($count > 0);
 });
 
 test("most-viewed mogous data for homepage can fetched successfully",function(){

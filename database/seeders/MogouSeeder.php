@@ -41,6 +41,7 @@ class MogouSeeder extends Seeder
                     'rating' => fake()->randomFloat(1, 0, 5),
                     'released_year' => fake()->year,
                     'released_at' => fake()->dateTimeThisYear,
+                    'created_at' => fake()->dateTimeThisYear,
                 ];
             }
 

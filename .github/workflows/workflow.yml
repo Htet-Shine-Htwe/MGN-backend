@@ -40,6 +40,9 @@ jobs:
       - name: Run Stress testss
         run: ./vendor/bin/pest --parallel --group=stress-test
 
+      - name: Php stan analysis
+        run: ./vendor/bin/phpstan analyse --memory-limit=2G
+
       - name: Set up Git user identity
         run: |
           git config --global user.email "github-actions@github.com"

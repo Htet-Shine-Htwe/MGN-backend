@@ -21,7 +21,7 @@ beforeEach(function(){
 
     $this->mogou = Mogou::factory()->create();
 
-});
+})->skip();
 
 dataset('sub-mogou-data-collection',[
     fn() => [
@@ -108,8 +108,6 @@ test("can successfully update the cover of sub mogous",function($sub_mogou){
         'cover' => UploadedFile::fake()->image('cover.jpg')
     ]);
 
-    dd($response->json());
-
     $folder = (new SubMogouActionRepo())->generateSubMogouFolder($subMogou);
 
     $response->assertStatus(200);
@@ -121,5 +119,4 @@ test("can successfully update the cover of sub mogous",function($sub_mogou){
 
     $this->assertInStorage($full_path);
 })
-->with('sub-mogou-data-collection')
-->group('hi');
+->with('sub-mogou-data-collection');

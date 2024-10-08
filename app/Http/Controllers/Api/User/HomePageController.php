@@ -8,23 +8,26 @@ use App\Http\Controllers\Controller;
 use App\Models\Mogou;
 use App\Models\SocialInfo;
 use App\Repo\Admin\Mogou\MogouRepo;
+use App\Services\SectionManagement\SectionManagementService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class HomePageController extends Controller
 {
     // make constructor
-    public function __construct(protected MogouRepo $mogouRepo)
+    public function __construct(protected MogouRepo $mogouRepo,protected SectionManagementService $sms)
     {
         //
     }
 
     public function carousel(): JsonResponse
     {
+        $mogous_ids = $this->sms->getBySection("hero_highlight_slider")->childSections->pluck('pivot_key');
+
         $mogou = Mogou::select("id", "title", "slug", "cover", "rotation_key", "description", "finish_status", 'mogou_type', 'status', "rating")
             ->where('status', MogousStatus::PUBLISHED->value)
             ->with('categories:title')
-            ->take(8)
+            ->whereIn('id', $mogous_ids)
             ->get();
 
         return response()->json(
