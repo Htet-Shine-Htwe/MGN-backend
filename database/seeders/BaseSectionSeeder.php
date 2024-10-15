@@ -13,7 +13,7 @@ class BaseSectionSeeder extends Seeder
      */
     public function run(): void
     {
-        $base_sections = ["hero_highlight_slider"];
+        $base_sections = ["hero_highlight_slider","main_page_recommended"];
 
         foreach ($base_sections as $section) {
             \App\Models\BaseSection::create([
@@ -25,6 +25,10 @@ class BaseSectionSeeder extends Seeder
 
         ChildSection::factory( 8)->create([
             "base_section_id" => 1,
+        ]);
+
+        ChildSection::factory( 8)->create([
+            "base_section_id" => 2,
         ]);
 
     }

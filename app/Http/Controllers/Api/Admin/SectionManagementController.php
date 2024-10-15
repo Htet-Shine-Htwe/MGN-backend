@@ -16,7 +16,7 @@ class SectionManagementController extends Controller
 
     public function index(Request $request): JsonResponse
     {
-        $baseSection = $this->sms->getBySection($request->section)->load('childSections');
+        $baseSection = $this->sms->getMogouSection($request->section);
 
         return response()->json([
             "baseSection" => $baseSection,
@@ -28,7 +28,7 @@ class SectionManagementController extends Controller
         $this->sms->attachNewChild($request->section, $request->child);
 
         return response()->json([
-            'message' => 'section updated successfully',
+            'message' => 'new component was added',
         ]);
     }
 
@@ -37,8 +37,30 @@ class SectionManagementController extends Controller
         $this->sms->removeChild($request->section, $request->child);
 
         return response()->json( [
-            'message' => 'section updated successfully',
+            'message' => 'component was removed successfully',
         ]);
+    }
+
+    public function searchMogou(Request $request): JsonResponse
+    {
+        $mogous = $this->sms->searchMogou($request->search,$request->type);
+
+        return response()->json([
+            'mogous' => $mogous,
+        ]);
+    }
+
+    public function setVisibility(Request $request): JsonResponse
+    {
+
+        $this->sms->setToggleVisibility($request->section, $request->child, $request->visibility);
+
+        $visibilityStatus = $request->visibility ? 'visible' : 'invisible';
+
+        return response()->json([
+            'message' => 'component was activated to ' . $visibilityStatus,
+        ]);
+
     }
 
 

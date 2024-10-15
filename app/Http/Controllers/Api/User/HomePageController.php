@@ -22,12 +22,34 @@ class HomePageController extends Controller
 
     public function carousel(): JsonResponse
     {
-        $mogous_ids = $this->sms->getBySection("hero_highlight_slider")->childSections->pluck('pivot_key');
+        $mogous_ids = $this->sms->getBySection("hero_highlight_slider")->childSections
+        ->where("is_visible", 1)
+        ->pluck('pivot_key');
 
         $mogou = Mogou::select("id", "title", "slug", "cover", "rotation_key", "description", "finish_status", 'mogou_type', 'status', "rating")
             ->where('status', MogousStatus::PUBLISHED->value)
             ->with('categories:title')
             ->whereIn('id', $mogous_ids)
+            ->get();
+
+        return response()->json(
+            [
+            'mogous' => $mogou
+            ]
+        );
+    }
+
+    public function recommended(): JsonResponse
+    {
+        $mogous_ids = $this->sms->getBySection("main_page_recommended")->childSections
+        ->where("is_visible", 1)
+        ->pluck('pivot_key');
+
+        $mogou = Mogou::select("id", "title", "slug", "cover", "rotation_key", "description", "finish_status", 'mogou_type', 'status', "rating")
+            ->where('status', MogousStatus::PUBLISHED->value)
+            ->with('categories:title')
+            ->whereIn('id', $mogous_ids)
+            ->take(20)
             ->get();
 
         return response()->json(

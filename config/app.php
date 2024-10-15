@@ -172,6 +172,7 @@ return [
         Spatie\Permission\PermissionServiceProvider::class,
         HydraStorage\HydraStorage\HydraStorageServiceProvider::class,
         WeStacks\TeleBot\Laravel\Providers\TeleBotServiceProvider::class,
+        \Mews\Purifier\PurifierServiceProvider::class,
 
     ])->toArray(),
 
@@ -189,6 +190,7 @@ return [
     'aliases' => Facade::defaultAliases()->merge([
         // 'Example' => App\Facades\Example::class,
         'TeleBot' => WeStacks\TeleBot\Laravel\TeleBot::class,
+        'Purifier' => \Mews\Purifier\Facades\Purifier::class,
     ])->toArray(),
 
 ];

@@ -31,6 +31,7 @@ class DatabaseSeeder extends Seeder
             MogousCategorySeeder::class,
             SubMogouSeeder::class,
             BannerSeeder::class,
+            BaseSectionSeeder::class,
         ]);
     }
 }

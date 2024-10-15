@@ -86,8 +86,10 @@ Route::middleware(['auth:sanctum'])
 
     Route::controller(SectionManagementController::class)->group(function(){
         Route::get('/sections/{section}','index')->name('sections.index');
+        Route::post('/search_section_items','searchMogou')->name('sections.searchItem');
         Route::post('/sections/{section}','attachNewChild')->name('sections.update');
         Route::post('/sections/{section}/delete','removeChild')->name('sections.delete');
+        Route::post('/section_items/visibility','setVisibility')->name('sections.searchItem');
     });
 
     Route::controller(BotPublisherController::class)->name('bot-publisher.')->group(function(){

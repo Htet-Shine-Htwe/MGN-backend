@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('child_sections', function (Blueprint $table) {
             $table->id();
             $table->string("pivot_key", 115);
+            $table->smallInteger('is_visible')->default(1);
             $table->foreignId("base_section_id")->constrained()->onDelete('cascade');
             $table->index('pivot_key');
         });

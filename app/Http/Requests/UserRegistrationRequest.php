@@ -26,6 +26,7 @@ class UserRegistrationRequest extends FormRequest
             'name' => 'required|string|max:255',
             'email' => 'nullable|string|email|max:255',
             'password' => 'required|string|min:6',
+            'current_subscription_id' => 'nullable|exists:subscriptions,id',
         ];
     }
 }
