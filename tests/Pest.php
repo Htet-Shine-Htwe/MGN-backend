@@ -2,6 +2,7 @@
 
 use App\Console\Kernel;
 use Database\Seeders\AdminPermissionSeeder;
+use Database\Seeders\ApplicationConfigSeeder;
 use Tests\Support\TestStorage;
 
 /*
@@ -21,7 +22,8 @@ uses(
 )
 ->beforeEach(function () {
     $this->seed([
-        AdminPermissionSeeder::class
+        AdminPermissionSeeder::class,
+        ApplicationConfigSeeder::class
     ]);
 })
 ->in('Feature');
