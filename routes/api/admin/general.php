@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\Admin\AdminController;
+use App\Http\Controllers\Api\Admin\AdminReportController;
 use App\Http\Controllers\Api\Admin\BotPublisherController;
 use App\Http\Controllers\Api\Admin\CategoryController;
 use App\Http\Controllers\Api\Admin\MogouChapterController;
@@ -43,6 +44,8 @@ Route::middleware(['auth:sanctum'])
         Route::get('/users','index')->name('subscription-users.index');
         Route::post('/users','create')->name('subscription-users.store');
         Route::post('/users/update','update')->name('subscription-users.update');
+        Route::post('/users/update-subscription','update')->name('subscription-users.update-subscription');
+
 
         Route::get('/users/{user_code}/subscriptions','subscriptions')->name('subscription-users.subscriptions');
         Route::get('/users/show/{user_code}','show')->name('subscription-users.show');
@@ -90,10 +93,17 @@ Route::middleware(['auth:sanctum'])
         Route::post('/sections/{section}','attachNewChild')->name('sections.update');
         Route::post('/sections/{section}/delete','removeChild')->name('sections.delete');
         Route::post('/section_items/visibility','setVisibility')->name('sections.searchItem');
+        Route::post('/sections/{section}/empty','emptySection')->name('sections.empty');
     });
 
     Route::controller(BotPublisherController::class)->name('bot-publisher.')->group(function(){
         Route::post('/bot-publisher','store')->name('store');
+    });
+
+    Route::controller(AdminReportController::class)->group(function(){
+        Route::get('/reports','index')->name('reports.index');
+        Route::get('/reports/{report}','show')->name('reports.show');
+        Route::post('/reports/{report}','updateStatus')->name('reports.updateStatus');
     });
 });
 
