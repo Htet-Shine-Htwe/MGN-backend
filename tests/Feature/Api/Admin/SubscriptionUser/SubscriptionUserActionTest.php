@@ -53,7 +53,7 @@ test("request body validation for subscription user",function(){
     $response->assertJsonStructure([
         'message',
         'errors' => [
-            'name',
+            'user_code',
         ]
     ]);
 });
