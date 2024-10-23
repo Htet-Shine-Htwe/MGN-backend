@@ -18,6 +18,9 @@ use Stevebauman\Location\Facades\Location;
 Route::get('/request', function () {
 
     $client_ip = \Request::getClientIp();
-    $location = geoip()->getLocation($client_ip);
-    dd($location,$client_ip);
+    $location = geoip()->getLocation("69.160.8.3");
+
+    $response = Http::get("http://ipinfo.io/$client_ip/json");
+    $locationData = $response->json();
+    dd($location,$client_ip,$locationData,Location::get($client_ip));
 });
