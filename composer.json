@@ -11,6 +11,7 @@
         "dede/hydrastorage": "^0.5.2",
         "fakerphp/faker": "^1.9.1",
         "guzzlehttp/guzzle": "^7.2",
+        "hisorange/browser-detect": "^5.0",
         "laravel-notification-channels/telegram": "^5.0",
         "laravel/framework": "^10.10",
         "laravel/sanctum": "^3.3",
@@ -24,7 +25,6 @@
         "spatie/laravel-permission": "^6.4",
         "staudenmeir/eloquent-eager-limit": "^1.0",
         "stevebauman/location": "^7.3",
-        "torann/geoip": "^3.0",
         "westacks/telebot-laravel": "^3.2"
     },
     "require-dev": {

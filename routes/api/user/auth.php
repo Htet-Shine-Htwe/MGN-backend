@@ -3,9 +3,10 @@
 use App\Http\Controllers\Api\User\AuthController;
 use Illuminate\Support\Facades\Route;
 use Stevebauman\Location\Facades\Location;
-// Route::post('users/login',[AuthController::class,'login'])->name('admin.login')->middleware('guest:admin');
+use hisorange\BrowserDetect\Parser as Browser;
 
 
+Route::post('users/login',[AuthController::class,'login'])->name('user.login')->middleware('guest');
 
 // Route::middleware(['auth:sanctum'])->group(function(){
 //     // Change Password
@@ -17,10 +18,5 @@ use Stevebauman\Location\Facades\Location;
 
 Route::get('/request', function () {
 
-    $client_ip = \Request::getClientIp();
-    $location = geoip()->getLocation("69.160.8.3");
-
-    $response = Http::get("http://ipinfo.io/$client_ip/json");
-    $locationData = $response->json();
-    dd($location,$client_ip,$locationData,Location::get($client_ip));
+   dd( Browser::platformName(). " ( " . Browser::browserFamily() . " ) ");
 });

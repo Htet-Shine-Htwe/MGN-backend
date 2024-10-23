@@ -34,4 +34,22 @@ class UserSubscriptionRepo
         )->sortByDesc('created_at')->values());
     }
 
+    public function login_history(): mixed
+    {
+        return $this->user->loginHistory()
+            ->orderBy('login_at', 'desc')
+            ->take(20)
+            ->get()
+            ->map(function ($history) {
+                return [
+                    'id' => $history->id,
+                    'location' => $history->location,
+                    'country' => $history->country,
+                    'device' => $history->device,
+                    'login_at' => $history->login_at->format('Y-m-d H:i:s'),
+                ];
+        });
+    }
+
+
 }

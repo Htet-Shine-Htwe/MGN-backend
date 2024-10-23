@@ -2,6 +2,7 @@
 
 namespace App\Services\Auth;
 
+use App\Services\ClientIp\ClientIpAddressService;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\JsonResponse;
@@ -35,6 +36,9 @@ class Authentication
     {
         try {
             $this->authenticate($guard);
+
+            $guard == "web" && (new ClientIpAddressService)->saveRecord();
+
             return $this->signInResponse($path, $guard);
         } catch (ValidationException $e) {
             return $this->handleValidationException($e);
@@ -102,7 +106,7 @@ class Authentication
      */
     protected function authenticate(string $guard): void
     {
-        $throttle = $this->initializeThrottle();
+        $throttle = $this->initializeThrottle($guard);
 
         if (!$this->attemptLogin($guard)) {
             $throttle->hit();
@@ -185,10 +189,19 @@ class Authentication
      */
     protected function attemptLogin(string $guard): bool
     {
-        return Auth::guard($guard)->attempt(
-            $this->request->only('email', 'password'),
-            $this->request->boolean('remember')
-        );
+         if($guard == "admin")
+         {
+            return Auth::guard("admin")->attempt(
+                $this->request->only('email', 'password'),
+                $this->request->boolean('remember')
+            );
+         }
+         else{
+            return Auth::guard("web")->attempt(
+                $this->request->only('user_code', 'password'),
+                $this->request->boolean('remember')
+            );
+         }
     }
 
     /**
@@ -226,9 +239,10 @@ class Authentication
     /**
      * Initialize the throttle object.
      */
-    protected function initializeThrottle(): AuthRequestThrottle
+    protected function initializeThrottle(string $guard): AuthRequestThrottle
     {
-        return new AuthRequestThrottle($this->request->input('email'), $this->request->ip());
+        $throttle_key = $guard == "admin" ? "email" : "user_code";
+        return new AuthRequestThrottle($this->request->input($throttle_key), $this->request->ip());
     }
 
     /**

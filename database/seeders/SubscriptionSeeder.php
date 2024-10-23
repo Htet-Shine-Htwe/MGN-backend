@@ -16,22 +16,32 @@ class SubscriptionSeeder extends Seeder
             [
                 "title" => "Free",
                 "duration" => 30,
+                "price" => 0,
             ],
             [
                 "title" => "Basic",
                 "duration" => 60,
+                "price" => 2500,
             ],
             [
                 "title" => "Premium",
                 "duration" => 90,
+                "price" => 5000,
             ],
             [
                 "title" => "Promotion",
                 "duration" => 10,
+                "price" => 1000,
             ],
             [
                 "title" => "Special",
                 "duration" => 180,
+                'price' => 10000,
+            ],
+            [
+                "title"  => 'Life-Time',
+                "duration" => 0,
+                'price' => 100000,
             ]
         ];
 
@@ -39,6 +49,7 @@ class SubscriptionSeeder extends Seeder
             \App\Models\Subscription::factory()->create([
                 'title' => $subscription['title'],
                 'duration' => $subscription['duration'],
+                'price' => $subscription['price'],
             ]);
         }
     }

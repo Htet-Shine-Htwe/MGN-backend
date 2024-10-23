@@ -14,10 +14,10 @@ return new class extends Migration
         Schema::create('login_histories', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('user_id');
-            $table->string('device', 125)->nullable();
             $table->string('location', 125)->nullable();
+            $table->string('country', 125)->nullable();
+            $table->string('device',85)->nullable();
             $table->timestamp('login_at');
-            $table->ipAddress('ip_address')->nullable();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->index('user_id');
             $table->index('login_at');

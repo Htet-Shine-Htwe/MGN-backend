@@ -109,6 +109,16 @@ class User extends Authenticatable
     }
 
     /**
+     * login_history
+     *
+     * @return HasMany<LoginHistory>
+     */
+    public function loginHistory(): HasMany
+    {
+        return $this->hasMany(LoginHistory::class);
+    }
+
+    /**
      * scopeSearch
      *
      * @param  Builder<static> $query

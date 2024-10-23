@@ -89,11 +89,13 @@ class UserSubscriptionController extends Controller
         $user = $this->userRegistrationRepo->show('id',$request->id);
 
         $user_subscriptions = $this->userSubscriptionRepo->setUser($user->user_code)->subscriptions();
+        $user_login_history = $this->userSubscriptionRepo->setUser($user->user_code)->login_history();
 
         return response()->json(
             [
             'user' => $user,
-            'subscriptions' => $user_subscriptions
+            'subscriptions' => $user_subscriptions,
+            'login_history' => $user_login_history
             ]
         );
     }

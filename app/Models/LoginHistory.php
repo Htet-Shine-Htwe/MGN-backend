@@ -11,4 +11,9 @@ class LoginHistory extends Model
 
     protected $guarded=[];
 
+    public $timestamps = false;
+
+    protected $casts = [
+        'login_at' => 'datetime',
+    ];
 }

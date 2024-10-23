@@ -26,7 +26,7 @@ test('request body is required', function () {
         ]);
 });
 
-test("invalid credintials", function () {
+test("invalid credentials", function () {
     $response = $this->json('POST', route('api.admin.login'), [
         'email' => 'wrong@gmail.com',
         'password' => 'password',

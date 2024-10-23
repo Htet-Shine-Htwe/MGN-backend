@@ -26,6 +26,8 @@ class DatabaseSeeder extends Seeder
             AdminPermissionSeeder::class,
             SubscriptionSeeder::class,
             UserSeeder::class,
+            LoginHistorySeeder::class,
+            UserSubscriptionSeeder::class,
             CategorySeeder::class,
             MogouSeeder::class,
             MogousCategorySeeder::class,
