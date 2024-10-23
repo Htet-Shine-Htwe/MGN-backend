@@ -17,7 +17,7 @@ use Stevebauman\Location\Facades\Location;
 
 Route::get('/request', function () {
 
-    $location = geoip()->getLocation(request()->ip());
-
-    dd($location);
+    $client_ip = \Request::getClientIp();
+    $location = geoip()->getLocation($client_ip);
+    dd($location,$client_ip);
 });
