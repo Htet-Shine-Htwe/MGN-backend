@@ -24,6 +24,7 @@
         "spatie/laravel-permission": "^6.4",
         "staudenmeir/eloquent-eager-limit": "^1.0",
         "stevebauman/location": "^7.3",
+        "torann/geoip": "^3.0",
         "westacks/telebot-laravel": "^3.2"
     },
     "require-dev": {

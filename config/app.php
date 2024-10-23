@@ -173,6 +173,7 @@ return [
         HydraStorage\HydraStorage\HydraStorageServiceProvider::class,
         WeStacks\TeleBot\Laravel\Providers\TeleBotServiceProvider::class,
         \Mews\Purifier\PurifierServiceProvider::class,
+        \Torann\GeoIP\GeoIPServiceProvider::class,
 
     ])->toArray(),
 
@@ -191,6 +192,7 @@ return [
         // 'Example' => App\Facades\Example::class,
         'TeleBot' => WeStacks\TeleBot\Laravel\TeleBot::class,
         'Purifier' => \Mews\Purifier\Facades\Purifier::class,
+        'GeoIP' => \Torann\GeoIP\Facades\GeoIP::class,
     ])->toArray(),
 
 ];
