@@ -9,6 +9,12 @@ use Illuminate\Http\Request;
 class ReportIndexRepo
 {
 
+    /**
+     * index
+     *
+     * @param  Request $request
+     * @return LengthAwarePaginator<Report>
+     */
     public function index(Request $request) : LengthAwarePaginator
     {
         return Report::orderBy("id",'desc')->paginate(10);

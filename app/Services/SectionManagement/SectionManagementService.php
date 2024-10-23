@@ -14,7 +14,7 @@ class SectionManagementService
         return BaseSection::where('section_name', $type)->firstOrFail();
     }
 
-    public function getMogouSection(string $type)
+    public function getMogouSection(string $type): array
     {
         $mogous_ids = $this->getBySection($type)->childSections->pluck('is_visible', 'pivot_key')->toArray();
 
@@ -72,6 +72,7 @@ class SectionManagementService
         $existedMogou = BaseSection::where('section_name', $type)->firstOrFail()->childSections->pluck('pivot_key')->toArray();
 
         $mogous = $mogous->map(function ($mogou) use ($existedMogou) {
+             /** @phpstan-ignore-next-line */
             $mogou->is_selected = in_array($mogou->id, $existedMogou);
             return $mogou;
         });

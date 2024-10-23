@@ -52,7 +52,7 @@ class User extends Authenticatable
     }
 
 
-    public function getSubscriptionEndDateAttribute($value): string | null
+    public function getSubscriptionEndDateAttribute(string $value): string | null
     {
         // format in Y-m-d H:i:s
         return $value ? date('Y-m-d H:i:s', strtotime($value)) : null;
