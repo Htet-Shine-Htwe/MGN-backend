@@ -22,16 +22,16 @@ class UserSubscriptionRepo
 
     public function subscriptions(): mixed
     {
-        return $this->user->subscriptions->map(
+        return collect($this->user->subscriptions->map(
             function ($subscription) {
                 return [
                 'id' => $subscription->id,
-                'name' => $subscription->subscription->title,
+                'title' => $subscription->subscription->title,
                 'price' => $subscription->subscription->price,
                 'created_at' => $subscription->created_at->format('Y-m-d'),
                 ];
             }
-        )->sortByDesc('created_at');
+        )->sortByDesc('created_at')->values());
     }
 
 }

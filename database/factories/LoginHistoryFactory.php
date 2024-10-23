@@ -5,9 +5,9 @@ namespace Database\Factories;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\ApplicationConfig>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\LoginHistory>
  */
-class ApplicationConfigFactory extends Factory
+class LoginHistoryFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -17,9 +17,7 @@ class ApplicationConfigFactory extends Factory
     public function definition(): array
     {
         return [
-            "title" => "Test Title",
-            "logo" => "Test Logo",
-            "user_side_is_maintenance_mode" => 0,
+            //
         ];
     }
 }

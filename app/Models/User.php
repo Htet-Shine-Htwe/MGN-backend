@@ -28,7 +28,8 @@ class User extends Authenticatable
         'user_code',
         'current_subscription_id',
         'subscription_end_date' ,
-        'last_login_at'
+        'last_login_at',
+        'active'
     ];
 
     // appends
@@ -51,6 +52,12 @@ class User extends Authenticatable
     }
 
 
+    public function getSubscriptionEndDateAttribute($value): string | null
+    {
+        // format in Y-m-d H:i:s
+        return $value ? date('Y-m-d H:i:s', strtotime($value)) : null;
+    }
+
     /**
      * The attributes that should be cast.
      *
@@ -65,12 +72,6 @@ class User extends Authenticatable
     {
         parent::boot();
 
-        // static::creating(
-        //     function ($user) {
-        //         // with current time and unique id
-        //         $user->user_code = time() . uniqid();
-        //     }
-        // );
     }
 
     /*

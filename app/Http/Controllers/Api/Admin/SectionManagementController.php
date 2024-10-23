@@ -60,7 +60,15 @@ class SectionManagementController extends Controller
         return response()->json([
             'message' => 'component was activated to ' . $visibilityStatus,
         ]);
+    }
 
+    public function emptySection(Request $request): JsonResponse
+    {
+        $this->sms->truncateSection($request->section);
+
+        return response()->json([
+            'message' => 'all data were cleared',
+        ]);
     }
 
 

@@ -17,7 +17,9 @@ class BaseSectionFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            "section_name" => $this->faker->word,
+            "section_description" => $this->faker->sentence,
+            "component_limit" => $this->faker->numberBetween(1, 100),
         ];
     }
 }

@@ -72,7 +72,7 @@ class SectionManagementService
         $existedMogou = BaseSection::where('section_name', $type)->firstOrFail()->childSections->pluck('pivot_key')->toArray();
 
         $mogous = $mogous->map(function ($mogou) use ($existedMogou) {
-            $mogou->is_selected = in_array($mogou->mogou_name, $existedMogou);
+            $mogou->is_selected = in_array($mogou->id, $existedMogou);
             return $mogou;
         });
         return $mogous->toArray();
@@ -83,6 +83,15 @@ class SectionManagementService
         $baseSection = $this->getBySection($type);
 
         $baseSection->childSections()->where('pivot_key', $child)->update(['is_visible' => $visibility]);
+
+        return $baseSection;
+    }
+
+    public function truncateSection(string $type): BaseSection
+    {
+        $baseSection = $this->getBySection($type);
+
+        $baseSection->childSections()->delete();
 
         return $baseSection;
     }

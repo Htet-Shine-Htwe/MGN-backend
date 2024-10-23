@@ -17,7 +17,13 @@ class ReportFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            "title" => $this->faker->sentence,
+            "description" => $this->faker->paragraph,
+            "current_url" => $this->faker->url,
+            "status" => $this->faker->randomElement([0,1,2]),
+            "image" => $this->faker->imageUrl(),
+            'created_at' => $this->faker->dateTimeBetween('-1 years', 'now'),
+
         ];
     }
 }

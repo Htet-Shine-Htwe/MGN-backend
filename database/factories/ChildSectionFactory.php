@@ -19,6 +19,7 @@ class ChildSectionFactory extends Factory
         return [
             'pivot_key' => random_int( 1, 10),
             'base_section_id' => 1,
+            'is_visible' => 1
         ];
     }
 }

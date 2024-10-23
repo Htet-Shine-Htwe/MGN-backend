@@ -120,8 +120,8 @@ trait MogouScope
         $search = request()->input('search');
         return $query->when(
             $search, function (Builder $query) use ($search): Builder {
-                return $query->where('title', 'like', '%'.$search.'%')
-                    ->orWhere('author', 'like', '%'.$search.'%');
+                return $query->orWhere('title', 'like', $search.'%');
+
             }
         );
     }

@@ -22,7 +22,8 @@ trait CacheResponse
             $process = $callback();
 
             if (is_array($process) || is_object($process)) {
-                $process = serialize($process);
+                $process = $callback();
+
             }
 
             return Cache::remember($key, $minutes, function () use ($process) {

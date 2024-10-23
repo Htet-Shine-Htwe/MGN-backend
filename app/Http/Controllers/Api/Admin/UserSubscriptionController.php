@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UserRegistrationRequest;
+use App\Models\User;
 use App\Repo\Admin\UserRegistrationRepo;
 use App\Repo\Admin\Subscription\UserSubscriptionRepo;
 use Illuminate\Http\JsonResponse;
@@ -53,16 +54,16 @@ class UserSubscriptionController extends Controller
         $request->validate([
             'id' => 'required|exists:users,id',
             'user_code' => "unique:users,user_code,".$request->input('id'),
-            'password' => 'nullable|string|min:8'
         ]);
 
         $id = $request->input('id');
         return tryCatch(
             function () use ($request,$id) {
-                $this->userRegistrationRepo->updateUser($request, $id);
+                $user = $this->userRegistrationRepo->updateUser($request, $id);
                 return response()->json(
                     [
-                    'message' => 'User updated successfully'
+                    'message' => 'User updated successfully',
+                    'user' => $user
                     ]
                 );
             },null,true

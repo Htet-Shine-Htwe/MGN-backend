@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string("title");
             $table->string("logo")->nullable();
+            $table->integer("user_side_is_maintenance_mode")->default(0);
             $table->timestamps();
         });
     }

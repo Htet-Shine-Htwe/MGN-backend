@@ -19,6 +19,7 @@ class CategoryController extends Controller
     public function __construct(protected CategoryRepo $categoryRepo,private string $cacheKey = "")
     {
         $this->cacheKey = $this->generateCacheKey('all-categories');
+
     }
 
     public function all(Request $request): JsonResponse

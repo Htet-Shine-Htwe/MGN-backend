@@ -23,10 +23,11 @@ class UserRegistrationRequest extends FormRequest
     {
         return [
             'user_code' => 'required|string|max:255',
-            'name' => 'required|string|max:255',
+            'name' => 'nullable|string|max:255',
             'email' => 'nullable|string|email|max:255',
-            'password' => 'required|string|min:6',
+            'password' => 'nullable|min:6',
             'current_subscription_id' => 'nullable|exists:subscriptions,id',
+            'active' => 'nullable|boolean',
         ];
     }
 }

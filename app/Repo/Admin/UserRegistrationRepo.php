@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Models\UserSubscription;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class UserRegistrationRepo
 {
@@ -43,10 +44,18 @@ class UserRegistrationRepo
 
     public function updateUser(UserRegistrationRequest $request,string $id) :User
     {
-        $data = $request->validated();
+        $data = $request->all();
+
+        isset($data['password']) ? $data['password'] = bcrypt($data['password']) : null;
+
+        if($data['password'] == null) {
+            unset($data['password']);
+        }
+
         $user = User::where('id', $id)->firstOrFail();
 
-        // $data = self::updateDataSubscription($data, $user);
+        $data = self::updateDataSubscription($data, $user);
+
         $user->update($data);
         return $user;
     }
@@ -54,18 +63,18 @@ class UserRegistrationRepo
     protected static function mutateDataSubscription(mixed $data): mixed
     {
         if(isset($data['current_subscription_id'])) {
-            $end_date = Subscription::where('id', $data['current_subscription_id'])->first()->max;
+            $end_date = Subscription::where('id', $data['current_subscription_id'])->first()->duration;
 
             $data['subscription_end_date'] = now()->addDays($end_date);
         }
         return $data;
     }
 
-    protected static function updateDataSubscription(mixed $data,User $user): mixed
+    public static function updateDataSubscription(mixed $data,User $user): mixed
     {
 
-        if($user->current_subscription_id != $data['current_subscription_id']) {
-            $end_date = Subscription::where('id', $data['current_subscription_id'])->first()->max;
+        if(isset($data['current_subscription_id']) && $user->current_subscription_id != $data['current_subscription_id']) {
+            $end_date = Subscription::where('id', $data['current_subscription_id'])->first()->duration;
 
             UserSubscription::create(
                 [

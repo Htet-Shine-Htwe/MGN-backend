@@ -25,5 +25,4 @@ class CreateReportRepo
         $report->save();
         return $report;
     }
-
 }
