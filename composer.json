@@ -27,6 +27,7 @@
         "westacks/telebot-laravel": "^3.2"
     },
     "require-dev": {
+        "larastan/larastan": "^2.0",
         "laravel/pint": "^1.0",
         "laravel/sail": "^1.18",
         "mockery/mockery": "^1.4.4",
