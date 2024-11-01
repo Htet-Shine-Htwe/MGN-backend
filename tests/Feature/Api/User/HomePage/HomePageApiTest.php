@@ -6,6 +6,7 @@ use Database\Seeders\MogousCategorySeeder;
 use Database\Seeders\MogouSeeder;
 use Database\Seeders\SubMogouSeeder;
 use Database\Seeders\SubscriptionSeeder;
+use Database\Seeders\UserAvatarSeeder;
 use Tests\Support\UserAuthenticated;
 
 // Group the test
@@ -17,6 +18,7 @@ beforeEach(function() {
 
     // Seed the database
     $this->seed([
+
         SubscriptionSeeder::class,
         CategorySeeder::class,
         MogouSeeder::class,

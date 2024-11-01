@@ -31,7 +31,7 @@ class User extends Authenticatable
         'last_login_at',
         'active',
         'background_color',
-        'avatar_name',
+        'avatar_id',
     ];
 
     // appends

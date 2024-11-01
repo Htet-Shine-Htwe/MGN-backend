@@ -5,6 +5,7 @@ use App\Enum\AdminRole;
 use App\Models\User;
 use App\Models\Admin;
 use Database\Seeders\AdminPermissionSeeder;
+use Database\Seeders\UserAvatarSeeder;
 use Illuminate\Contracts\Auth\Authenticatable;
 
 trait UserAuthenticated
@@ -15,6 +16,7 @@ trait UserAuthenticated
 
     public function setupUser(array $body = [])
     {
+
         $this->user = User::factory()->create($body);
 
         return $this->authenticated($this->user);

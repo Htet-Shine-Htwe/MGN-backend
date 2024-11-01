@@ -63,7 +63,7 @@ test("user subscription can be query with search",function(){
 
 test("user subscription can be filter with specific current_subscription_id",function(){
     $response = $this->authenticatedAdmin()->getJson(route('api.admin.subscription-users.index',[
-        'filter' =>  1
+        'subscriptions' =>  1
     ]));
 
     // every user has subscription_id 1
