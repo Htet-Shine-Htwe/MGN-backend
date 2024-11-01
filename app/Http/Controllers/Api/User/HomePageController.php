@@ -86,7 +86,7 @@ class HomePageController extends Controller
 
                 $key = $mogou->rotation_key;
 
-                $subMogou = $mogou->subMogous($key)->select('title')->latest()->limit(3)->get();
+                $subMogou = $mogou->subMogous($key)->select('title')->latest('chapter_number')->limit(3)->get();
 
                 $mogou->setRelation('subMogous', $subMogou);
             }

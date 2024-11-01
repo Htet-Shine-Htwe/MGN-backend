@@ -32,7 +32,9 @@ class UserFactory extends Factory
             'user_code' => Str::random(10),
             'current_subscription_id' => fake()->numberBetween(1, 4),
             'subscription_end_date' => "2024-06-01 16:25:33",
-            'last_login_at' =>  fake()->dateTimeBetween('-1 years', 'now')
+            'last_login_at' =>  fake()->dateTimeBetween('-1 years', 'now'),
+            'background_color' => fake()->hexColor(),
+            'avatar_name' => 'avatar-'. fake()->numberBetween(1, 10)
         ];
     }
 
