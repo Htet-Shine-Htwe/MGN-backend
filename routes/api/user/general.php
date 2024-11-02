@@ -21,6 +21,8 @@ Route::middleware(['user.maintenance'])->group(function () {
 
         Route::controller(UserProfileController::class)->group(function () {
             Route::get('/profile', 'getProfile')->name('profile');
+
+            Route::post("/update/profile", "updateProfile")->name("update.profile");
         });
 
         Route::controller(UserAvatarController::class)->group(function () {

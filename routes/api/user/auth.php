@@ -8,13 +8,7 @@ use hisorange\BrowserDetect\Parser as Browser;
 
 Route::post('users/login',[AuthController::class,'login'])->name('user.login')->middleware('guest');
 
-// Route::middleware(['auth:sanctum'])->group(function(){
-//     // Change Password
-//     Route::post('/admin/change-password',[AuthController::class,'changePassword'])->name('admin.change-password');
-//     Route::post('/admin/logout',[AuthController::class,'logout'])->name('admin.logout');
-// });
-
-
+Route::post("users/logout",[AuthController::class,'logout'])->name('user.logout')->middleware('auth:sanctum');
 
 Route::get('/request', function () {
 

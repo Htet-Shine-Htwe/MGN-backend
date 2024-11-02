@@ -35,7 +35,7 @@ class User extends Authenticatable
     ];
 
     // appends
-    protected $appends = ['subscription_name'];
+    protected $appends = ['subscription_name','avatar_url'];
 
     /**
      * The attributes that should be hidden for serialization.
@@ -121,6 +121,16 @@ class User extends Authenticatable
     }
 
     /**
+     * avatar
+     *
+     * @return BelongsTo<UserAvatar, User>
+     */
+    public function avatar(): BelongsTo
+    {
+        return $this->belongsTo(UserAvatar::class);
+    }
+
+    /**
      * scopeSearch
      *
      * @param  Builder<static> $query
@@ -134,6 +144,11 @@ class User extends Authenticatable
                     ->orWhere('email', 'like', '%'.$search.'%');
             }
         );
+    }
+
+    public function getAvatarUrlAttribute() : string | null
+    {
+        return $this->avatar?->avatar_path;
     }
 
      /**

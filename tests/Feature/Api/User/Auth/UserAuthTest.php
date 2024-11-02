@@ -68,3 +68,14 @@ test("User Login Request Validation", function () {
         'errors'
     ]);
 });
+
+
+test('user can logout with token delete', function () {
+    $this->setupUser();
+    $response = $this->authenticatedAdmin($this->user)->postJson(route('api.user.logout'));
+
+    $response->assertStatus(200)
+        ->assertJson([
+            'message' => 'Logged out successfully',
+        ]);
+});

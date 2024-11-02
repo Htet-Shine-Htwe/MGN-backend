@@ -62,8 +62,7 @@ class UserRegistrationRepo
      */
     public function show(string $haystack,string $value): User
     {
-        return User::where($haystack, $value)
-        ->firstOrFail();
+        return User::where($haystack, $value)->firstOrFail();
     }
 
     /**
@@ -117,7 +116,7 @@ class UserRegistrationRepo
     public static function updateDataSubscription(mixed $data,User $user): mixed
     {
 
-        if(isset($data['current_subscription_id']) && $user->current_subscription_id != $data['current_subscription_id']) {
+        if(isset($data['current_subscription_id'])) {
             $end_date = Subscription::where('id', $data['current_subscription_id'])->first()->duration;
 
             if($end_date == 0)
