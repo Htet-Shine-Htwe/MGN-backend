@@ -28,6 +28,8 @@ class UserRegistrationRequest extends FormRequest
             'password' => 'nullable|min:6',
             'current_subscription_id' => 'nullable|exists:subscriptions,id',
             'active' => 'nullable|boolean',
+            'avatar_id' => 'nullable|exists:user_avatars,id',
+            'background_color' => 'nullable|string|max:155',
         ];
     }
 }

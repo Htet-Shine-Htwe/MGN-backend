@@ -22,6 +22,8 @@ return new class extends Migration
             $table->string('password');
             $table->boolean('active')->default(1);
             $table->timestamp('last_login_at')->nullable();
+            $table->string("background_color", 7)->default("#ffffff")->nullable();
+            $table->foreignId('avatar_id')->nullable();
             $table->rememberToken();
             $table->timestamps();
 

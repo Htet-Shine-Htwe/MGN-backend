@@ -29,11 +29,13 @@ class User extends Authenticatable
         'current_subscription_id',
         'subscription_end_date' ,
         'last_login_at',
-        'active'
+        'active',
+        'background_color',
+        'avatar_id',
     ];
 
     // appends
-    protected $appends = ['subscription_name'];
+    protected $appends = ['subscription_name','avatar_url'];
 
     /**
      * The attributes that should be hidden for serialization.
@@ -119,6 +121,16 @@ class User extends Authenticatable
     }
 
     /**
+     * avatar
+     *
+     * @return BelongsTo<UserAvatar, User>
+     */
+    public function avatar(): BelongsTo
+    {
+        return $this->belongsTo(UserAvatar::class);
+    }
+
+    /**
      * scopeSearch
      *
      * @param  Builder<static> $query
@@ -134,30 +146,39 @@ class User extends Authenticatable
         );
     }
 
+    public function getAvatarUrlAttribute() : string | null
+    {
+        return $this->avatar?->avatar_path;
+    }
+
      /**
      * scopeFilter
      *
      * @param  Builder<static> $query
-     * @param mixed $filter
      * @return Builder<static>
      */
-    public function scopeFilter(Builder $query,mixed $filter) : Builder
+    public function scopeFilterSubscription(Builder $query) : Builder
     {
-        return $query->when(
-            $filter, function ($query,$filter) {
+        $filter = request()->input('subscriptions');
+
+        return $query->when($filter,function($query) use ($filter){
+            if (is_string($filter) && strpos($filter, ',') !== false) {
+                $status = explode(',', $filter);
+                return $query->whereIn('current_subscription_id', $status);
+            } else {
                 return $query->where('current_subscription_id', $filter);
             }
-        );
+        });
     }
 
     /**
      * scopeExpiredSubscription
      *
      * @param  Builder<static> $query
-     * @param  mixed $expired
+     * @param  string $expired
      * @return Builder<static>
      */
-    public function scopeExpiredSubscription(Builder $query,mixed $expired) : Builder
+    public function scopeExpiredSubscription(Builder $query,?string $expired) : Builder
     {
         return $query->when($expired, function ($query)  {
                 return $query->where('subscription_end_date', '<', now());
@@ -165,8 +186,25 @@ class User extends Authenticatable
         );
     }
 
+    /**
+     * scopeFilterActiveUser
+     *
+     * @param  Builder<static> $query
+     * @param  string $active
+     * @return Builder<static>
+     */
+    public function scopeFilterActiveUser(Builder $query, ?string $active) : Builder
+    {
+
+        return $query->when(isset($active), function ($query) use ($active) {
+            return $query->where('active', $active);
+        });
+    }
+
     public function getSubscriptionNameAttribute() : string | null
     {
         return $this->subscription?->title;
     }
+
+
 }

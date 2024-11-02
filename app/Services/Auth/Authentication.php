@@ -37,7 +37,9 @@ class Authentication
         try {
             $this->authenticate($guard);
 
-            $guard == "web" && (new ClientIpAddressService)->saveRecord();
+            $clientIp = app(ClientIpAddressService::class);
+
+            $guard == "web" && $clientIp->saveRecord();
 
             return $this->signInResponse($path, $guard);
         } catch (ValidationException $e) {
