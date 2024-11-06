@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\Admin\AdminController;
 use App\Http\Controllers\Api\Admin\AdminReportController;
+use App\Http\Controllers\Api\Admin\AnalysisReportController;
 use App\Http\Controllers\Api\Admin\BotPublisherController;
 use App\Http\Controllers\Api\Admin\CategoryController;
 use App\Http\Controllers\Api\Admin\MogouChapterController;
@@ -10,6 +11,7 @@ use App\Http\Controllers\Api\Admin\SectionManagementController;
 use App\Http\Controllers\Api\Admin\SocialInfoController;
 use App\Http\Controllers\Api\Admin\SubMogouController;
 use App\Http\Controllers\Api\Admin\SubscriptionController;
+use App\Http\Controllers\Api\Admin\UserAvatarController;
 use App\Http\Controllers\Api\Admin\UserSubscriptionController;
 use App\Http\Controllers\TestController;
 use Illuminate\Support\Facades\Route;
@@ -50,6 +52,13 @@ Route::middleware(['auth:sanctum'])
         Route::get('/users/{user_code}/subscriptions','subscriptions')->name('subscription-users.subscriptions');
         Route::get('/users/show/{user_code}','show')->name('subscription-users.show');
         Route::get('/users/showById/{id}','showById')->name('subscription-users.showById');
+    });
+
+    Route::controller( UserAvatarController::class)->group(function(){
+        Route::get('/user-avatars','get')->name('avatars');
+        Route::post('/user-avatars/create','store')->name('avatars.store');
+        Route::post('/user-avatars/update','update')->name('avatars.update');
+        Route::post('/user-avatars/delete','destroy')->name('avatars.delete');
     });
 
     Route::controller(MogouController::class)->group(function(){
@@ -104,6 +113,11 @@ Route::middleware(['auth:sanctum'])
         Route::get('/reports','index')->name('reports.index');
         Route::get('/reports/{report}','show')->name('reports.show');
         Route::post('/reports/{report}','updateStatus')->name('reports.updateStatus');
+    });
+
+    Route::controller(AnalysisReportController::class)->group(function(){
+        Route::get('/subscription-analysis','subscriptionAnalysis')->name('analysis-report.subscription');
+
     });
 });
 

@@ -33,4 +33,60 @@ class UserAvatarController extends Controller
         );
     }
 
+    public function store(Request $request): JsonResponse
+    {
+        $request->validate(
+            [
+                'avatar_name' => 'required|string',
+                'avatar' => 'required|image|mimes:png|max:3072'
+            ]
+        );
+
+        $avatar = $this->userAvatarService->createNewAvatar($request->avatar_name, $request->file('avatar'));
+
+        $this->forgetCache($this->cacheKey);
+        return response()->json(
+            [
+                'message' => 'Avatar created successfully',
+                'user_avatar' => $avatar
+            ]
+        );
+    }
+
+    public function update(Request $request): JsonResponse
+    {
+        $request->validate(
+            [
+                'id' => 'required|exists:user_avatars,id',
+                'avatar_name' => 'required|string',
+                'avatar' => 'required|image|mimes:png|max:3072'
+            ]
+        );
+
+        $avatar = $this->userAvatarService->updateUserAvatar($request->id, $request->avatar_name, $request->file('avatar'));
+        $this->forgetCache($this->cacheKey);
+
+        return response()->json(
+            [
+                'message' => 'Avatar updated successfully',
+                'user_avatar' => $avatar
+            ]
+        );
+    }
+
+    public function destroy(Request $request): JsonResponse
+    {
+        $ids = $request->ids;
+
+        $this->userAvatarService->bulkDeleteUserAvatars($ids);
+        $this->forgetCache($this->cacheKey);
+
+        return response()->json(
+            [
+                'message' => 'Deleted successfully'
+            ]
+        );
+    }
+
+
 }

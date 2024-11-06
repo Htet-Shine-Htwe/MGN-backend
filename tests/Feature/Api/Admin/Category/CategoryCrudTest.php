@@ -10,14 +10,7 @@ use Tests\Support\UserAuthenticated;
 uses()->group('admin','api','admin-category');
 uses(UserAuthenticated::class);
 
-dataset('category_test_data',[
-    [
-        'title' =>  "Mobile Adventure",
-    ],
-    [
-        'title' =>  "Another world",
-    ]
-]);
+
 
 beforeEach(function(){
     config(['control.test.users_count' => 10]);
@@ -93,7 +86,8 @@ test("request body validation in creating category",function(){
         ]);
 });
 
-test("category was successfully created & slug was correctly-formatted",function($title){
+test("category was successfully created & slug was correctly-formatted",function(){
+    $title = "New Category";
     $response = $this->authenticatedAdmin()->postJson(route('api.admin.categories.store'),[
         'title' => $title
     ]);
@@ -112,7 +106,7 @@ test("category was successfully created & slug was correctly-formatted",function
         ]
     ]);
 
-})->with('category_test_data');
+});
 
 
 test("request body validation in updating category",function(){

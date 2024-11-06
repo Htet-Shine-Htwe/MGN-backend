@@ -17,15 +17,15 @@ class UserMogouController extends Controller
 
         $subMogous = $mogou->subMogous($mogou->rotation_key)
             ->select('id', 'title', 'slug', 'chapter_number', 'created_at')
-            ->latest()->limit(5)->get();
+            ->latest('chapter_number')->limit(5)->get();
 
-        $isFavorite = $request->user()?->favorites()->where('mogou_id', $mogou->id)->exists();
+        $isFavorite = auth('sanctum')->user()?->favorites()->where('mogou_id', $mogou->id)->exists();
 
         return response()->json(
             [
-            'mogou' => $mogou,
-            'is_favorite' => $isFavorite,
-            'chapters' => $subMogous
+                'mogou' => $mogou,
+                'is_favorite' => $isFavorite,
+                'chapters' => $subMogous,
             ]
         );
     }
@@ -36,19 +36,20 @@ class UserMogouController extends Controller
 
         $mogou = Mogou::where('slug', $mogou)->firstOrFail();
 
-        $relatedMogous = Mogou::select('id', 'title', 'rotation_key', 'slug', 'author', 'cover')
+        $relatedMogous = Mogou::select('id', 'title', 'rotation_key', 'slug', 'author', 'cover', 'total_chapters')
             ->where('id', '!=', $mogou->id)
             ->whereHas(
-                'categories', function ($query) use ($mogou) {
+                'categories',
+                function ($query) use ($mogou) {
                     $query->whereIn('category_id', $mogou->categories->pluck('id'));
                 }
             )
 
-        ->latest()->limit(6)->get();
+            ->latest()->limit(6)->get();
 
         return response()->json(
             [
-            'mogous' => $relatedMogous
+                'mogous' => $relatedMogous
             ]
         );
     }

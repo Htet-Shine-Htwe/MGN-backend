@@ -80,3 +80,14 @@ it("can remove user avatar successfully",function(){
     $avatar = $this->userAvatarService->deleteUserAvatar(1);
     expect($avatar)->toBeTrue();
 });
+
+it("can remove multiple user avatars successfully",function(){
+    UserAvatar::factory()->count(3)->create();
+
+    $this->mock(\HydraStorage\HydraStorage\Traits\HydraMedia::class,function($hydraMedia){
+        $hydraMedia->shouldReceive('removeMedia')->andReturn(true);
+    });
+
+    $avatar = $this->userAvatarService->bulkDeleteUserAvatars([1,2,3]);
+    expect($avatar)->toBeTrue();
+});
