@@ -1,8 +1,11 @@
 <?php
 
 namespace App\Repo\User\Favorite;
+
+use App\Models\Mogou;
 use App\Models\User;
 use App\Models\UserFavorite;
+use Illuminate\Database\Eloquent\Collection;
 
 class UserFavoriteRepo
 {
@@ -14,9 +17,10 @@ class UserFavoriteRepo
         $this->user = $user;
     }
 
-    public function setUser(User $user): void
+    public function setUser(User $user): UserFavoriteRepo
     {
         $this->user = $user;
+        return $this;
     }
 
 
@@ -55,6 +59,17 @@ class UserFavoriteRepo
     public function getFavorites(): array
     {
         return $this->user?->favorites()->pluck('mogou_id')->toArray() ?? [];
+    }
+
+    /**
+     * getFavoriteMogous
+     *
+     * @return Collection<int, Mogou>
+     */
+    public function getFavoriteMogous(): Collection
+    {
+        return Mogou::select('id','title','slug','cover')
+        ->whereIn('id', $this->getFavorites())->get();
     }
 
     public function isFavorite(int $mogou_id): bool

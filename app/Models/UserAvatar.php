@@ -10,9 +10,18 @@ class UserAvatar extends Model
 {
     use HasFactory, HydraMedia;
 
-    public function getAvatarPathAttribute(string $value): string
+    protected $fillable = [
+        'avatar_name',
+        'avatar_path',
+    ];
+
+    protected $appends = ['avatar_url_path'];
+
+    public function getAvatarUrlPathAttribute(): string
     {
-        return $this->getMedia($value,'public/user_avatars');
+        return $this->getMedia($this->avatar_path,'public/user_avatars');
     }
+
+
 
 }

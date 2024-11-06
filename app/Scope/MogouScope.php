@@ -180,4 +180,20 @@ trait MogouScope
         }
         return $query;
     }
+
+    /**
+     * scopeByTotalChapters
+     *
+     * @param  Builder<Mogou> $query
+     * @return Builder<Mogou>
+     */
+    public function scopeByTotalChapters(Builder $query) : Builder
+    {
+        $chapters_count_order = request('chapters_count_order');
+
+        return $query->when($chapters_count_order,function(Builder $builder) use ($chapters_count_order) : Builder{
+            // return $builder->order_by("total_chapters",$chapters_count_order);
+            return $builder->orderBy("total_chapters",$chapters_count_order);
+        });
+    }
 }

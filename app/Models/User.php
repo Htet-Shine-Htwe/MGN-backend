@@ -148,7 +148,7 @@ class User extends Authenticatable
 
     public function getAvatarUrlAttribute() : string | null
     {
-        return $this->avatar?->avatar_path;
+        return $this->avatar?->avatar_url_path;
     }
 
      /**

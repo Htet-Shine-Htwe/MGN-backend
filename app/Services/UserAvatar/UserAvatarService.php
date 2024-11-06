@@ -22,7 +22,6 @@ class UserAvatarService
 {
 
     use HydraMedia;
-
     /**
      * Retrieve all user avatars.
      *
@@ -75,10 +74,11 @@ class UserAvatarService
         $mediaOption = MediaOption::create()->setQuality(100)->get();
 
         $avatar = UserAvatar::findOrFail($id);
+        $this->removeMedia("public/user_avatars/$avatar->avatar_path");
+
         $avatar->avatar_name = $name;
         $avatar->avatar_path = $this->storeMedia($file, 'user_avatars', false, $mediaOption);
 
-        $this->removeMedia($avatar->avatar_path);
 
         $avatar->save();
         return $avatar;
@@ -93,9 +93,25 @@ class UserAvatarService
     public function deleteUserAvatar(string $id): bool
     {
         $avatar = UserAvatar::findOrFail($id);
-        $this->removeMedia($avatar->avatar_path);
+        $this->removeMedia("public/user_avatars/$avatar->avatar_path");
         $avatar->delete();
 
+        return true;
+    }
+
+    /**
+     * Bulk delete user avatars by their IDs.
+     *
+     * @param  array $ids
+     * @return bool
+     */
+    public function bulkDeleteUserAvatars(array $ids): bool
+    {
+        $avatars = UserAvatar::whereIn('id', $ids)->get();
+        foreach ($avatars as $avatar) {
+            $this->removeMedia("public/user_avatars/$avatar->avatar_path");
+            $avatar->delete();
+        }
         return true;
     }
 }
