@@ -2,6 +2,7 @@
 
 namespace App\Services\Auth;
 
+use App\Jobs\RecordLoginAddress;
 use App\Services\ClientIp\ClientIpAddressService;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Http\FormRequest;
@@ -36,11 +37,7 @@ class Authentication
     {
         try {
             $this->authenticate($guard);
-
-            $clientIp = app(ClientIpAddressService::class);
-
-            $guard == "web" && $clientIp->saveRecord();
-
+            RecordLoginAddress::dispatchIf( $guard == "web", auth()->user())->onQueue('normal');
             return $this->signInResponse($path, $guard);
         } catch (ValidationException $e) {
             return $this->handleValidationException($e);

@@ -15,6 +15,9 @@ class UserMogouController extends Controller
 
         $mogou = Mogou::where('slug', $mogou)->with('categories')->firstOrFail();
 
+
+        $mogou->append('total_view_count');
+
         $subMogous = $mogou->subMogous($mogou->rotation_key)
             ->select('id', 'title', 'slug', 'chapter_number', 'created_at')
             ->latest('chapter_number')->limit(5)->get();

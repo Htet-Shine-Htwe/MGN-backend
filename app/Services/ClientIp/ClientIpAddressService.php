@@ -18,11 +18,9 @@ class ClientIpAddressService
         return Location::get($client_ip);
     }
 
-    public function saveRecord(): bool
+    public function saveRecord(User $user): bool
     {
-        $user = auth()->user();
-
-        if (!$user) {
+        if ($user == null) {
             return false;
         }
 
