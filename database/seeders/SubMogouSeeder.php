@@ -28,6 +28,8 @@ class SubMogouSeeder extends Seeder
                         'mogou_id' => $i,
                         'chapter_number' => $j,
                     ]);
+
+                    $total_images = 20;
                 }
             }
         } else {
@@ -61,6 +63,7 @@ class SubMogouSeeder extends Seeder
                         $total_images = rand(20, 40);
                         for($k = 1; $k <= $total_images; $k++) {
                             $sub_mogou_images_insert[] = [
+                                'mogou_id' => $mogou[$i],
                                 'sub_mogou_id' => $j,
                                 'path' => 'image.jpg',
                                 'page_number' => $k,

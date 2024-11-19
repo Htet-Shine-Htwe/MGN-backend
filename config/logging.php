@@ -82,6 +82,20 @@ return [
             'replace_placeholders' => true,
         ],
 
+        'geoip' => [
+            'driver' => 'daily',
+            'path' => storage_path('logs/geoip.log'),
+            'level' => 'debug',
+            'days' => 14,
+        ],
+
+        'storage' => [
+            'driver' => 'daily',
+            'path' => storage_path('logs/storage.log'),
+            'level' => 'debug',
+            'days' => 14,
+        ],
+
         'papertrail' => [
             'driver' => 'monolog',
             'level' => env('LOG_LEVEL', 'debug'),

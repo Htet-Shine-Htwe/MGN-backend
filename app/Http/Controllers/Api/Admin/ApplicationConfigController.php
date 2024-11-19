@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\ApplicationConfig;
+use App\Repo\Admin\ApplicationConfig\ApplicationConfigUploadRepo;
 use App\Traits\CacheResponse;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -13,10 +14,17 @@ class ApplicationConfigController extends Controller
 {
     use CacheResponse;
 
+    private string $cacheKey;
+
+    public function __construct(protected ApplicationConfigUploadRepo $applicationConfigUploadRepo)
+    {
+        $this->cacheKey = $this->generateCacheKey('application_config');
+    }
+
     public function index(): JsonResponse
     {
+        $key = $this->cacheKey;
 
-        $key = $this->generateCacheKey('application_config');
         $app = $this->cacheResponse(
             $key, 300, function () {
                 return ApplicationConfig::first();
@@ -28,10 +36,10 @@ class ApplicationConfigController extends Controller
 
     public function update(Request $request): JsonResponse
     {
-        $app = ApplicationConfig::first();
-        $app->update($request->all());
+        $app = $this->applicationConfigUploadRepo->upload($request);
 
-        $this->updateCache('Laravel-application_config', $app);
+        $key = $this->cacheKey;
+        $this->forgetCache( $key);
 
         return response()->json($app);
     }

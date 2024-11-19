@@ -58,7 +58,7 @@ test("mogou data can be fetched",function()
 
 test("mogou data can searched with title",function($data)
 {
-    \App\Models\Mogou::factory()->create([
+    Mogou::factory()->create([
         'title' => $data['title']
     ]);
 
@@ -75,7 +75,7 @@ test("mogou data can searched with title",function($data)
 
 test("mogou data can be filtered by status",function($data)
 {
-    \App\Models\Mogou::factory()->create([
+    Mogou::factory()->create([
         'status' => $data['status']
     ]);
 
@@ -97,7 +97,7 @@ test("mogou data can be filtered by status",function($data)
 
 test("mogou data can be filtered by release year",function($data)
 {
-    \App\Models\Mogou::factory()->create([
+    Mogou::factory()->create([
         'released_year' => $data['released_year']
     ]);
 
@@ -119,7 +119,7 @@ test("mogou data can be filtered by release year",function($data)
 
 test("mogou data filtered with status & year",function($data)
 {
-    \App\Models\Mogou::factory()->create([
+    Mogou::factory()->create([
         'status' => $data['status'],
         'released_year' => $data['released_year']
     ]);
@@ -144,7 +144,7 @@ test("mogou data filtered with status & year",function($data)
 
 test("mogou data filtered with status & category & year",function($data){
 
-    $mogou = \App\Models\Mogou::factory()->create([
+    $mogou = Mogou::factory()->create([
         'status' => $data['status'],
         'released_year' => $data['released_year']
     ]);

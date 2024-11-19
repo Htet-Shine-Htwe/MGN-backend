@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('sub_mogou_images', function (Blueprint $table) {
             $table->id();
             $table->string('path');
+            $table->foreignId('mogou_id')->constrained()->onDelete('cascade');
             $table->foreignId('sub_mogou_id')->constrained()->onDelete('cascade');
             $table->unsignedInteger('page_number');
             $table->timestamps();

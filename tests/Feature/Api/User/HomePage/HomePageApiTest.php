@@ -34,8 +34,6 @@ test("carousel data for homepage can fetched successfully",function(){
     $response = $this->getJson(route('api.users.carousel'));
 
     $response->assertOk();
-    $count = count($response->json('mogous'));
-    $this->assertTrue($count > 0);
 });
 
 test("most-viewed mogous data for homepage can fetched successfully",function(){

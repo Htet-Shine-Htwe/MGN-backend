@@ -85,7 +85,9 @@ class HomePageController extends Controller
             function ($mogou) {
                 $key = $mogou->rotation_key;
 
-                $subMogou = $mogou->subMogous($key)->select('title','created_at')->latest('chapter_number')->limit(3)->get();
+                $subMogou = $mogou->subMogous($key)->select(
+                   'id', 'title', 'slug', 'chapter_number', 'created_at','subscription_only','third_party_url','third_party_redirect'
+                    )->latest('chapter_number')->limit(3)->get();
 
                 $mogou->setRelation('subMogous', $subMogou);
             }

@@ -6,8 +6,8 @@ use App\Http\Controllers\Api\User\UserFavoriteController;
 use App\Http\Controllers\Api\User\UserMogouController;
 use App\Http\Controllers\Api\User\UserProfileController;
 use App\Http\Controllers\Api\User\UserReportController;
-
 use Illuminate\Support\Facades\Route;
+use GuzzleHttp\Client;
 
 Route::middleware(['user.maintenance'])->group(function () {
 
@@ -42,6 +42,7 @@ Route::middleware(['user.maintenance'])->group(function () {
 
         Route::controller(UserMogouController::class)->group(function () {
             Route::get('/mogous/{mogou}', 'show')->name('mogous.show');
+            Route::get('/mogous/{mogou}/getMoreChapters', 'getMoreChapters')->name('mogous.getMoreChapters');
             Route::get('/mogous/{mogou}/related', 'relatedPostPerMogou')->name('mogous.relateMogou');
         });
 
@@ -56,5 +57,22 @@ Route::middleware(['user.maintenance'])->group(function () {
                 'status' => 200
             ], 200);
         });
+
+
+        Route::get("/test", function() {
+            $client = new Client();
+            $response = $client->get('https://radian-mgn.b-cdn.net/public/config/bg_02_673724cd5ef88.jpg');
+
+            // Get the image content as a string
+            $imageContent = $response->getBody()->getContents();
+
+            // Base64 encode the image to embed it directly in the img tag
+            $base64Image = base64_encode($imageContent);
+
+            // Return an image using the <img> tag
+            return "<img src='data:image/jpeg;base64,{$base64Image}' alt='Image from URL' />";
+        });
+
+
     });
 });

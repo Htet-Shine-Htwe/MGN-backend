@@ -85,7 +85,6 @@ it("Image was stored when creating report", function(){
         'title' => 'Test Report',
         'description' => 'Test Description',
         'current_url' => 'https://test.com',
-        'image' => 'cover.jpg'
     ]);
 
     $this->assertInStorage('reports/'.$response->json('cover'));

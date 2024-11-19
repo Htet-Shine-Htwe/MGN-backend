@@ -28,7 +28,6 @@ Route::prefix('v1')
         \App\Services\Route\RouteHelper::includedRouteFiles(__DIR__ . '/api');
         Route::controller(ApplicationConfigController::class)->group(function(){
             Route::get('/application-configs','index')->name('application-configs.index');
-            Route::post('/application-configs','update')->name('application-configs.store');
         });
 
         Route::get("/public/categories",[CategoryController::class,"all"]);

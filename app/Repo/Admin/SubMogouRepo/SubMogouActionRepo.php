@@ -12,63 +12,115 @@ class SubMogouActionRepo
 {
     use HydraMedia;
 
-    protected Mogou $parentMogou;
-
     public function __construct()
     {
     }
-
-    protected function setSubMogouTable(string $key="id",string $value =null): SubMogou
-    {
-        $this->parentMogou = Mogou::where($key, $value)->first();
-
-        $rotation_key = $this->parentMogou->rotation_key;
-
-        $sub_mogou = new SubMogou();
-        $table = $sub_mogou->getPartition($rotation_key);
-
-        $sub_mogou->setTable($table);
-
-        $sub_mogou->setKeyName('id');
-        return $sub_mogou;
-    }
-
+    /**
+     * generateSubMogouFolder
+     *
+     * @param  SubMogou $sub_mogou
+     * @return string
+     */
     public function generateSubMogouFolder(SubMogou $sub_mogou) :string
     {
         return 'sub_mogou/'.$sub_mogou['slug']."/cover";
     }
 
+    /**
+     * saveNewDraft
+     *
+     * @param array $data
+     * @return SubMogou
+     */
     public function saveNewDraft(array $data) :SubMogou | array
     {
-        $sub_mogou = $this->setSubMogouTable("slug", $data['mogou_slug']);
-        $data['mogou_id'] = $this->parentMogou->id;
+        $sub_mogou = MogouPartitionFind::getSubMogou("slug", $data['mogou_slug']);
+
+        $parent_mogou = MogouPartitionFind::$parentMogou;
+
+        $chapter_number = $sub_mogou->where('mogou_id', $parent_mogou->id)->where('chapter_number', $data['chapter_number'])->first();
+
+        if ($chapter_number) {
+            throw new \Exception("Chapter number already exists");
+        }
+
+        $data['mogou_id'] = $parent_mogou->id;
+
         return $sub_mogou->create($data);
     }
 
-    public function updateCover(array $data) :SubMogou
+    /**
+     * updateInfo
+     *
+     * @param array $data
+     * @return SubMogou
+     */
+    public function updateInfo(array $data) :SubMogou
     {
-        $sub_mogou_model = $this->setSubMogouTable("slug", $data['slug']);
+        $sub_mogou =  MogouPartitionFind::getSubMogou("slug", $data['mogou_slug']);
 
-        $sub_mogou = $sub_mogou_model->where('slug', $data['slug'])->firstOrFail();
+        $parent_mogou = MogouPartitionFind::$parentMogou;
 
-        $store_cover_folder = generateStorageFolder("sub_mogou", $data['slug'].'/cover');
+        $chapter_number = $sub_mogou
+        ->where('mogou_id', $parent_mogou->id)
+        ->where('chapter_number', $data['chapter_number'])->first();
 
-        $data['cover'] = $this->storeMedia($data['cover'], $store_cover_folder, false);
+        if ($chapter_number && $chapter_number->id != $data['id']) {
+            throw new \Exception("Chapter number already exists");
+        }
 
-        $sub_mogou->cover = $data['cover'];
-
-        $sub_mogou->save();
-
+        $sub_mogou = $sub_mogou->where('id', $data['id'])->firstOrFail();
+        $sub_mogou->update($data);
         return $sub_mogou;
     }
 
-    public function show(string $mogous_id,string $sub_mogou_id) :SubMogou
+    /**
+     * getLatestChapterNumber
+     *
+     * @param string $slug
+     * @return int
+     */
+    public function getLatestChapterNumber(string $slug) : int
     {
-        $sub_mogou = $this->setSubMogouTable("id", $mogous_id);
+        $sub_mogou =  MogouPartitionFind::getSubMogou("slug", $slug);
+        return $sub_mogou->where('mogou_id', MogouPartitionFind::$parentMogou->id)->max('chapter_number') ?? 0;
+    }
 
-        $sub_mogou = $sub_mogou->where('id', $sub_mogou_id)->firstOrFail();
+    /**
+     * updateCover
+     *
+     * @param array $data
+     * @return SubMogou
+     */
+    public function updateCover(array $data) :SubMogou
+    {
+        $sub_mogou_model =  MogouPartitionFind::getSubMogou("slug", $data['slug']);
+        $sub_mogou = $sub_mogou_model->where('slug', $data['slug'])->firstOrFail();
+        $store_cover_folder = generateStorageFolder("sub_mogou", $data['slug'].'/cover');
 
+        $data['cover'] = $this->storeMedia($data['cover'], $store_cover_folder, false);
+        $sub_mogou->cover = $data['cover'];
+        $sub_mogou->save();
         return $sub_mogou;
+    }
+
+    /**
+     * show
+     *
+     * @param string $mogou_slug
+     * @param string $sub_mogou_id
+     * @return array
+     */
+    public function show(string $mogou_slug,string $sub_mogou_id) : array
+    {
+        $sub_mogou =  MogouPartitionFind::getSubMogou("slug", $mogou_slug);
+        $sub_mogou = $sub_mogou->where('id', $sub_mogou_id)->firstOrFail();
+        $sub_mogou['images'] = (new SubMogouImageRepo)->getImages($sub_mogou, MogouPartitionFind::$parentMogou->rotation_key)->get();
+
+        return [
+            'sub_mogou' => $sub_mogou,
+
+        ];
     }
 
     /**

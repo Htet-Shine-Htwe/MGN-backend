@@ -18,7 +18,7 @@ class SubMogouImage extends Model
 
     protected string $baseTable = 'sub_mogou_images';
 
-    protected static function boot()
+    protected static function boot(): void
     {
         parent::boot();
 
@@ -26,10 +26,16 @@ class SubMogouImage extends Model
     }
 
     protected $fillable = [
+        'mogou_id',
         'sub_mogou_id',
         'path',
         'page_number'
     ];
+
+    public function getPathAttribute(string $value): string
+    {
+        return $this->getMedia($value,"public/mogou/$this->mogou_id/$this->sub_mogou_id");
+    }
 
     /**
      * subMogou

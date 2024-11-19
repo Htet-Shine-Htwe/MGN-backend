@@ -15,7 +15,7 @@ uses(UserAuthenticated::class);
 
 beforeEach(function(){
 
-    config(['control.test.mogous_count' => 20]);
+    config(['control.test.mogous_count' => 10]);
 
     $this->seed([
         CategorySeeder::class,
@@ -33,8 +33,11 @@ it("mogou chapters can be fetched", function(){
     $tables = ((new SubMogouImage())->getCreatedPartitions());
 
     \App\Models\SubMogouImage::factory()->count(20)->create([
-        'sub_mogou_id' => 1
+        'sub_mogou_id' => 1,
+
+        'mogou_id' => $mogou->id
     ]);
+
 
     PartitionFactory::shareData('sub_mogou_images',$tables[1]);
 

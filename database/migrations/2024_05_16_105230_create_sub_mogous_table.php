@@ -29,6 +29,8 @@ return new class extends Migration
             $table->integer('subscription_only')->default(0);
             $table->json('subscription_collection')->nullable();
 
+            $table->string('prefix_upload')->nullable();
+
             $table->foreignId('mogou_id')->constrained()->onDelete('cascade');
             $table->timestamps();
         });

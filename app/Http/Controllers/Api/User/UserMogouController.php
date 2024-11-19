@@ -15,19 +15,40 @@ class UserMogouController extends Controller
 
         $mogou = Mogou::where('slug', $mogou)->with('categories')->firstOrFail();
 
-
         $mogou->append('total_view_count');
 
         $subMogous = $mogou->subMogous($mogou->rotation_key)
-            ->select('id', 'title', 'slug', 'chapter_number', 'created_at')
-            ->latest('chapter_number')->limit(5)->get();
+            ->select('id', 'title', 'slug', 'chapter_number', 'created_at','subscription_only','third_party_url','third_party_redirect')
+            ->latest('chapter_number')->limit(10)->get();
 
-        $isFavorite = auth('sanctum')->user()?->favorites()->where('mogou_id', $mogou->id)->exists();
+        $is_auth = auth('sanctum')->user();
+
+        // if is auth is User  Model instance
+        if($is_auth instanceof \App\Models\User){
+            $isFavorite = $is_auth ? $is_auth->favorites()->where('mogou_id', $mogou->id)->exists() : null;
+        }
 
         return response()->json(
             [
                 'mogou' => $mogou,
-                'is_favorite' => $isFavorite,
+                'is_favorite' => $isFavorite ?? false,
+                'chapters' => $subMogous,
+            ]
+        );
+    }
+
+    public function getMoreChapters(Request $request): JsonResponse
+    {
+        $mogou = $request->mogou;
+
+        $mogou = Mogou::where('slug', $mogou)->firstOrFail();
+
+        $subMogous = $mogou->subMogous($mogou->rotation_key)
+            ->select('id', 'title', 'slug', 'chapter_number', 'created_at','subscription_only','third_party_url','third_party_redirect')
+            ->latest('chapter_number')->get();
+
+        return response()->json(
+            [
                 'chapters' => $subMogous,
             ]
         );

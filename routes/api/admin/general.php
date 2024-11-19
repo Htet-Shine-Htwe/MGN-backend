@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\Admin\AdminController;
 use App\Http\Controllers\Api\Admin\AdminReportController;
 use App\Http\Controllers\Api\Admin\AnalysisReportController;
+use App\Http\Controllers\Api\Admin\ApplicationConfigController;
 use App\Http\Controllers\Api\Admin\BotPublisherController;
 use App\Http\Controllers\Api\Admin\CategoryController;
 use App\Http\Controllers\Api\Admin\MogouChapterController;
@@ -83,8 +84,12 @@ Route::middleware(['auth:sanctum'])
 
     Route::controller(SubMogouController::class)->group(function(){
         Route::post('/sub-mogous/new-draft','saveNewDraft')->name('sub-mogous.saveNewDraft');
+        Route::post('/sub-mogous/update-draft','updateInfo')->name('sub-mogous.updateInfo');
         Route::post('/sub-mogous/update-cover','updateCover')->name('sub-mogous.updateCover');
-        Route::get('/sub-mogous/{mogous_id}/{sub_mogou_id}','show')->name('sub-mogous.show');
+        Route::get('/sub-mogous/show/{mogou_slug}/{sub_mogou_id}','show')->name('sub-mogous.show');
+        Route::get("/sub-mogous/get-latest-chapter/{mogou_slug}",'getLatestChapterNumber')->name('sub-mogous.getLatestChapterNumber');
+        Route::post("/sub-mogous/upload-files",'uploadStorageFiles')->name('sub-mogous.uploadStorageFiles');
+        Route::post("/sub-mogous/delete",'deleteSubMogou')->name('sub-mogous.deleteSubMogou');
     });
 
     Route::controller(SocialInfoController::class)->group(function(){
@@ -117,12 +122,10 @@ Route::middleware(['auth:sanctum'])
 
     Route::controller(AnalysisReportController::class)->group(function(){
         Route::get('/subscription-analysis','subscriptionAnalysis')->name('analysis-report.subscription');
+    });
+
+    Route::controller(ApplicationConfigController::class)->group(function(){
+        Route::post('/application-configs','update')->name('application-configs.store');
 
     });
-});
-
-
-
-Route::controller(TestController::class)->group(function(){
-    Route::post('/test','test')->name('test');
 });
