@@ -78,7 +78,7 @@ class SubMogouStorageUploadRepo
         return $subMogou;
     }
 
-    public function getWaterMarkImage()
+    public function getWaterMarkImage(): string
     {
         $app = ApplicationConfig::firstOrFail();
 
