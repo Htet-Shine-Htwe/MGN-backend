@@ -14,7 +14,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable,HasRoles;
+    use HasApiTokens, HasFactory, Notifiable, HasRoles;
 
     /**
      * The attributes that are mass assignable.
@@ -27,7 +27,7 @@ class User extends Authenticatable
         'password',
         'user_code',
         'current_subscription_id',
-        'subscription_end_date' ,
+        'subscription_end_date',
         'last_login_at',
         'active',
         'background_color',
@@ -35,7 +35,7 @@ class User extends Authenticatable
     ];
 
     // appends
-    protected $appends = ['subscription_name','avatar_url'];
+    protected $appends = ['subscription_name', 'avatar_url'];
 
     /**
      * The attributes that should be hidden for serialization.
@@ -54,11 +54,12 @@ class User extends Authenticatable
     }
 
 
-    public function getSubscriptionEndDateAttribute(string $value): string | null
+    public function getSubscriptionEndDateAttribute(string $value): string|null
     {
-        // format in Y-m-d H:i:s
-        return $value ? date('Y-m-d H:i:s', strtotime($value)) : null;
+        $timestamp = strtotime($value);
+        return $timestamp !== false ? date('Y-m-d H:i:s', $timestamp) : null;
     }
+
 
     /**
      * The attributes that should be cast.
@@ -73,7 +74,6 @@ class User extends Authenticatable
     protected static function boot(): void
     {
         parent::boot();
-
     }
 
     /*
@@ -136,32 +136,33 @@ class User extends Authenticatable
      * @param  Builder<static> $query
      * @return Builder<static>
      */
-    public function scopeSearch(Builder $query,?string $search) : Builder
+    public function scopeSearch(Builder $query, ?string $search): Builder
     {
         return $query->when(
-            $search, function ($query,$search) {
-                return $query->where('name', 'like', '%'.$search.'%')
-                    ->orWhere('email', 'like', '%'.$search.'%');
+            $search,
+            function ($query, $search) {
+                return $query->where('name', 'like', '%' . $search . '%')
+                    ->orWhere('email', 'like', '%' . $search . '%');
             }
         );
     }
 
-    public function getAvatarUrlAttribute() : string | null
+    public function getAvatarUrlAttribute(): string | null
     {
         return $this->avatar?->avatar_url_path;
     }
 
-     /**
+    /**
      * scopeFilter
      *
      * @param  Builder<static> $query
      * @return Builder<static>
      */
-    public function scopeFilterSubscription(Builder $query) : Builder
+    public function scopeFilterSubscription(Builder $query): Builder
     {
         $filter = request()->input('subscriptions');
 
-        return $query->when($filter,function($query) use ($filter){
+        return $query->when($filter, function ($query) use ($filter) {
             if (is_string($filter) && strpos($filter, ',') !== false) {
                 $status = explode(',', $filter);
                 return $query->whereIn('current_subscription_id', $status);
@@ -178,9 +179,11 @@ class User extends Authenticatable
      * @param  string $expired
      * @return Builder<static>
      */
-    public function scopeExpiredSubscription(Builder $query,?string $expired) : Builder
+    public function scopeExpiredSubscription(Builder $query, ?string $expired): Builder
     {
-        return $query->when($expired, function ($query)  {
+        return $query->when(
+            $expired,
+            function ($query) {
                 return $query->where('subscription_end_date', '<', now());
             }
         );
@@ -193,7 +196,7 @@ class User extends Authenticatable
      * @param  string $active
      * @return Builder<static>
      */
-    public function scopeFilterActiveUser(Builder $query, ?string $active) : Builder
+    public function scopeFilterActiveUser(Builder $query, ?string $active): Builder
     {
 
         return $query->when(isset($active), function ($query) use ($active) {
@@ -201,10 +204,8 @@ class User extends Authenticatable
         });
     }
 
-    public function getSubscriptionNameAttribute() : string | null
+    public function getSubscriptionNameAttribute(): string | null
     {
         return $this->subscription?->title;
     }
-
-
 }

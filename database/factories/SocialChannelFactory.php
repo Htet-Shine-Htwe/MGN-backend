@@ -5,9 +5,9 @@ namespace Database\Factories;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\BotPublisher>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\SocialChannel>
  */
-class BotPublisherFactory extends Factory
+class SocialChannelFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -18,10 +18,9 @@ class BotPublisherFactory extends Factory
     {
         return [
             'name' => $this->faker->name,
-            'token_key' => $this->faker->word,
+            'token_key' => $this->faker->uuid,
             'type' => $this->faker->randomElement([1, 2]),
-            'is_active' => true,
-            'last_activity' => $this->faker->dateTime(),
+            'is_active' => $this->faker->boolean,
         ];
     }
 }

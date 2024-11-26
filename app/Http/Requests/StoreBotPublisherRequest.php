@@ -26,7 +26,6 @@ class StoreBotPublisherRequest extends FormRequest
             'token_key' => ['required', 'string', 'max:255','unique:bot_publishers,token_key'],
             'type' => ['required', 'max:255'],
             // 'available_ids' => ['required', 'array'],
-            'available_ids' => ['required', 'string', 'max:255'],
         ];
     }
 }

@@ -15,4 +15,9 @@ class LinedPublisher
     {
         return $this->publisher->getPublisherDetail();
     }
+
+    public function checkIsExistOnProvider(string $id): bool
+    {
+        return $this->publisher->checkIsExistOnProvider($id);
+    }
 }

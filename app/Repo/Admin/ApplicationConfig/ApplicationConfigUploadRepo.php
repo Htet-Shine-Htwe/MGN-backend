@@ -26,7 +26,12 @@ class ApplicationConfigUploadRepo
         foreach ($validUploadProperties as $property) {
             if ($request->hasFile($property)) {
                 $this->removeMedia('public/config/'.$app->getRawOriginal($property));
-                $app->$property = $this->storeMedia($request->file($property), 'config');
+                $mediaResult = $this->storeMedia($request->file($property), 'config');
+                if (is_string($mediaResult)) {
+                    $app->$property = $mediaResult;
+                } else {
+                    throw new \UnexpectedValueException('Expected a string for avatar path but got an array.');
+                }
             }
 
         }

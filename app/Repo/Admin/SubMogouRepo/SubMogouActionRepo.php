@@ -99,7 +99,7 @@ class SubMogouActionRepo
         $store_cover_folder = generateStorageFolder("sub_mogou", $data['slug'].'/cover');
 
         $data['cover'] = $this->storeMedia($data['cover'], $store_cover_folder, false);
-        $sub_mogou->cover = $data['cover'];
+        $sub_mogou->cover = (string) $data['cover'];
         $sub_mogou->save();
         return $sub_mogou;
     }

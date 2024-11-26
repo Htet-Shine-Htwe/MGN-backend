@@ -25,6 +25,15 @@ enum SocialMediaType :int implements SmartEnum
         ];
     }
 
+    public static function getByLabel( string $label ): int
+    {
+        return match ( $label ) {
+            "Telegram" => self::Telegram->value,
+            "Discord" => self::Discord->value,
+            default => 0
+        };
+    }
+
     public static function getKey( SocialMediaType $value ): string
     {
         return match ( $value ) {

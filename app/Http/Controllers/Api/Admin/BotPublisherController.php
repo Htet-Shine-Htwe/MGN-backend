@@ -5,18 +5,20 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreBotPublisherRequest;
 use App\Models\BotPublisher;
 use App\Services\BotPublisher\CreateBot;
+use App\Services\BotPublisher\GetBotServices;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 
 class BotPublisherController extends Controller
 {
 
-    public function index(): JsonResponse
+    public function index(Request $request): JsonResponse
     {
-        $bots = BotPublisher::all();
+        $bots = (new GetBotServices($request->type))->getBotPublishers();
         return response()->json(
             [
             'success' => true,
-            'data' => $bots
+            'bots' => $bots
             ]
         );
     }
@@ -35,7 +37,7 @@ class BotPublisherController extends Controller
                     ]
                 );
             },
-            "Failed to generate new bot"
+            withException:true
         );
     }
 }

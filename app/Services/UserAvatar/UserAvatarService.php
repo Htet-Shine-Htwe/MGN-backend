@@ -56,7 +56,12 @@ class UserAvatarService
 
         $avatar = new UserAvatar();
         $avatar->avatar_name = $name;
-        $avatar->avatar_path = $this->storeMedia($file, 'user_avatars', false, $mediaOption);
+        $mediaResult = $this->storeMedia($file, 'user_avatars', false, $mediaOption);
+        if (is_string($mediaResult)) {
+            $avatar->avatar_path = $mediaResult;
+        } else {
+            throw new \UnexpectedValueException('Expected a string for avatar path but got an array.');
+        }
         $avatar->save();
         return $avatar;
     }
@@ -77,8 +82,13 @@ class UserAvatarService
         $this->removeMedia("public/user_avatars/$avatar->avatar_path");
 
         $avatar->avatar_name = $name;
-        $avatar->avatar_path = $this->storeMedia($file, 'user_avatars', false, $mediaOption);
-
+        $avatar->avatar_name = $name;
+        $mediaResult = $this->storeMedia($file, 'user_avatars', false, $mediaOption);
+        if (is_string($mediaResult)) {
+            $avatar->avatar_path = $mediaResult;
+        } else {
+            throw new \UnexpectedValueException('Expected a string for avatar path but got an array.');
+        }
 
         $avatar->save();
         return $avatar;

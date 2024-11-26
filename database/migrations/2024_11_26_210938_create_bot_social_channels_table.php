@@ -11,13 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('bot_publishers', function (Blueprint $table) {
+        Schema::create('bot_social_channels', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('token_key');
-            $table->unsignedTinyInteger('type');
-            $table->boolean('is_active')->default(true);
-            $table->dateTime('last_activity')->nullable();
+            $table->foreignId('bot_publisher_id')->constrained()->onDelete('cascade');
+            $table->foreignId('social_channel_id')->constrained()->onDelete('cascade');
             $table->timestamps();
         });
     }
@@ -27,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('bot_publishers');
+        Schema::dropIfExists('bot_social_channels');
     }
 };

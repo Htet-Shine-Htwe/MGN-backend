@@ -8,6 +8,7 @@ use App\Http\Controllers\Api\User\UserProfileController;
 use App\Http\Controllers\Api\User\UserReportController;
 use Illuminate\Support\Facades\Route;
 use GuzzleHttp\Client;
+use WeStacks\TeleBot\TeleBot;
 
 Route::middleware(['user.maintenance'])->group(function () {
 
@@ -28,7 +29,6 @@ Route::middleware(['user.maintenance'])->group(function () {
         Route::controller(UserAvatarController::class)->group(function () {
             Route::get('/user-avatars', 'get')->name('avatars');
         });
-
     });
 
     Route::prefix('users')->name('users.')->group(function () {
@@ -51,7 +51,7 @@ Route::middleware(['user.maintenance'])->group(function () {
         });
 
 
-        Route::get("/check-server",function(){
+        Route::get("/check-server", function () {
             return response()->json([
                 'message' => 'service available',
                 'status' => 200
@@ -59,20 +59,27 @@ Route::middleware(['user.maintenance'])->group(function () {
         });
 
 
-        Route::get("/test", function() {
-            $client = new Client();
-            $response = $client->get('https://radian-mgn.b-cdn.net/public/config/bg_02_673724cd5ef88.jpg');
+        Route::get("/test", function () {
+            $bot = new TeleBot('7049894399:AAF1brp9kVvU9F1Bq6nnq3Q4GfoYfn2UGAM');
 
-            // Get the image content as a string
-            $imageContent = $response->getBody()->getContents();
+            // See docs for details:  https://core.telegram.org/bots/api#sendmessage
+            $message = $bot->sendMessage([
+                'chat_id' => "-1002198423534",
+                'text' => '<b>If the world is burning</b>',
+                'parse_mode' => 'HTML',
+                'link_preview' => false
+            ]);
 
-            // Base64 encode the image to embed it directly in the img tag
-            $base64Image = base64_encode($imageContent);
 
-            // Return an image using the <img> tag
-            return "<img src='data:image/jpeg;base64,{$base64Image}' alt='Image from URL' />";
+            dd($bot->getChat([
+                'chat_id' => "@radianAplus"
+            ]));
+
+            // $messages = $bot->sendMediaGroup([
+            //     'chat_id' => "@radianAplus",
+            //     'text' =>
+            //  ]);
+
         });
-
-
     });
 });

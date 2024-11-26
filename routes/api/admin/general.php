@@ -111,6 +111,7 @@ Route::middleware(['auth:sanctum'])
     });
 
     Route::controller(BotPublisherController::class)->name('bot-publisher.')->group(function(){
+        Route::get("/bot-publisher/{type}/list",'index')->name('index');
         Route::post('/bot-publisher','store')->name('store');
     });
 

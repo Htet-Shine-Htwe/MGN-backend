@@ -11,14 +11,14 @@ class SubscriptionAnalysis
 {
     public function getCurrentMonthProfit(): float
     {
-        return Subscription::join('user_subscriptions', 'subscriptions.id', '=', 'user_subscriptions.subscription_id')
+        return (float) Subscription::join('user_subscriptions', 'subscriptions.id', '=', 'user_subscriptions.subscription_id')
             ->whereBetween('user_subscriptions.created_at', [Carbon::now()->startOfMonth(), Carbon::now()->endOfMonth()])
             ->sum('subscriptions.price');
     }
 
     public function getPreviousMonthProfit(): float
     {
-        return Subscription::join('user_subscriptions', 'subscriptions.id', '=', 'user_subscriptions.subscription_id')
+        return (float) Subscription::join('user_subscriptions', 'subscriptions.id', '=', 'user_subscriptions.subscription_id')
             ->whereBetween('user_subscriptions.created_at', [Carbon::now()->subMonth()->startOfMonth(), Carbon::now()->subMonth()->endOfMonth()])
             ->sum('subscriptions.price');
     }

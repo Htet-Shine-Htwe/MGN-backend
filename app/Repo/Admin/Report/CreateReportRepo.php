@@ -21,7 +21,7 @@ class CreateReportRepo
             $mediaOption = MediaOption::create()->setQuality(70);
             $report->image = $this->storeMedia($request->image, 'reports', true, $mediaOption);
         }
-        $report->user_id = auth()->id() ?? null;
+        $report->user_id = auth()->id() !== null ? (int) auth()->id() : null;
         $report->save();
         return $report;
     }

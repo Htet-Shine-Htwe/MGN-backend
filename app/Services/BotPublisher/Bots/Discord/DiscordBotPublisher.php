@@ -10,4 +10,9 @@ class DiscordBotPublisher implements PublisherInterface
     {
         return 'Telegram';
     }
+
+    public function checkIsExistOnProvider(string $id) : bool
+    {
+        return $id == 1;
+    }
 }
