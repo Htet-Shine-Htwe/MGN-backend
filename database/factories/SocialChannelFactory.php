@@ -21,6 +21,7 @@ class SocialChannelFactory extends Factory
             'token_key' => $this->faker->uuid,
             'type' => $this->faker->randomElement([1, 2]),
             'is_active' => $this->faker->boolean,
+
         ];
     }
 }

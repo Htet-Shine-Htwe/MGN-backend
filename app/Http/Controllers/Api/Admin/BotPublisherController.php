@@ -14,7 +14,7 @@ class BotPublisherController extends Controller
 
     public function index(Request $request): JsonResponse
     {
-        $bots = (new GetBotServices($request->type))->getBotPublishers();
+        $bots = (new GetBotServices())->getBotPublishers($request->type);
         return response()->json(
             [
             'success' => true,
@@ -38,6 +38,31 @@ class BotPublisherController extends Controller
                 );
             },
             withException:true
+        );
+    }
+
+    public function showBot(Request $request) : JsonResponse
+    {
+        $bot = (new GetBotServices())->getBotPublisher((int) $request->id);
+
+        return response()->json(
+            [
+            'success' => true,
+            'bots' => $bot
+            ]
+        );
+    }
+
+    public function remove(Request $request) : JsonResponse
+    {
+        $bot = BotPublisher::find($request->id);
+        $bot->delete();
+
+        return response()->json(
+            [
+            'success' => true,
+            'message' => 'Bot was deleted successfully'
+            ]
         );
     }
 }

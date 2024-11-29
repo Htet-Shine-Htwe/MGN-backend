@@ -16,7 +16,8 @@ class SocialPublisher
     public function __construct(protected string $token_key,protected int $type)
     {
         $publisherType = $this->getPublisherType($token_key,$type);
-        $this->linedPublisher = new LinedPublisher($publisherType);
+        $botPublisher = BotPublisher::where('token_key', $token_key)->where('type', $type)->first();
+        $this->linedPublisher = new LinedPublisher($publisherType,$botPublisher);
     }
 
     public function getPublisherType(string $token_key,int $type): PublisherInterface
@@ -33,7 +34,5 @@ class SocialPublisher
     {
         return $this->linedPublisher;
     }
-
-
 
 }

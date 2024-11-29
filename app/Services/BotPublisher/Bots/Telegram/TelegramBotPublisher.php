@@ -3,17 +3,22 @@
 namespace App\Services\BotPublisher\Bots\Telegram;
 
 use App\Contracts\PublisherInterface;
+use GuzzleHttp\Client;
+use Illuminate\Database\Eloquent\Collection;
 use WeStacks\TeleBot\TeleBot;
 
 class TelegramBotPublisher implements PublisherInterface
 {
     protected TeleBot $serviceBot;
+    protected Client $httpClient;
+
     public function __construct(protected string $api_key)
     {
         $this->serviceBot = new TeleBot($api_key);
+        $this->httpClient = $this->createHttpClient();
     }
 
-    public static function provider(string $api_key): TelegramBotPublisher
+    public static function provider(string $api_key): self
     {
         return new self($api_key);
     }
@@ -21,10 +26,8 @@ class TelegramBotPublisher implements PublisherInterface
     public function getPublisherDetail(): mixed
     {
         $botDetails = $this->individualChannel('-1002198423534')->getTotalMembers();
-
         return json_encode($botDetails);
     }
-
 
     public function individualChannel(string $channel_id): SingleChannel
     {
@@ -33,21 +36,36 @@ class TelegramBotPublisher implements PublisherInterface
 
     public function checkIsExistOnProvider(string $id): bool
     {
-        $url = "https://api.telegram.org/bot$id/getMe";
-        $response = new \GuzzleHttp\Client(
-            [
-                'base_uri' => $url,
-                'http_errors' => false,
-                'headers' => [
-                    'accept' => 'application/json',
-                ]
-            ]
-        );
+        $response = $this->makeTelegramRequest("bot{$id}/getMe");
+        return $response->getStatusCode() === 200;
+    }
 
-        $response = $response->get($url);
-        if ($response->getStatusCode() == 200) {
-            return true;
-        }
-        return false;
+    public function getChannelsWithSubscribers(Collection $channels): mixed
+    {
+        return $channels->map(function ($channel) {
+            $channel->providers = $this->individualChannel($channel->token_key)->getChatInfo();
+            return $channel;
+        });
+    }
+
+    public function checkChannelExistOnProvider(string $id, string $channel_token_key): mixed
+    {
+        return  $this->individualChannel($channel_token_key)->getChatDetail();
+    }
+
+    protected function makeTelegramRequest(string $endpoint, array $queryParams = []): \Psr\Http\Message\ResponseInterface
+    {
+        $url = "https://api.telegram.org/{$endpoint}";
+        return $this->httpClient->get($url, ['query' => $queryParams]);
+    }
+
+    protected function createHttpClient(): Client
+    {
+        return new Client([
+            'http_errors' => false,
+            'headers' => [
+                'Accept' => 'application/json',
+            ],
+        ]);
     }
 }

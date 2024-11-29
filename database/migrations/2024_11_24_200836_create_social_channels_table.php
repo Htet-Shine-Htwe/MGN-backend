@@ -17,6 +17,7 @@ return new class extends Migration
             $table->unsignedTinyInteger('type');
             $table->string('token_key');
             $table->boolean('is_active')->default(true);
+            $table->json('meta_data')->nullable();
             $table->timestamps();
         });
     }

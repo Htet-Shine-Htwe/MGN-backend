@@ -3,6 +3,7 @@ namespace App\Services\BotPublisher\Bots\Discord;
 
 
 use App\Contracts\PublisherInterface;
+use Illuminate\Database\Eloquent\Collection;
 
 class DiscordBotPublisher implements PublisherInterface
 {
@@ -12,6 +13,18 @@ class DiscordBotPublisher implements PublisherInterface
     }
 
     public function checkIsExistOnProvider(string $id) : bool
+    {
+        return $id == 1;
+    }
+
+    public function getChannelsWithSubscribers(Collection $channels): mixed
+    {
+       return $channels->map(function($channel){
+            return $channel;
+        });
+    }
+
+    public function checkChannelExistOnProvider(string $id,string $channel_token_keys) : bool
     {
         return $id == 1;
     }

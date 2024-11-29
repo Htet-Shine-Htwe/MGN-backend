@@ -9,6 +9,7 @@ use App\Http\Controllers\Api\Admin\CategoryController;
 use App\Http\Controllers\Api\Admin\MogouChapterController;
 use App\Http\Controllers\Api\Admin\MogouController;
 use App\Http\Controllers\Api\Admin\SectionManagementController;
+use App\Http\Controllers\Api\Admin\SocialChannelController;
 use App\Http\Controllers\Api\Admin\SocialInfoController;
 use App\Http\Controllers\Api\Admin\SubMogouController;
 use App\Http\Controllers\Api\Admin\SubscriptionController;
@@ -112,11 +113,17 @@ Route::middleware(['auth:sanctum'])
 
     Route::controller(BotPublisherController::class)->name('bot-publisher.')->group(function(){
         Route::get("/bot-publisher/{type}/list",'index')->name('index');
+        Route::get("/bot-publisher/{id}/detail",'showBot')->name('showBot');
         Route::post('/bot-publisher','store')->name('store');
+        Route::post('/bot-publisher/remove','remove')->name('remove');
+    });
+
+    Route::controller(SocialChannelController::class)->group(function(){
+        Route::post('/social-channel','create')->name('social-channels.store');
     });
 
     Route::controller(AdminReportController::class)->group(function(){
-        Route::get('/reports','index')->name('reports.index');
+        Route::get('/reports','index')->name('reports.index'    );
         Route::get('/reports/{report}','show')->name('reports.show');
         Route::post('/reports/{report}','updateStatus')->name('reports.updateStatus');
     });
