@@ -9,7 +9,7 @@ class DiscordBotPublisher implements PublisherInterface
 {
     public function getPublisherDetail() : string
     {
-        return 'Telegram';
+        return 'Discord';
     }
 
     public function checkIsExistOnProvider(string $id) : bool
@@ -24,7 +24,7 @@ class DiscordBotPublisher implements PublisherInterface
         });
     }
 
-    public function checkChannelExistOnProvider(string $id,string $channel_token_keys) : bool
+    public function checkChannelExistOnProvider(int $id,string $channel_token_keys) : bool
     {
         return $id == 1;
     }

@@ -6,6 +6,9 @@ use App\Enum\SocialMediaType;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @property mixed $providers
+ */
 class SocialChannel extends Model
 {
     use HasFactory;

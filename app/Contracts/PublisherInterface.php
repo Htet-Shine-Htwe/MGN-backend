@@ -2,6 +2,7 @@
 
 namespace App\Contracts;
 
+use App\Models\SocialChannel;
 use Illuminate\Database\Eloquent\Collection;
 
 interface PublisherInterface
@@ -24,7 +25,7 @@ interface PublisherInterface
     /**
      * get the channels with subscribers
      *
-     * @param  Collection $channels
+     * @param  Collection<int, SocialChannel> $channels
      * @return mixed
      */
     public function getChannelsWithSubscribers(Collection $channels) : mixed;
@@ -32,10 +33,10 @@ interface PublisherInterface
     /**
      * check the channel exist on provider with bot id
      *
-     * @param  string $id
-     * @param  string $channel_id
+     * @param  int $id
+     * @param  string $channel_token_key
      * @return mixed
      */
-    public function checkChannelExistOnProvider(string $id,string $channel_token_key) : mixed;
+    public function checkChannelExistOnProvider(int $id,string $channel_token_key) : mixed;
 
 }

@@ -8,6 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
+
+/**
+ * @property mixed $channels
+ */
 class BotPublisher extends Model
 {
     use HasFactory;

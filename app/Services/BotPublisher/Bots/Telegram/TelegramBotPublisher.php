@@ -48,7 +48,7 @@ class TelegramBotPublisher implements PublisherInterface
         });
     }
 
-    public function checkChannelExistOnProvider(string $id, string $channel_token_key): mixed
+    public function checkChannelExistOnProvider(int $id, string $channel_token_key): mixed
     {
         return  $this->individualChannel($channel_token_key)->getChatDetail();
     }
