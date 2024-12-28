@@ -1,0 +1,70 @@
+name: Deploy to Heroku
+
+on:
+  push:
+    branches:
+      - main
+      - development
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2' # or your Laravel PHP version
+
+      - name: Install Composer dependencies
+        run: composer install --no-interaction --prefer-dist --optimize-autoloader
+
+      - name: Create .env.testing file
+        run: |
+          cp .env.example .env.testing
+          echo "DB_CONNECTION=sqlite" >> .env.testing
+          echo "DB_DATABASE=:memory:" >> .env.testing
+          php artisan key:generate --env=testing
+
+      - name: Run migrations for testing
+        run: php artisan migrate --env=testing --force
+
+      - name: Run Pest Unit tests
+        run: ./vendor/bin/pest --parallel --group=unit
+
+      - name: Run Pest Features tests
+        run: ./vendor/bin/pest --parallel --group=feature
+
+      - name: Run Stress testss
+        run: ./vendor/bin/pest --parallel --group=stress-test
+
+      - name: Php stan analysis
+        run: ./vendor/bin/phpstan analyse --memory-limit=2G
+
+      - name: Set up Git user identity
+        run: |
+          git config --global user.email "github-actions@github.com"
+          git config --global user.name "GitHub Actions"
+
+      - name: Fetch from Heroku
+        if: github.ref == 'refs/heads/main' && success()
+        env:
+          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+        run: |
+          git remote add heroku https://heroku:${{ secrets.HEROKU_API_KEY }}@git.heroku.com/radian-b.git
+          git fetch heroku main
+          git rebase -X theirs heroku/main
+
+      - name: Continue rebase if necessary
+        if: github.ref == 'refs/heads/main' && success()
+        run: git rebase --continue || echo "No rebase needed"
+
+      - name: Deploy to Heroku
+        if: github.ref == 'refs/heads/main' && success()
+        env:
+          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+        run: |
+          git push heroku main --force

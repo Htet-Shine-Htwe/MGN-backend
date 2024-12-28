@@ -1,0 +1,15 @@
+includes:
+     - vendor/larastan/larastan/extension.neon
+parameters:
+    paths:
+        - app
+    level: 6
+    treatPhpDocTypesAsCertain: false
+
+    excludePaths:
+        - app/Services/Auth/Authentication.php
+        - app/Exceptions/Handler.php
+    checkMissingIterableValueType: false
+
+
+
