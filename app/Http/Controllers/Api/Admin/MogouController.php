@@ -76,6 +76,7 @@ class MogouController extends Controller
 
     public function update(MogouActionRequest $request, Mogou $mogou): JsonResponse
     {
+
             $mogou = $this->mogouActionRepo->update($request, $mogou);
             return response()->json(
                 [
@@ -87,6 +88,7 @@ class MogouController extends Controller
 
     public function updateStatus(Request $request): JsonResponse
     {
+
         $request->validate(
             [
             'mogou_id' => 'required|exists:mogous,id',

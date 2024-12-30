@@ -59,7 +59,7 @@ COPY ./deployment/entrypoint.sh /entrypoint.sh
 RUN chmod +x ./deployment/entrypoint.sh
 
 
-EXPOSE 9000
+EXPOSE 9001
 
 ENTRYPOINT ["./deployment/entrypoint.sh"]
 

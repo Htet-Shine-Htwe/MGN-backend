@@ -28,7 +28,7 @@ class MogouActionRequest extends FormRequest
             'description' => 'required',
             'status' =>  MogouValidation::status(),
             'author' => 'nullable',
-            'cover' => 'nullable|file',
+            'cover' => 'nullable|image',
             'legal_age' => 'required|boolean',
             'rating' => 'required|numeric|between:0,5',
             'finish_status' => MogouValidation::finishStatus(),

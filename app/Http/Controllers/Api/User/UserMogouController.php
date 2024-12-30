@@ -28,7 +28,7 @@ class UserMogouController extends Controller
             ->limit(10)
             ->get();
 
-        $isFavorite = (auth('sanctum')->user() instanceof \App\Models\User) && auth('sanctum')->user()?->favorites()->where('mogou_id', $mogou->id)->exists();
+        $isFavorite = (auth('sanctum')->user() instanceof \App\Models\User) && auth('sanctum')->user()->favorites()->where('mogou_id', $mogou->id)->exists();
 
         return response()->json([
             'mogou' => $mogou,

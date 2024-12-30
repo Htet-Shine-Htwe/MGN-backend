@@ -5,6 +5,7 @@ namespace App\Repo\Admin\Mogou;
 use App\Enum\MogousStatus;
 use App\Http\Requests\MogouActionRequest;
 use App\Models\Mogou;
+use AWS\CRT\Log;
 use HydraStorage\HydraStorage\Service\Option\MediaOption;
 use HydraStorage\HydraStorage\Traits\HydraMedia;
 
@@ -39,14 +40,18 @@ class MogouActionRepo
     public function update(MogouActionRequest $request, Mogou $mogou): Mogou
     {
         $data = $request->validated();
+
         $request->validate(
             [
             'title' => 'unique:mogous,title,' . $mogou->slug . ',slug',
-            'cover' => 'nullable|image'
             ]
         );
 
+        \Log::info('reach tesgt');
+
+
         if ($request->hasFile('cover')) {
+
             $this->removeMedia("public/mogou/cover/{$mogou->cover}");
 
             $mediaOption =  MediaOption::create()->setQuality(70)->get();

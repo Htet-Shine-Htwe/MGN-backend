@@ -17,7 +17,10 @@ class ReportIndexRepo
      */
     public function index(Request $request) : LengthAwarePaginator
     {
-        return Report::orderBy("id",'desc')->paginate(10);
+        return Report::search($request->search)
+        ->status($request->status)
+        ->sortBy($request->sort_by ?? 'asc')
+        ->paginate(6);
     }
 
     public function show(string $id) : Report

@@ -28,7 +28,7 @@ class CacheApplicationConfigService
         return $applicationConfig;
     }
 
-    public function getCacheKey(){
+    public function getCacheKey(): string{
         return $this->cacheKey;
     }
 }
