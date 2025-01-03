@@ -1,6 +1,10 @@
 services:
     db:
         image: mysql:8
+        deploy:
+            placement:
+                constraints:
+                    - "node.labels.db == true"
         container_name: mgn-db
         volumes:
             - db_data:/var/lib/mysql
@@ -23,6 +27,8 @@ services:
                 - user=radian
                 - uid=1000
         container_name: mgn-app
+        deploy:
+            replicas: 2
         restart: always
         tty: true
         volumes:
@@ -67,6 +73,10 @@ services:
     redis:
         image: redis:alpine
         container_name: mgn-redis
+        deploy:
+            placement:
+                constraints:
+                    - "node.labels.db == true"
         restart: always
         volumes:
             - ./redisdata:/data

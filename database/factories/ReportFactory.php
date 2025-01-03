@@ -23,7 +23,6 @@ class ReportFactory extends Factory
             "status" => $this->faker->randomElement([0,1,2]),
             "image" => $this->faker->imageUrl(),
             'created_at' => $this->faker->dateTimeBetween('-1 years', 'now'),
-
         ];
     }
 }

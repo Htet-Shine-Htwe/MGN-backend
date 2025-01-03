@@ -123,7 +123,7 @@ Route::middleware(['auth:sanctum'])
     });
 
     Route::controller(AdminReportController::class)->group(function(){
-        Route::get('/reports','index')->name('reports.index'    );
+        Route::get('/reports','index')->name('reports.index');
         Route::get('/reports/{report}','show')->name('reports.show');
         Route::post('/reports/{report}','updateStatus')->name('reports.updateStatus');
     });

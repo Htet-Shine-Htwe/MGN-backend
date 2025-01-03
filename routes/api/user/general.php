@@ -50,12 +50,9 @@ Route::middleware(['user.maintenance'])->group(function () {
 
 
         Route::get("/check-server", function () {
-
-
             return response()->json([
                 'message' => 'service available',
-                'status' => 200,
-                'first_user' => \App\Models\User::first()
+                'status' => 200
             ], 200);
         });
 

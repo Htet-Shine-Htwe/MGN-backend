@@ -18,10 +18,10 @@ class SubMogouActionRepo
     /**
      * generateSubMogouFolder
      *
-     * @param  SubMogou $sub_mogou
+     * @param array $sub_mogou
      * @return string
      */
-    public function generateSubMogouFolder(SubMogou $sub_mogou) :string
+    public function generateSubMogouFolder(array $sub_mogou) :string
     {
         return 'sub_mogou/'.$sub_mogou['slug']."/cover";
     }
@@ -47,6 +47,7 @@ class SubMogouActionRepo
         $data['mogou_id'] = $parent_mogou->id;
 
         return $sub_mogou->create($data);
+
     }
 
     /**
@@ -94,7 +95,8 @@ class SubMogouActionRepo
      */
     public function updateCover(array $data) :SubMogou
     {
-        $sub_mogou_model =  MogouPartitionFind::getSubMogou("slug", $data['slug']);
+        // $sub_mogou_model =  MogouPartitionFind::getSubMogou("slug", $data['slug']);
+        $sub_mogou_model =  MogouPartitionFind::getSubMogou("id", $data['id']);
         $sub_mogou = $sub_mogou_model->where('slug', $data['slug'])->firstOrFail();
         $store_cover_folder = generateStorageFolder("sub_mogou", $data['slug'].'/cover');
 
