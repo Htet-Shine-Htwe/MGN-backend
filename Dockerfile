@@ -21,9 +21,11 @@ RUN apt-get update && apt-get install -y \
     supervisor && \
     rm -rf /var/lib/apt/lists/*
 
+
+
 # Install PHP extensions
 RUN docker-php-ext-configure gd --with-freetype --with-jpeg && \
-    docker-php-ext-install -j$(nproc) pdo_mysql mbstring exif pcntl bcmath zip gd opcache sockets && \
+    docker-php-ext-install -j$(nproc) mbstring exif pcntl bcmath zip gd opcache sockets && \
     pecl install imagick && \
     docker-php-ext-enable imagick && \
     docker-php-ext-enable sockets

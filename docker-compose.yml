@@ -1,21 +1,22 @@
+version: '3.9'
+
 services:
     db:
-        image: mysql:8
+        image: postgres:15
         deploy:
             placement:
                 constraints:
                     - "node.labels.db == true"
         container_name: mgn-db
         volumes:
-            - db_data:/var/lib/mysql
+             - ./docker/postgres/data:/var/lib/postgres/data
         restart: always
         ports:
-            - "${DB_PORT:-3306}:3306"
+            - "${DB_PORT:-5432}:5432"
         environment:
-            MYSQL_ROOT_PASSWORD: root
-            MYSQL_DATABASE: mgnn
-            MYSQL_USER: user
-            MYSQL_PASSWORD: password
+            POSTGRES_USER: user
+            POSTGRES_PASSWORD: password
+            POSTGRES_DB: mgn
         networks:
             - mgn-network
 
@@ -27,8 +28,6 @@ services:
                 - user=radian
                 - uid=1000
         container_name: mgn-app
-        deploy:
-            replicas: 2
         restart: always
         tty: true
         volumes:
@@ -38,9 +37,9 @@ services:
         networks:
             - mgn-network
         environment:
-            DB_CONNECTION: mysql
+            DB_CONNECTION: pgsql
             DB_HOST: db
-            DB_PORT: 3306
+            DB_PORT: 5432
             DB_DATABASE: mgn
             DB_USERNAME: user
             DB_PASSWORD: password
@@ -119,8 +118,6 @@ services:
 
 volumes:
     db_data:
-
-
 
 networks:
     mgn-network:
