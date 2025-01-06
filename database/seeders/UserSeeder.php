@@ -20,7 +20,7 @@ class UserSeeder extends Seeder
             $user_dump[] = [
                 'name' => 'User ' . $i,
                 'email' => 'user' . $i . '@example.com',
-                'password' =>  bcrypt('password'),
+                'password' => '$2y$12$aR7T9dfGfF8Cfk171ygc1O1lus3kZX3q4sV7Q9/u3ES/YGtIXtcgS',
                 'current_subscription_id' => rand(1, 4),
                 'user_code' => 'user' . $i,
                 'subscription_end_date' => now()->subDays(rand(1, 30)),

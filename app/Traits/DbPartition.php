@@ -78,6 +78,7 @@ trait DbPartition
         return match (config('database.default')) {
             'mysql' => "CREATE TABLE {$partition}_{$table} LIKE {$table}",
             'sqlite' => "CREATE TABLE {$partition}_{$table} AS SELECT * FROM {$table} WHERE 0",
+            "pgsql" => "CREATE TABLE {$partition}_{$table} AS TABLE {$table} WITH NO DATA",
             default => "CREATE TABLE {$partition}_{$table} LIKE {$table}",
         };
 

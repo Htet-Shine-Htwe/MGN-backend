@@ -38,7 +38,7 @@ class MogouSeeder extends Seeder
                     'finish_status' =>  MogouFinishStatus::getRandomStatus(),
                     'mogou_type' => MogouTypeEnum::getRandomMogouType(),
                     'legal_age' => fake()->boolean,
-                    'rating' => fake()->randomFloat(1, 0, 5),
+                    'rating' => fake()->randomFloat(0, 0, 5),
                     'released_year' => fake()->year,
                     'released_at' => fake()->dateTimeThisYear,
                     'created_at' => fake()->dateTimeThisYear,

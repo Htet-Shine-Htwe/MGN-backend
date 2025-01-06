@@ -13,6 +13,7 @@ RUN apt-get update && apt-get install -y \
     libpng-dev \
     zlib1g-dev \
     libzip-dev \
+    libpq-dev \
     unzip \
     libonig-dev \
     libmagickwand-dev --no-install-recommends \
@@ -21,7 +22,7 @@ RUN apt-get update && apt-get install -y \
     supervisor && \
     rm -rf /var/lib/apt/lists/*
 
-
+RUN docker-php-ext-install pdo pdo_pgsql
 
 # Install PHP extensions
 RUN docker-php-ext-configure gd --with-freetype --with-jpeg && \

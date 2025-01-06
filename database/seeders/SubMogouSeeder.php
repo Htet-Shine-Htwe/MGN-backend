@@ -9,6 +9,7 @@ use App\Services\Partition\PartitionFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 
 class SubMogouSeeder extends Seeder
 {
@@ -53,7 +54,7 @@ class SubMogouSeeder extends Seeder
                     for($j = 1; $j <= $total_chapter; $j++) {
                         $sub_mogou_insert[] = [
                             'title' => 'Chapter ' . $j . ' of Mogou ' . $mogou[$i],
-                            "slug" => "chapter-" . $j . "-of-mogou-" . $mogou[$i],
+                            "slug" => "chapter-" . $j .rand(1, 100). "-of-mogou-" . $mogou[$i] .rand(1, 100),
                             'cover' => 'cover.jpg',
                             'mogou_id' => $mogou[$i],
                             'chapter_number' => $j,
@@ -78,10 +79,11 @@ class SubMogouSeeder extends Seeder
                 DB::statement('insert into '.$key.'_sub_mogous select * from sub_mogous');
                 DB::statement('insert into '.$key.'_sub_mogou_images select * from sub_mogou_images');
 
-                DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+                Schema::disableForeignKeyConstraints();
                 SubMogouImage::truncate();
                 SubMogou::truncate();
-                DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+                Schema::enableForeignKeyConstraints();
+
             }
 
         }
