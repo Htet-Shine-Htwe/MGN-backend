@@ -1,8 +1,8 @@
 # Use PHP 8.1
 FROM php:8.2-fpm as api
 
-ARG user
-ARG uid
+ARG user=www-data
+ARG uid=1000
 
 # Install common PHP extension dependencies
 RUN apt-get update && apt-get install -y \

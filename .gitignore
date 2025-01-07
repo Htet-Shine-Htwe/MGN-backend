@@ -21,3 +21,6 @@ rr
 .rr.yaml
 ./redisdata
 /redisdata
+
+/docker
+./docker
