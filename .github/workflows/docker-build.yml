@@ -42,3 +42,4 @@ jobs:
               DB_DATABASE: mgn
               DB_USERNAME: user
               DB_PASSWORD: password
+
