@@ -55,9 +55,15 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      # Run static analysis
+      - name: Install Composer dependencies
+        run: composer install --no-interaction --prefer-dist --optimize-autoloader
+
+      - name: Verify phpstan installation
+        run: ls -l ./vendor/bin
+
       - name: PhpStan analysis
         run: ./vendor/bin/phpstan analyse --memory-limit=2G
+
 
   # Job 3: Deploy to Heroku
   deploy:
