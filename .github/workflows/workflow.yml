@@ -49,7 +49,6 @@ jobs:
   # Job 2: Static Analysis
   static-analysis:
     runs-on: ubuntu-latest
-    needs: build-and-test
     steps:
       # Checkout the code
       - name: Checkout code
@@ -68,7 +67,8 @@ jobs:
   # Job 3: Deploy to Heroku
   deploy:
     runs-on: ubuntu-latest
-    needs: static-analysis
+    # need 2 jobs to run before deploying
+    needs: [build-and-test, static-analysis]
     steps:
       # Checkout the code
       - name: Checkout code
