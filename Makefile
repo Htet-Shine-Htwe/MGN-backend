@@ -13,6 +13,12 @@ seed:
 phpstan:
 	./vendor/bin/phpstan analyse
 
+pest:
+	./vendor/bin/pest
+
+pest-parallel:
+	./vendor/bin/pest --parallel
+
 
 d-restart:
 	@docker-compose down
