@@ -13,6 +13,14 @@ class LinedPublisher
 
     }
 
+    public function getBot(){
+        return $this->botPublisher;
+    }
+
+    public function getPublisher(){
+        return $this->publisher;
+    }
+
     public function getInfo() : mixed
     {
         return $this->publisher->getPublisherDetail();

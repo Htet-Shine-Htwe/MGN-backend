@@ -14,9 +14,7 @@ class AppServiceProvider extends ServiceProvider
     /**
      * Register any application services.
      */
-    public function register(): void
-    {
-    }
+    public function register(): void {}
 
     /**
      * Bootstrap any application services.
@@ -42,22 +40,23 @@ class AppServiceProvider extends ServiceProvider
 
 
         $this->app->singleton(
-            'MangaTestClient', function () {
+            'MangaTestClient',
+            function () {
+
                 $client = new \GuzzleHttp\Client(
                     [
-                    'base_uri' => 'https://myanimelist.p.rapidapi.com/',
-                    'http_errors' => false,
-                    'headers' => [
-                    'accept' => 'application/json',
-                    'x-rapidapi-host' => 'myanimelist.p.rapidapi.com',
-                    'x-rapidapi-key' => 'bdb606d03dmshf9031f66fc37266p1aa047jsnc218d1a5aa84',
-                    ]
+                        'base_uri' => 'https://'.config('global.rapid_api.myanimelist.host') .'/',
+                        'http_errors' => false,
+                        'headers' => [
+                            'accept' => 'application/json',
+                            'x-rapidapi-host' => config('global.rapid_api.myanimelist.host'),
+                            'x-rapidapi-key' => config('global.rapid_api.myanimelist.key'),
+                        ]
                     ]
                 );
 
                 return $client;
             }
         );
-
     }
 }

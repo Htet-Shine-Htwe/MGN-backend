@@ -16,6 +16,7 @@ use App\Http\Controllers\Api\Admin\SubscriptionController;
 use App\Http\Controllers\Api\Admin\UserAvatarController;
 use App\Http\Controllers\Api\Admin\UserSubscriptionController;
 use App\Http\Controllers\TestController;
+use App\Services\BotPublisher\GetBotServices;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware(['auth:sanctum'])
@@ -136,4 +137,13 @@ Route::middleware(['auth:sanctum'])
         Route::post('/application-configs','update')->name('application-configs.store');
 
     });
+});
+
+
+Route::get("/test",function(){
+    $bot = (new GetBotServices())->getBot(1)->getPublisher()->self();
+    $bot->sendMessage([
+        'chat_id' => "1002249930897",
+        'text'    => 'Hello, from Laravel\'s notifications!'
+    ]);
 });

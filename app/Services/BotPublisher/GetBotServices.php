@@ -43,7 +43,10 @@ class GetBotServices
 
     public function getBot(int $id) : LinedPublisher
     {
+        // find the bot publisher first
         $botPublisher = BotPublisher::where('id', $id)->first();
+
+        // then inject the token key and type to the SocialPublisher to get what kind of publisher it is
         $linePublisher = (new SocialPublisher($botPublisher->token_key, $botPublisher->type->value))->get();
 
         return $linePublisher;

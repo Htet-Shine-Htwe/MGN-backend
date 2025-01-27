@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Collection;
 
 interface PublisherInterface
 {
+
+    public function self() : mixed;
     /**
      * get the detail of the publisher
      * @return mixed

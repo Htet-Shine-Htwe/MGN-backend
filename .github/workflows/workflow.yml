@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - main
-      - development
+      # - development
 
 jobs:
   # Job 1: Build and Test
