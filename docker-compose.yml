@@ -9,10 +9,10 @@ services:
                     - "node.labels.db == true"
         container_name: mgn-db
         volumes:
-             - ./docker/postgres/data:/var/lib/postgres/data
+             -  ./docker/postgres/data:/var/lib/postgresql/data
         restart: always
         ports:
-            - "${DB_PORT:-5432}:5432"
+            - "${DB_HOST_PORT:-5432}:5432"
         environment:
             POSTGRES_USER: user
             POSTGRES_PASSWORD: password
@@ -36,20 +36,7 @@ services:
             - "9001:80"
         networks:
             - mgn-network
-        environment:
-            DB_CONNECTION: pgsql
-            DB_HOST: db
-            DB_PORT: 5432
-            DB_DATABASE: mgn
-            DB_USERNAME: user
-            DB_PASSWORD: password
-            APP_NAME: Radian
-            APP_ENV: local
-            REDIS_HOST: redis
-            REDIS_PORT: 6379
-            PORT: 9001
-            APP_USER: ${APP_USER:-radian}
-            APP_GROUP: ${APP_GROUP:-radian}
+
         depends_on:
             - db
             - redis
@@ -78,7 +65,7 @@ services:
                     - "node.labels.db == true"
         restart: always
         volumes:
-            - ./redisdata:/data
+            - ./docker/redisdata:/data
         ports:
             - "6378:6379"
         networks:
@@ -92,9 +79,7 @@ services:
             args:
                 - user=radian
                 - uid=1000
-        environment:
-            APP_USER: radian
-            APP_GROUP: radian
+        command: php artisan queue:work --queue=normal --sleep=3 --tries=3 --max-time=3600
         volumes:
             - .:/var/www/mgn
         networks:
@@ -108,9 +93,6 @@ services:
             args:
                 - user=radian
                 - uid=1000
-        environment:
-            APP_USER: radian
-            APP_GROUP: radian
         volumes:
             - .:/var/www/mgn
         networks:
@@ -118,6 +100,7 @@ services:
 
 volumes:
     db_data:
+        driver: local
 
 networks:
     mgn-network:
