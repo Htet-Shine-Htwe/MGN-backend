@@ -21,7 +21,7 @@ services:
       - mgn-network
 
   laravel:
-    image: jixkgabby/mgn-api:0.8
+    image: jixkgabby/mgn-api:latest
     deploy:
       replicas: 2
     container_name: mgn-app
