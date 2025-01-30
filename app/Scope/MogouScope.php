@@ -50,7 +50,7 @@ trait MogouScope
     {
         return $query->when(
             request('legal_only'), function (Builder $query): Builder {
-                return $query->where('legal_age', request('legal_only') ? 0 : 1);
+                return $query->where('legal_age', request('legal_only') ? true : false);
             }
         );
     }

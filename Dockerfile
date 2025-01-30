@@ -1,5 +1,5 @@
 # Use PHP 8.1
-FROM php:8.2-fpm as api
+FROM php:8.2-fpm as template
 
 ARG user=radian
 ARG uid=1000
@@ -45,14 +45,14 @@ RUN composer install --prefer-dist --optimize-autoloader --no-interaction && \
     composer dump-autoload --optimize
 
 # Add user and set permissions
-RUN mkdir -p /home/$user/.composer && useradd -G www-data,root -u $uid -d /home/$user $user && \
-    chown -R $user:$user /home/$user && \
-    chown -R $user:$user /var/www/mgn && \
-    chmod -R 775 /var/www/mgn/storage /var/www/mgn/public
-
-RUN mkdir -p /usr/local/var/log && \
+RUN useradd -G www-data,root -u $uid -d /home/$user $user && \
+    mkdir -p /home/$user/.composer /usr/local/var/log /var/run && \
     touch /usr/local/var/log/php-fpm.log && \
-    chown -R $user:$user /usr/local/var/log
+    chown -R $user:$user /home/$user /var/www/mgn /usr/local/var/log /etc/supervisor /var/log/supervisor && \
+    chmod -R 775 /var/www/mgn/storage /var/www/mgn/public && \
+    chmod 777 /var/run
+
+USER $user
 
 # Copy custom PHP-FPM configuration
 COPY deployment/config/fpm/custom-php-fpm.conf /usr/local/etc/php-fpm.d/
@@ -61,18 +61,18 @@ COPY deployment/config/fpm/custom-php-fpm.conf /usr/local/etc/php-fpm.d/
 COPY ./deployment/entrypoint.sh /entrypoint.sh
 RUN chmod +x ./deployment/entrypoint.sh
 
-
 EXPOSE 9001
+
+FROM template as api
 
 ENTRYPOINT ["./deployment/entrypoint.sh"]
 
-USER $user
-
-
 # Worker Image
-FROM api as worker
-CMD ["php", "/var/www/mgn/artisan", "queue:work", "--queue=normal", "--tries=3", "--verbose", "--timeout=30", "--sleep=3", "--rest=1", "--max-jobs=1000", "--max-time=3600"]
+FROM template as worker
 
-# Scheduler Image
-FROM api as scheduler
-CMD ["/bin/sh", "-c", "sleep 60 && php /var/www/mgn/artisan schedule:run --verbose --no-interaction"]
+# Copy Supervisor configuration
+COPY deployment/config/supervisor /etc/supervisor/conf.d
+COPY deployment/config/supervisor/supervisord.conf /etc/supervisor/supervisord.conf
+
+CMD ["sh", "-c", "/entrypoint.sh && supervisord -n -c /etc/supervisor/supervisord.conf"]
+# CMD ["supervisord"]

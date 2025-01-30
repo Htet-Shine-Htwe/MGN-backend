@@ -1,5 +1,3 @@
-version: '3.9'
-
 services:
     db:
         image: postgres:15
@@ -24,6 +22,7 @@ services:
         build:
             context: .
             dockerfile: Dockerfile
+            target: api
             args:
                 - user=radian
                 - uid=1000
@@ -71,32 +70,23 @@ services:
         networks:
             - mgn-network
 
-    worker:
+    supervisor:
         build:
             context: .
             dockerfile: Dockerfile
             target: worker
-            args:
-                - user=radian
-                - uid=1000
-        command: php artisan queue:work --queue=normal --sleep=3 --tries=3 --max-time=3600
+        container_name: mgn-supervisor
+        restart: always
+        command: ["/usr/bin/supervisord", "-n", "-c", "/etc/supervisor/supervisord.conf"]
         volumes:
             - .:/var/www/mgn
+            - ./deployment/config/supervisor:/etc/supervisor/conf.d
         networks:
             - mgn-network
-
-    scheduler:
-        build:
-            context: .
-            dockerfile: Dockerfile
-            target: scheduler
-            args:
-                - user=radian
-                - uid=1000
-        volumes:
-            - .:/var/www/mgn
-        networks:
-            - mgn-network
+        depends_on:
+            - laravel
+            - db
+            - redis
 
 volumes:
     db_data:
