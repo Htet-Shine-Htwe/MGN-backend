@@ -23,6 +23,7 @@ services:
   laravel:
     image: jixkgabby/mgn-api:latest
     restart: always
+    platform: linux/amd64
     tty: true
     volumes:
       - .:/var/www/mgn
@@ -80,6 +81,7 @@ services:
 
   supervisor:
     image: jixkgabby/mgn-worker:latest
+    platform: linux/amd64
     restart: always
     command: ["/usr/bin/supervisord", "-n", "-c", "/etc/supervisor/supervisord.conf"]
     volumes:

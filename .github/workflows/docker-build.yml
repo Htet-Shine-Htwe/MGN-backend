@@ -3,7 +3,7 @@ name: Build Ci/CD with Docker
 on:
   push:
     branches:
-      - development
+      # - development
 
 jobs:
   build-and-push:
