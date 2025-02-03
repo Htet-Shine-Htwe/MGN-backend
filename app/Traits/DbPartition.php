@@ -86,7 +86,7 @@ trait DbPartition
             'mysql' => "CREATE TABLE {$partition}_{$table} LIKE {$table}",
             'sqlite' => "CREATE TABLE {$partition}_{$table} AS SELECT * FROM {$table} WHERE 0",
             "pgsql" => json_encode([
-                "CREATE TABLE {$partition}_{$table} (LIKE {$table} INCLUDING defaults)",
+                "CREATE TABLE {$partition}_{$table} (LIKE {$table} INCLUDING ALL)",
                 "CREATE SEQUENCE {$partition}_{$table}_id_seq AS integer",
                 "ALTER TABLE {$partition}_{$table} ALTER COLUMN id SET DEFAULT nextval('{$partition}_{$table}_id_seq')",
                 "ALTER SEQUENCE {$partition}_{$table}_id_seq OWNED BY {$partition}_{$table}.id",

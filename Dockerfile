@@ -1,31 +1,39 @@
 # Use PHP 8.1
-FROM php:8.2-fpm as template
+FROM php:8.2-fpm-alpine AS template
 
 ARG user=radian
 ARG uid=1000
 
 # Install common PHP extension dependencies
-RUN apt-get update && apt-get install -y \
-    git \
-    bash \
-    libfreetype6-dev \
-    libjpeg62-turbo-dev \
-    libpng-dev \
-    zlib1g-dev \
-    libzip-dev \
-    libpq-dev \
-    unzip \
-    libonig-dev \
-    libmagickwand-dev --no-install-recommends \
-    wget \
-    curl \
-    supervisor && \
-    rm -rf /var/lib/apt/lists/*
-
-RUN docker-php-ext-install pdo pdo_pgsql
+RUN apk update && apk add \
+        git \
+        bash \
+        freetype-dev \
+        libpng-dev \
+        jpeg-dev \
+        libjpeg-turbo-dev \
+        zlib \
+        libzip-dev \
+        libpq-dev \
+        unzip \
+        imagemagick \
+        oniguruma \
+        oniguruma-dev \
+        imagemagick-dev \
+        libtool \
+        wget \
+        curl \
+        supervisor \
+        linux-headers \
+        autoconf \
+        gcc \
+        g++ \
+        make && \
+        rm -rf /var/lib/apt/lists/*
 
 # Install PHP extensions
-RUN docker-php-ext-configure gd --with-freetype --with-jpeg && \
+RUN docker-php-ext-install pdo pdo_pgsql && \
+    docker-php-ext-configure gd --with-freetype --with-jpeg && \
     docker-php-ext-install -j$(nproc) mbstring exif pcntl bcmath zip gd opcache sockets && \
     pecl install imagick && \
     docker-php-ext-enable imagick && \
@@ -45,14 +53,15 @@ RUN composer install --prefer-dist --optimize-autoloader --no-interaction && \
     composer dump-autoload --optimize
 
 # Add user and set permissions
-RUN useradd -G www-data,root -u $uid -d /home/$user $user && \
-    mkdir -p /home/$user/.composer /usr/local/var/log /var/run && \
-    touch /usr/local/var/log/php-fpm.log && \
-    chown -R $user:$user /home/$user /var/www/mgn /usr/local/var/log /etc/supervisor /var/log/supervisor && \
-    chmod -R 775 /var/www/mgn/storage /var/www/mgn/public && \
-    chmod 777 /var/run
 
-USER $user
+# RUN adduser -u $uid -D -h /home/$user -G www-data $user && \
+#     chown -R $user:www-data /home/$user /var/www/mgn /usr/local/var/log && \
+#     chmod -R 775 /var/www/mgn/storage /var/www/mgn/public
+
+RUN addgroup -S $user && adduser -S $user -G www-data && \
+    mkdir -p /etc/supervisor /var/log/supervisor && \
+    chown -R $user:www-data /usr/local/var/log /etc/supervisor /var/log/supervisor
+
 
 # Copy custom PHP-FPM configuration
 COPY deployment/config/fpm/custom-php-fpm.conf /usr/local/etc/php-fpm.d/
@@ -61,14 +70,18 @@ COPY deployment/config/fpm/custom-php-fpm.conf /usr/local/etc/php-fpm.d/
 COPY ./deployment/entrypoint.sh /entrypoint.sh
 RUN chmod +x ./deployment/entrypoint.sh
 
+
+USER $user
+
+
 EXPOSE 9001
 
-FROM template as api
+FROM template AS api
 
-ENTRYPOINT ["./deployment/entrypoint.sh"]
+CMD ["sh", "-c", "/entrypoint.sh"]
 
 # Worker Image
-FROM template as worker
+FROM template AS worker
 
 # Copy Supervisor configuration
 COPY deployment/config/supervisor /etc/supervisor/conf.d

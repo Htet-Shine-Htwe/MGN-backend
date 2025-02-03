@@ -69,7 +69,7 @@ return [
             'driver' => 'daily',
             'path' => storage_path('logs/laravel.log'),
             'level' => env('LOG_LEVEL', 'debug'),
-            'days' => 7,
+            'days' =>4,
             'replace_placeholders' => true,
         ],
 
@@ -86,14 +86,14 @@ return [
             'driver' => 'daily',
             'path' => storage_path('logs/geoip.log'),
             'level' => 'debug',
-            'days' => 14,
+            'days' => 4,
         ],
 
         'storage' => [
             'driver' => 'daily',
             'path' => storage_path('logs/storage.log'),
             'level' => 'debug',
-            'days' => 14,
+            'days' => 4,
         ],
 
         'papertrail' => [

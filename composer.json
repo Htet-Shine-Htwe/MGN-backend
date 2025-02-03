@@ -21,6 +21,7 @@
         "laravel/tinker": "^2.8",
         "league/flysystem-aws-s3-v3": "^3.0",
         "mews/purifier": "^3.4",
+        "opcodesio/log-viewer": "^3.14",
         "platformcommunity/flysystem-bunnycdn": "*",
         "predis/predis": "^2.2",
         "spatie/laravel-backup": "^9.1",

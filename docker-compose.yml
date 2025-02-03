@@ -19,13 +19,7 @@ services:
             - mgn-network
 
     laravel:
-        build:
-            context: .
-            dockerfile: Dockerfile
-            target: api
-            args:
-                - user=radian
-                - uid=1000
+        image: mgn-api
         container_name: mgn-app
         restart: always
         tty: true
