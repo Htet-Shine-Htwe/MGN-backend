@@ -3,7 +3,7 @@ name: Build Ci/CD with Docker
 on:
   push:
     branches:
-      # - development
+      - development
 
 jobs:
   build-and-push:
@@ -35,9 +35,11 @@ jobs:
         with:
           context: .
           push: true
-          platforms: linux/amd64
+          platforms: linux/amd64,linux/arm64
           target: ${{ matrix.image.target }}
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ matrix.image.tag }}:latest
           build-args: |
             user=radian
             uid=1000
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
