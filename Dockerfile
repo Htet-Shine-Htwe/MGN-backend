@@ -74,18 +74,28 @@ RUN chmod +x ./deployment/entrypoint.sh
 USER $user
 
 
-EXPOSE 9001
-
 FROM template AS api
+
+EXPOSE 9001
 
 CMD ["sh", "-c", "/entrypoint.sh"]
 
 # Worker Image
-FROM template AS worker
+FROM php:8.2-fpm-alpine AS worker
 
-# Copy Supervisor configuration
+RUN apk add --no-cache \
+        bash \
+        libpq \
+        supervisor  # Only if your worker needs supervisor
+
+# Copy the runtime artifacts from the builder stage
+WORKDIR /var/www/mgn
+COPY --from=template /var/www/mgn /var/www/mgn
+COPY --from=template /usr/local/etc/php-fpm.d/ /usr/local/etc/php-fpm.d/
+COPY --from=template /entrypoint.sh /entrypoint.sh
+
+# Copy Supervisor configuration for worker
 COPY deployment/config/supervisor /etc/supervisor/conf.d
 COPY deployment/config/supervisor/supervisord.conf /etc/supervisor/supervisord.conf
 
 CMD ["sh", "-c", "/entrypoint.sh && supervisord -n -c /etc/supervisor/supervisord.conf"]
-# CMD ["supervisord"]
