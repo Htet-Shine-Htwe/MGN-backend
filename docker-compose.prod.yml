@@ -22,9 +22,6 @@ services:
 
   laravel:
     image: jixkgabby/mgn-api:latest
-    deploy:
-      replicas: 2
-    container_name: mgn-app
     restart: always
     tty: true
     volumes:
@@ -81,10 +78,24 @@ services:
     networks:
       - mgn-network
 
+  supervisor:
+    image: jixkgabby/mgn-worker:latest
+    restart: always
+    command: ["/usr/bin/supervisord", "-n", "-c", "/etc/supervisor/supervisord.conf"]
+    volumes:
+        - .:/var/www/mgn
+        - ./deployment/config/supervisor:/etc/supervisor/conf.d
+    networks:
+        - mgn-network
+    depends_on:
+        - laravel
+        - db
+        - redis
+
 volumes:
   pgdata:
     driver: local
 
 networks:
   mgn-network:
-    driver: overlay # Use overlay for Swarm to enable multi-host networking
+    driver: bridge
