@@ -7,5 +7,8 @@ return [
             'host' => env("RAPID_API_MYANIMELIST_HOST","myanimelist.p.rapidapi.com"),
             'key' => env("RAPID_API_MYANIMELIST_KEY"),
         ]
+    ],
+    'chapter_analysis' => [
+        'based' => 'weekly'
     ]
 ];
