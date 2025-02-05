@@ -36,6 +36,7 @@ class DatabaseSeeder extends Seeder
             BannerSeeder::class,
             BaseSectionSeeder::class,
             ReportSeeder::class,
+            ChapterAnalysisSeeder::class,
             // BotSocialChannelSeeder::class
         ]);
     }

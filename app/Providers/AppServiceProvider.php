@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Services\IpAddressService;
 use Illuminate\Support\ServiceProvider;
 
 
@@ -33,6 +34,10 @@ class AppServiceProvider extends ServiceProvider
         //         $config
         //     );
         // });
+
+        $this->app->singleton(IpAddressService::class, function ($app) {
+            return new IpAddressService();
+        });
 
         $this->app->singleton(
             'MangaTestClient',
