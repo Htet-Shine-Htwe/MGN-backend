@@ -13,11 +13,13 @@ class LinedPublisher
 
     }
 
-    public function getBot(){
+    public function getBot() : BotPublisher
+    {
         return $this->botPublisher;
     }
 
-    public function getPublisher(){
+    public function getPublisher() : PublisherInterface
+    {
         return $this->publisher;
     }
 

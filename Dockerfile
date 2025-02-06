@@ -52,15 +52,11 @@ COPY . .
 RUN composer install --prefer-dist --optimize-autoloader --no-interaction && \
     composer dump-autoload --optimize
 
-# Add user and set permissions
-
-# RUN adduser -u $uid -D -h /home/$user -G www-data $user && \
-#     chown -R $user:www-data /home/$user /var/www/mgn /usr/local/var/log && \
-#     chmod -R 775 /var/www/mgn/storage /var/www/mgn/public
+# Add user and set permission
 
 RUN addgroup -S $user && adduser -S $user -G www-data && \
     mkdir -p /etc/supervisor /var/log/supervisor && \
-    chown -R $user:www-data /usr/local/var/log /etc/supervisor /var/log/supervisor
+    chown -R $user:www-data /var/www/mgn /usr/local/var/log /etc/supervisor /var/log/supervisor
 
 
 # Copy custom PHP-FPM configuration
@@ -71,31 +67,26 @@ COPY ./deployment/entrypoint.sh /entrypoint.sh
 RUN chmod +x ./deployment/entrypoint.sh
 
 
-USER $user
-
-
 FROM template AS api
+
+USER $user
 
 EXPOSE 9001
 
 CMD ["sh", "-c", "/entrypoint.sh"]
 
 # Worker Image
-FROM php:8.2-fpm-alpine AS worker
+FROM template AS worker
 
-RUN apk add --no-cache \
-        bash \
-        libpq \
-        supervisor  # Only if your worker needs supervisor
-
-# Copy the runtime artifacts from the builder stage
-WORKDIR /var/www/mgn
-COPY --from=template /var/www/mgn /var/www/mgn
-COPY --from=template /usr/local/etc/php-fpm.d/ /usr/local/etc/php-fpm.d/
-COPY --from=template /entrypoint.sh /entrypoint.sh
+RUN mkdir -p /var/log/supervisor /var/www/mgn/storage/logs
 
 # Copy Supervisor configuration for worker
 COPY deployment/config/supervisor /etc/supervisor/conf.d
 COPY deployment/config/supervisor/supervisord.conf /etc/supervisor/supervisord.conf
+
+RUN chown -R www-data:www-data /var/log/supervisor /var/www/mgn/storage/logs /var/spool/cron/crontabs
+
+RUN echo "* * * * * www-data php /var/www/mgn/artisan schedule:run >> /var/log/cron.log 2>&1" > /var/spool/cron/crontabs/www-data && \
+    chmod 0644 /var/spool/cron/crontabs/www-data
 
 CMD ["sh", "-c", "/entrypoint.sh && supervisord -n -c /etc/supervisor/supervisord.conf"]

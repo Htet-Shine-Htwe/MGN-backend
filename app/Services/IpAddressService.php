@@ -17,7 +17,7 @@ class IpAddressService
     public function pack(string $ip): string
     {
         $packed = bin2hex(inet_pton($ip));
-        if ($packed === false) {
+        if ($packed == false) {
             throw new InvalidArgumentException("Invalid IP address: {$ip}");
         }
         return $packed;

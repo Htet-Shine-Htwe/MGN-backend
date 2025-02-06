@@ -7,6 +7,11 @@ use Illuminate\Database\Eloquent\Collection;
 
 class DiscordBotPublisher implements PublisherInterface
 {
+
+    public function self(): mixed
+    {
+        return $this;
+    }
     public function getPublisherDetail() : string
     {
         return 'Discord';

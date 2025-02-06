@@ -27,6 +27,7 @@ class UserSeeder extends Seeder
                 "last_login_at" => now()->subDays(rand(1, 30)),
                 'avatar_id' => rand(1, 5),
                 'background_color' => '#' . substr(md5(rand()), 0, 6),
+                'created_at' => fake()->dateTimeThisYear
             ];
         }
 

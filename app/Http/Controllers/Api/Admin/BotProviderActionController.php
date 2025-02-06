@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 
 class BotProviderActionController extends Controller
 {
-    public function publish(Request $request)
+    public function publish(Request $request) : void
     {
 
     }

@@ -40,9 +40,9 @@ class RecordSummaryChapterAnalysis implements ShouldQueue
     /**
      * Get grouped chapters by mogou_id and sub_mogou_id.
      *
-     * @return \Illuminate\Support\Collection
+     * @return \Illuminate\Support\Collection<int, ChapterAnalysis>
      */
-    protected function getGroupedChapters()
+    protected function getGroupedChapters() : \Illuminate\Support\Collection
     {
         return ChapterAnalysis::query()
             ->select('mogou_id', 'sub_mogou_id', DB::raw('count(*) as total_views'))
@@ -51,12 +51,8 @@ class RecordSummaryChapterAnalysis implements ShouldQueue
             ->get();
     }
 
-    /**
-     * Process each chapter and update or create summary.
-     *
-     * @param $chapter
-     */
-    protected function processChapter($chapter)
+
+    protected function processChapter(ChapterAnalysis $chapter) : void
     {
         DB::transaction(function() use ($chapter) {
             $this->updateOrCreateSummary($chapter);
@@ -70,7 +66,7 @@ class RecordSummaryChapterAnalysis implements ShouldQueue
      *
      * @param $chapter
      */
-    protected function updateOrCreateSummary($chapter)
+    protected function updateOrCreateSummary(ChapterAnalysis $chapter) : void
     {
         ChapterAnalysisSummary::updateOrCreate(
             [
@@ -78,7 +74,7 @@ class RecordSummaryChapterAnalysis implements ShouldQueue
                 'sub_mogou_id' => $chapter->sub_mogou_id,
             ],
             [
-                'total_views' => $chapter->total_views,
+                'total_views' => $chapter->total_views ?? 0,
                 'start_date' => now()->startOfWeek(),
                 'end_date' => now()->endOfWeek(),
             ]
@@ -90,28 +86,24 @@ class RecordSummaryChapterAnalysis implements ShouldQueue
      *
      * @param $chapter
      */
-    protected function deleteChapterAnalysis($chapter)
+    protected function deleteChapterAnalysis(ChapterAnalysis $chapter) : void
     {
         ChapterAnalysis::where('mogou_id', $chapter->mogou_id)
             ->where('sub_mogou_id', $chapter->sub_mogou_id)
             ->whereBetween('date', [$this->start_time, $this->end_time])
             ->delete();
     }
-    /**
-     * Log chapter summary update.
-     *
-     * @param $chapter
-     */
-    protected function logChapterSummary($chapter)
+
+
+    protected function logChapterSummary(ChapterAnalysis $chapter) : void
     {
+        $total_views = $chapter->total_views ?? 0;
         Log::channel("chapter_summary")
-            ->info("Chapter Summary for Mogou ID: {$chapter->mogou_id} and Sub Mogou ID: {$chapter->sub_mogou_id} with count: {$chapter->total_views} has been updated.");
+            ->info("Chapter Summary for Mogou ID: {$chapter->mogou_id} and Sub Mogou ID: {$chapter->sub_mogou_id} with count: {$total_views } has been updated.");
     }
 
-    /**
-     * Log summary recorded message.
-     */
-    protected function logSummaryRecorded()
+
+    protected function logSummaryRecorded() : void
     {
         Log::channel("chapter_summary")
             ->info("Chapter Summary has been successfully recorded for week " . now()->weekOfYear);
