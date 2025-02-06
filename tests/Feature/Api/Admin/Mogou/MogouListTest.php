@@ -218,7 +218,7 @@ test("Only Age Legal Mogou returned",function(){
         collect($mogous)->each(function($mogou){
             $this->assertEquals(1,$mogou['legal_age']);
         });
-});
+})->group("hi");
 
 test("Only Completed Mogou returned",function(){
 

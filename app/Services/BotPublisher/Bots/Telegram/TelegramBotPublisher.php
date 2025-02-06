@@ -18,6 +18,10 @@ class TelegramBotPublisher implements PublisherInterface
         $this->httpClient = $this->createHttpClient();
     }
 
+    public function self(): mixed{
+        return $this->serviceBot;
+    }
+
     public static function provider(string $api_key): self
     {
         return new self($api_key);

@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\Admin\AnalysisReportController;
 use App\Http\Controllers\Api\Admin\ApplicationConfigController;
 use App\Http\Controllers\Api\Admin\BotPublisherController;
 use App\Http\Controllers\Api\Admin\CategoryController;
+use App\Http\Controllers\Api\Admin\DashboardController;
 use App\Http\Controllers\Api\Admin\MogouChapterController;
 use App\Http\Controllers\Api\Admin\MogouController;
 use App\Http\Controllers\Api\Admin\SectionManagementController;
@@ -16,6 +17,7 @@ use App\Http\Controllers\Api\Admin\SubscriptionController;
 use App\Http\Controllers\Api\Admin\UserAvatarController;
 use App\Http\Controllers\Api\Admin\UserSubscriptionController;
 use App\Http\Controllers\TestController;
+use App\Services\BotPublisher\GetBotServices;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware(['auth:sanctum'])
@@ -28,6 +30,10 @@ Route::middleware(['auth:sanctum'])
     Route::get('/permissions',[AdminController::class,'permissions'])->name('permissions.index');
 
     Route::get('/members',[AdminController::class,'members'])->name('members.index');
+
+    Route::controller(DashboardController::class)->group(function(){
+        Route::get('/dashboard/stats','stats')->name('dashboard.stats');
+    });
 
     Route::controller(SubscriptionController::class)->group(function(){
         Route::get('/subscriptions','index')->name('subscriptions.index');
@@ -136,4 +142,13 @@ Route::middleware(['auth:sanctum'])
         Route::post('/application-configs','update')->name('application-configs.store');
 
     });
+});
+
+
+Route::get("/test",function(){
+    $bot = (new GetBotServices())->getBot(1)->getPublisher()->self();
+    $bot->sendMessage([
+        'chat_id' => "1002249930897",
+        'text'    => 'Hello, from Laravel\'s notifications!'
+    ]);
 });

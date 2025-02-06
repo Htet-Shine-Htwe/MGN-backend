@@ -35,7 +35,7 @@ class RecordLoginAddress implements ShouldQueue
     {
         $clientIp = app(ClientIpAddressService::class);
 
-        Log::info('RecordLoginAddress', ['user' => $this->user]);
+        Log::info('RecordLoginAddress', ['clientIp' => $clientIp]);
 
         $clientIp->saveRecord($this->user);
 

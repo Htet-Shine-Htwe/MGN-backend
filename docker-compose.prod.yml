@@ -1,112 +1,103 @@
+version: '3.9'
+
 services:
-    db:
-        image: mysql:8
-        container_name: mgn-db
-        volumes:
-            - db_data:/var/lib/mysql
-        restart: always
-        ports:
-            - "${DB_PORT:-3306}:3306"
-        environment:
-            MYSQL_ROOT_PASSWORD: root
-            MYSQL_DATABASE: mgn
-            MYSQL_USER: user
-            MYSQL_PASSWORD: password
-        networks:
-            - mgn-network
+  db:
+    image: postgres:15
+    deploy:
+      placement:
+        constraints:
+          - "node.labels.db == true"
+    container_name: mgn-db
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    restart: always
+    ports:
+      - "${DB_PORT:-5432}:5432"
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: mgn
+    networks:
+      - mgn-network
 
-    laravel:
-        image: htetshinehtwe/mgn-repo:latest
-        container_name: mgn-app
-        restart: always
-        tty: true
-        volumes:
-            - .:/var/www/mgn
-        ports:
-            - "9001:80"
-        networks:
-            - mgn-network
-        environment:
-            DB_CONNECTION: mysql
-            DB_HOST: db
-            DB_PORT: 3306
-            DB_DATABASE: mgn
-            DB_USERNAME: user
-            DB_PASSWORD: password
-            APP_NAME: Radian
-            APP_ENV: local
-            REDIS_HOST: redis
-            REDIS_PORT: 6379
-            PORT: 9001
-            APP_USER: ${APP_USER:-radian}
-            APP_GROUP: ${APP_GROUP:-radian}
-        depends_on:
-            - db
-            - redis
+  laravel:
+    image: jixkgabby/mgn-api:latest
+    restart: always
+    platform: linux/amd64
+    tty: true
+    volumes:
+      - .:/var/www/mgn
+    ports:
+      - "9001:80"
+    networks:
+      - mgn-network
+    environment:
+      DB_CONNECTION: pgsql
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_DATABASE: mgn
+      DB_USERNAME: user
+      DB_PASSWORD: password
+      APP_NAME: Radian
+      APP_ENV: local
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      PORT: 9001
+      APP_USER: ${APP_USER:-radian}
+      APP_GROUP: ${APP_GROUP:-radian}
+    depends_on:
+      - db
+      - redis
 
-    nginx:
-        image: nginx:alpine
-        container_name: mgn-nginx
-        restart: unless-stopped
-        tty: true
-        ports:
-            - "7777:80"
-        volumes:
-            - ./deployment/config/nginx/default.conf:/etc/nginx/conf.d/default.conf
-            - .:/var/www/mgn
-        depends_on:
-            - laravel
-        networks:
-            - mgn-network
+  nginx:
+    image: nginx:alpine
+    container_name: mgn-nginx
+    restart: unless-stopped
+    tty: true
+    ports:
+      - "7777:80"
+    volumes:
+      - ./deployment/config/nginx/default.conf:/etc/nginx/conf.d/default.conf
+      - .:/var/www/mgn
+    depends_on:
+      - laravel
+    networks:
+      - mgn-network
 
-    redis:
-        image: redis:alpine
-        container_name: mgn-redis
-        restart: always
-        volumes:
-            - ./redisdata:/data
-        ports:
-            - "6378:6379"
-        networks:
-            - mgn-network
+  redis:
+    image: redis:alpine
+    container_name: mgn-redis
+    deploy:
+      placement:
+        constraints:
+          - "node.labels.db == true"
+    restart: always
+    volumes:
+      - ./redisdata:/data
+    ports:
+      - "6378:6379"
+    networks:
+      - mgn-network
 
-    worker:
-        build:
-            context: .
-            dockerfile: Dockerfile
-            target: worker
-            args:
-                - user=radian
-                - uid=1000
-        environment:
-            APP_USER: radian
-            APP_GROUP: radian
-        volumes:
-            - .:/var/www/mgn
-        networks:
-            - mgn-network
-
-    scheduler:
-        build:
-            context: .
-            dockerfile: Dockerfile
-            target: scheduler
-            args:
-                - user=radian
-                - uid=1000
-        environment:
-            APP_USER: radian
-            APP_GROUP: radian
-        volumes:
-            - .:/var/www/mgn
-        networks:
-            - mgn-network
+  supervisor:
+    image: jixkgabby/mgn-worker:latest
+    platform: linux/amd64
+    restart: always
+    command: ["/usr/bin/supervisord", "-n", "-c", "/etc/supervisor/supervisord.conf"]
+    volumes:
+        - .:/var/www/mgn
+        - ./deployment/config/supervisor:/etc/supervisor/conf.d
+    networks:
+        - mgn-network
+    depends_on:
+        - laravel
+        - db
+        - redis
 
 volumes:
-    db_data:
-
-
+  pgdata:
+    driver: local
 
 networks:
-    mgn-network:
-        driver: bridge
+  mgn-network:
+    driver: bridge

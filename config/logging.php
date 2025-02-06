@@ -69,10 +69,15 @@ return [
             'driver' => 'daily',
             'path' => storage_path('logs/laravel.log'),
             'level' => env('LOG_LEVEL', 'debug'),
-            'days' => 14,
+            'days' =>4,
             'replace_placeholders' => true,
         ],
-
+        'chapter_summary' => [
+            'driver' => 'single',
+            'path' => storage_path('logs/chapter_summary.log'),
+            'level' => 'debug',
+            'replace_placeholders' => true,
+        ],
         'slack' => [
             'driver' => 'slack',
             'url' => env('LOG_SLACK_WEBHOOK_URL'),
@@ -86,14 +91,14 @@ return [
             'driver' => 'daily',
             'path' => storage_path('logs/geoip.log'),
             'level' => 'debug',
-            'days' => 14,
+            'days' => 4,
         ],
 
         'storage' => [
             'driver' => 'daily',
             'path' => storage_path('logs/storage.log'),
             'level' => 'debug',
-            'days' => 14,
+            'days' => 4,
         ],
 
         'papertrail' => [

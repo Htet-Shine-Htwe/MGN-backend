@@ -95,7 +95,8 @@ class UserSubscriptionController extends Controller
             [
             'user' => $user,
             'subscriptions' => $user_subscriptions,
-            'login_history' => $user_login_history
+            'login_history' => $user_login_history,
+            'favorites' => $user->favorites->load("mogou")
             ]
         );
     }

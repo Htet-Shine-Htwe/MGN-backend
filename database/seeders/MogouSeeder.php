@@ -9,6 +9,7 @@ use App\Models\Mogou;
 use App\Services\Api\DataClient;
 use App\Services\Partition\TablePartition;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
 class MogouSeeder extends Seeder
@@ -23,7 +24,23 @@ class MogouSeeder extends Seeder
         } else {
             $data = [];
 
-            $outsource_data = DataClient::getMangaData();
+            $outsource_folder = storage_path('app/public/outsource');
+            $file_name = 'manga.json';
+
+            if (!file_exists($outsource_folder)) {
+                mkdir($outsource_folder, 0777, true);
+            }
+
+            if (!file_exists($outsource_folder . '/' . $file_name)) {
+                $outsource_data = DataClient::getMangaData();
+                file_put_contents($outsource_folder . '/' . $file_name, json_encode($outsource_data));
+                Log::info('Manga data fetched from API and saved to local storage');
+            }else{
+                $outsource_data = json_decode(file_get_contents($outsource_folder . '/' . $file_name), true);
+                Log::info('Manga data fetched from local storage');
+            }
+
+            \Log::info($outsource_data);
 
             foreach ($outsource_data as $manga) {
                 $title  = str_replace('"', '', $manga['title']);

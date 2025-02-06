@@ -13,11 +13,25 @@ seed:
 phpstan:
 	./vendor/bin/phpstan analyse
 
+pest:
+	./vendor/bin/pest
+
+pest-parallel:
+	./vendor/bin/pest --parallel
+
+up:
+	@docker-compose up -d
+
+down:
+	@docker-compose down
 
 d-restart:
 	@docker-compose down
-	@docker-compose --env-file .env.dev up -d
+	@docker-compose  up -d
 
 d-restart-build:
 	@docker-compose down
 	@docker-compose --env-file .env.dev up -d --build
+
+d-app:
+	@docker exec -it mgn-app bash

@@ -4,24 +4,28 @@ on:
   push:
     branches:
       - main
-      - development
+      # - development
 
 jobs:
-  build-and-deploy:
+  # Job 1: Build and Test
+  build-and-test:
     runs-on: ubuntu-latest
-
     steps:
+      # Checkout the code
       - name: Checkout code
         uses: actions/checkout@v2
 
+      # Set up PHP environment
       - name: Set up PHP
         uses: shivammathur/setup-php@v2
         with:
           php-version: '8.2' # or your Laravel PHP version
 
+      # Install dependencies
       - name: Install Composer dependencies
         run: composer install --no-interaction --prefer-dist --optimize-autoloader
 
+      # Set up testing environment
       - name: Create .env.testing file
         run: |
           cp .env.example .env.testing
@@ -32,23 +36,51 @@ jobs:
       - name: Run migrations for testing
         run: php artisan migrate --env=testing --force
 
+      # Run tests
       - name: Run Pest Unit tests
         run: ./vendor/bin/pest --parallel --group=unit
 
       - name: Run Pest Features tests
         run: ./vendor/bin/pest --parallel --group=feature
 
-      - name: Run Stress testss
+      - name: Run Stress tests
         run: ./vendor/bin/pest --parallel --group=stress-test
 
-      - name: Php stan analysis
+  # Job 2: Static Analysis
+  static-analysis:
+    runs-on: ubuntu-latest
+    steps:
+      # Checkout the code
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Install Composer dependencies
+        run: composer install --no-interaction --prefer-dist --optimize-autoloader
+
+      - name: Verify phpstan installation
+        run: ls -l ./vendor/bin
+
+      - name: PhpStan analysis
         run: ./vendor/bin/phpstan analyse --memory-limit=2G
 
+
+  # Job 3: Deploy to Heroku
+  deploy:
+    runs-on: ubuntu-latest
+    # need 2 jobs to run before deploying
+    needs: [build-and-test, static-analysis]
+    steps:
+      # Checkout the code
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      # Set up Git user identity for Heroku
       - name: Set up Git user identity
         run: |
           git config --global user.email "github-actions@github.com"
           git config --global user.name "GitHub Actions"
 
+      # Prepare and fetch Heroku remote
       - name: Fetch from Heroku
         if: github.ref == 'refs/heads/main' && success()
         env:
@@ -62,9 +94,17 @@ jobs:
         if: github.ref == 'refs/heads/main' && success()
         run: git rebase --continue || echo "No rebase needed"
 
+      # Deploy to Heroku
       - name: Deploy to Heroku
         if: github.ref == 'refs/heads/main' && success()
         env:
           HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
         run: |
           git push heroku main --force
+
+      - name: Run database migrations
+        if: github.ref == 'refs/heads/main' && success()
+        env:
+          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+        run: |
+          heroku run php artisan migrate --force -a radian-b

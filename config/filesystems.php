@@ -56,13 +56,7 @@ return [
             'visibility' => 'public',
             'throw' => false,
         ],
-        'bunnycdn' => [
-            'driver' => 'bunnycdn',
-            'storage_zone' => env('BUNNYCDN_STORAGE_ZONE'),
-            'pull_zone' => env('BUNNYCDN_PULL_ZONE'),
-            'api_key' => env('BUNNYCDN_API_KEY'),
-            'region' => env('BUNNYCDN_REGION', \PlatformCommunity\Flysystem\BunnyCDN\BunnyCDNRegion::DEFAULT)
-        ],
+
         'backups' => [
             'driver' => 's3',
             'key' => env( 'AWS_ACCESS_KEY_ID' ),
