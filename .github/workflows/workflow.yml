@@ -101,3 +101,10 @@ jobs:
           HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
         run: |
           git push heroku main --force
+
+      - name: Run database migrations
+        if: github.ref == 'refs/heads/main' && success()
+        env:
+          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+        run: |
+          heroku run php artisan migrate --force -a radian-b
