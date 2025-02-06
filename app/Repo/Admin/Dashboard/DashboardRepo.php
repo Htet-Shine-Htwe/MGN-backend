@@ -2,6 +2,8 @@
 
 namespace App\Repo\Admin\Dashboard;
 
+use App\Models\ChapterAnalysis;
+use App\Models\Mogou;
 use App\Models\User;
 use App\Models\UserSubscription;
 use Illuminate\Database\Eloquent\Model;
@@ -23,14 +25,6 @@ class DashboardRepo
         $this->lastMonthEndDate = Carbon::now()->subMonth()->endOfMonth()->toDateString();
     }
 
-    public function popularChapterByWeek() : void
-    {
-        $lastWeekStartDate = Carbon::now()->subWeek()->startOfWeek()->toDateString();
-        $lastWeekEndDate = Carbon::now()->subWeek()->endOfWeek()->toDateString();
-
-        // Add logic to fetch popular chapters within the last week
-    }
-
     public function subscriptions() : array
     {
         return $this->getMonthlySummary(new UserSubscription);
@@ -39,6 +33,29 @@ class DashboardRepo
     public function users() : array
     {
         return $this->getMonthlySummary(new User);
+    }
+
+    public function contentUploaded() : array
+    {
+        return $this->getMonthlySummary(new Mogou);
+    }
+
+    public function traffic() :array
+    {
+        $tomorrow = Carbon::now()->addDay()->toDateString();
+        $today = Carbon::now()->toDateString();
+        $yesterday = Carbon::now()->subDay()->toDateString();
+        $todayTraffic = $this->getSummary(new ChapterAnalysis, $today, $tomorrow,'date');
+        $yesterdayTraffic = $this->getSummary(new ChapterAnalysis, $yesterday, $today,'date');
+
+        $diffInPercentage = $this->calculatePercentageDifference($todayTraffic, $yesterdayTraffic);
+
+        return [
+            'current' => $todayTraffic,
+            'prev' => $yesterdayTraffic,
+            'status' => $diffInPercentage > 0 ? 'success' : 'destructive',
+            'percentage' => $diffInPercentage
+        ];
     }
 
     protected function getMonthlySummary(Model $model) : array
@@ -50,16 +67,16 @@ class DashboardRepo
         $status = $diffInPercentage > 0 ? 'success' : 'destructive';
 
         return [
-            'this_month' => $thisMonthCount,
-            'last_month' => $lastMonthCount,
+            'current' => $thisMonthCount,
+            'prev' => $lastMonthCount,
             'status' => $status,
             'percentage' => $diffInPercentage
         ];
     }
 
-    protected function getSummary(Model $model,string $startDate,string $endDate) : int
+    protected function getSummary(Model $model,string $startDate,string $endDate,string $key = "created_at") : int
     {
-        return $model::whereBetween('created_at', [$startDate, $endDate])->count();
+        return $model::whereBetween($key, [$startDate, $endDate])->count();
     }
 
     protected function calculatePercentageDifference(int $current,int $previous) : int|float|string

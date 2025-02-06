@@ -19,11 +19,12 @@ class LoginHistorySeeder extends Seeder
 
         for ($i = 1; $i <= $user_count; $i++) {
 
-            for ($j = 1; $j <= 10; $j++) {
+            $loop = rand(10, 40);
+            for ($j = 1; $j <= $loop; $j++) {
                 $data[] = [
                     'user_id' => $i,
-                    'location' => 'location'.$j,
-                    'country' => 'country'.$j,
+                    'location' => fake()->city,
+                    'country' => fake()->country,
                     'device' => 'device'.$j,
                     'login_at' => now()->subDays($j),
                 ];

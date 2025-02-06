@@ -2,7 +2,7 @@
 
 return [
     'test' => [
-        'users_count' => 80,
+        'users_count' => 180,
         'mogous_count' => 80,
         'categories_count' => 22,
     ],

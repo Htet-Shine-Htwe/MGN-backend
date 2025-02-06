@@ -27,7 +27,7 @@ return new class extends Migration
             $table->rememberToken();
             $table->timestamps();
 
-            $table->index(['user_code','name', 'email']);
+            $table->index(['user_code','name','created_at']);
         });
     }
 
