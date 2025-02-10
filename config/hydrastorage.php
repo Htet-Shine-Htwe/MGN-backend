@@ -3,7 +3,7 @@
 // config for HydraStorage/HydraStorage
 return [
 
-    'provider' => env('STORAGE_PROVIDER', 'local'),
+    'provider' => env('FILESYSTEM_DISK', 'local'),
 
     'compressed_quality' => env('COMPRESSED_QUALITY', 60),
 ];

@@ -34,7 +34,7 @@ class SubMogouImage extends Model
 
     public function getPathAttribute(string $value): string
     {
-        return $this->getMedia($value,"public/mogou/$this->mogou_id/$this->sub_mogou_id");
+        return $this->getMedia($value,"mogou/$this->mogou_id/$this->sub_mogou_id");
     }
 
     /**

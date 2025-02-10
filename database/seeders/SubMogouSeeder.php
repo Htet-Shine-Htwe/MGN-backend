@@ -79,6 +79,13 @@ class SubMogouSeeder extends Seeder
                 DB::statement('insert into '.$key.'_sub_mogous select * from sub_mogous');
                 DB::statement('insert into '.$key.'_sub_mogou_images select * from sub_mogou_images');
 
+                // SELECT setval('beta_sub_mogous_id_seq', (SELECT MAX(id) FROM beta_sub_mogous));
+                if(config('database.default') == 'pgsql') {
+                    DB::statement('SELECT setval(\''.$key.'_sub_mogous_id_seq\', (SELECT MAX(id) FROM '.$key.'_sub_mogous))');
+                    DB::statement('SELECT setval(\''.$key.'_sub_mogou_images_id_seq\', (SELECT MAX(id) FROM '.$key.'_sub_mogou_images))');
+                }
+
+
                 Schema::disableForeignKeyConstraints();
                 SubMogouImage::truncate();
                 SubMogou::truncate();

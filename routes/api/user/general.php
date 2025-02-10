@@ -1,11 +1,13 @@
 <?php
 
 use App\Http\Controllers\Api\Admin\UserAvatarController;
+use App\Http\Controllers\Api\User\FilterPageController;
 use App\Http\Controllers\Api\User\HomePageController;
 use App\Http\Controllers\Api\User\UserFavoriteController;
 use App\Http\Controllers\Api\User\UserMogouController;
 use App\Http\Controllers\Api\User\UserProfileController;
 use App\Http\Controllers\Api\User\UserReportController;
+use App\Http\Controllers\ApiUserFilterPageController;
 use App\Models\ChapterAnalysis;
 use Illuminate\Support\Facades\Route;
 
@@ -43,6 +45,10 @@ Route::middleware(['user.maintenance'])->group(function () {
             Route::get('/mogous/{mogou}', 'show')->name('mogous.show');
             Route::get('/mogous/{mogou}/getMoreChapters', 'getMoreChapters')->name('mogous.getMoreChapters');
             Route::get('/mogous/{mogou}/related', 'relatedPostPerMogou')->name('mogous.relateMogou');
+        });
+
+        Route::controller(FilterPageController::class)->group(function(){
+            Route::get('/filter','index')->name('filter.index');
         });
 
         Route::controller(UserReportController::class)->group(function () {

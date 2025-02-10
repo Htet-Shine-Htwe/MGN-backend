@@ -14,7 +14,7 @@ class Kernel extends ConsoleKernel
     {
         $schedule->command('telescope:prune --hours=48')->daily();
 
-        $schedule->command('calculate:mogou-chapters')->mondays()->at('0:01');
+        $schedule->command('calculate:mogou-chapters')->monthlyOn(1, '00:00');
     }
 
     /**

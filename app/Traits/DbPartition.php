@@ -92,6 +92,8 @@ trait DbPartition
                 "ALTER SEQUENCE {$partition}_{$table}_id_seq OWNED BY {$partition}_{$table}.id",
                 "SELECT setval('{$partition}_{$table}_id_seq', COALESCE(MAX(id), 1)) FROM {$partition}_{$table}" // Sync the sequence with the current max 'id'
             ]),
+
+            
             default => "CREATE TABLE {$partition}_{$table} LIKE {$table}",
         };
     }

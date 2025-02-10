@@ -17,7 +17,9 @@ class ChapterAnalysis extends Model
         'mogou_id',
         'ip',
         'date',
+        'user_id'
     ];
+
 
     public static function boot()
     {

@@ -15,10 +15,9 @@ return new class extends Migration
             $table->id();
             $table->foreignId('sub_mogou_id');
             $table->foreignId('mogou_id')->constrained()->onDelete('cascade');
-            // $table->binary('ip');
             $table->ipAddress('ip');
             $table->dateTime('date');
-
+            $table->foreignId('user_id')->nullable()->constrained()->onDelete('cascade');
             $table->index(['sub_mogou_id', 'mogou_id']);
         });
     }

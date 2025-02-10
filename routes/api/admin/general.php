@@ -36,6 +36,7 @@ Route::middleware(['auth:sanctum'])
         Route::get('/dashboard/user-locations','userLocation')->name('dashboard.user.location');
         Route::get('/dashboard/user-registrations','userRegistrationByMonths')->name('dashboard.user.registration');
         Route::get('/dashboard/user-logins','userLoginThisWeek')->name('dashboard.user.login');
+        Route::get('/dashboard/user-traffics','userTrafficSummary')->name('dashboard.user.traffics');
     });
 
     Route::controller(SubscriptionController::class)->group(function(){

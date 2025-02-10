@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use Carbon\Carbon;
 use Illuminate\Console\Command;
 
 class RecordSummaryChapterCommand extends Command
@@ -28,12 +29,12 @@ class RecordSummaryChapterCommand extends Command
 
         $date = $this->argument('date');
 
-        // get the start of the week for the given date
-        $startOfWeek = \Carbon\Carbon::parse($date)->startOfWeek();
-        $endOfWeek = \Carbon\Carbon::parse($date)->endOfWeek();
+        $endDate = Carbon::parse($date)->subDays(15);
+        $startDate = $endDate->copy()->subDays(15);
+
 
         $this->info('Recording summary chapter analysis');
-        dispatch(new \App\Jobs\RecordSummaryChapterAnalysis($startOfWeek,$endOfWeek))->onQueue('summary');
+        dispatch(new \App\Jobs\RecordSummaryChapterAnalysis($startDate,$endDate))->onQueue('summary');
         $this->info('Summary chapter analysis recorded successfully');
     }
 }

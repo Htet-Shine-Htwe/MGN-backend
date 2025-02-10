@@ -18,11 +18,13 @@ class ChapterAnalysisSeeder extends Seeder
         for ($k = 0; $k < 4; $k++) {
             $insert = [];
             for ($i = 1; $i <= 20000; $i++) {
+                $should_user_id = fake()->boolean(50);
                 $insert[] = [
                     'mogou_id' => rand(1,$mogouCount),
                     'sub_mogou_id' => rand(1, 10),
                     'ip' =>  fake()->ipv4,
-                    'date' => fake()->dateTimeThisYear,
+                    'date' => fake()->dateTimeBetween('2024-01-01', 'now')->format('Y-m-d H:i:s'),
+                    'user_id' => $should_user_id ? config("control.test.users_count") : null,
                 ];
             }
             $chunks = array_chunk($insert, 2000);

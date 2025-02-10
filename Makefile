@@ -19,6 +19,9 @@ pest:
 pest-parallel:
 	./vendor/bin/pest --parallel
 
+stan-pest:
+	./vendor/bin/phpstan analyse && ./vendor/bin/pest --parallel
+
 up:
 	@docker-compose up -d
 
@@ -35,3 +38,4 @@ d-restart-build:
 
 d-app:
 	@docker exec -it mgn-app bash
+

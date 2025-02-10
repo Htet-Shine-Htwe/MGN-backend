@@ -49,4 +49,11 @@ class DashboardController extends Controller
 
         return response()->json($data);
     }
+
+    public function userTrafficSummary() : JsonResponse
+    {
+        $data = $this->userDashboardRepo->isUserTrafficSummary();
+
+        return response()->json($data);
+    }
 }

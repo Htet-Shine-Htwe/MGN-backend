@@ -28,6 +28,7 @@ RUN apk update && apk add \
         autoconf \
         gcc \
         g++ \
+        build-essential \
         make && \
         rm -rf /var/lib/apt/lists/*
 

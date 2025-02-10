@@ -18,7 +18,6 @@ return new class extends Migration
             $table->unsignedInteger("total_views")->default(0);
             $table->dateTime("start_date");
             $table->dateTime("end_date");
-
             $table->index(['sub_mogou_id', 'mogou_id']);
         });
     }
