@@ -4,6 +4,7 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
@@ -46,4 +47,17 @@ class Admin extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+
+    public function chapters()
+    {
+        $subMoGou = new SubMogou();
+        $tables = $subMoGou->getCreatedPartitions();
+        $collection = [];
+        foreach ($tables as $table) {
+            $collection[] = $subMoGou->setTable($table)->where('creator_id', $this->id)->get();
+        }
+
+        return $subMoGou->newCollection($collection)->collapse();
+    }
 }

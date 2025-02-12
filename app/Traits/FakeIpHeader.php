@@ -8,10 +8,7 @@ trait FakeIpHeader
 {
     public function setupHeader()
     {
-        $request = new Request([
-            'mogou_id' => $this->mogou_id,
-            'sub_mogou_id' => $this->sub_mogou_id,
-        ]);
+        $request = Request::createFromGlobals();
 
         // Mock IP Address
         $request->setTrustedProxies([], Request::HEADER_X_FORWARDED_FOR);

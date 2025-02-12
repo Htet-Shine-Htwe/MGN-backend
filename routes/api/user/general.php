@@ -8,6 +8,7 @@ use App\Http\Controllers\Api\User\UserMogouController;
 use App\Http\Controllers\Api\User\UserProfileController;
 use App\Http\Controllers\Api\User\UserReportController;
 use App\Http\Controllers\ApiUserFilterPageController;
+use App\Models\Admin;
 use App\Models\ChapterAnalysis;
 use Illuminate\Support\Facades\Route;
 
@@ -44,6 +45,8 @@ Route::middleware(['user.maintenance'])->group(function () {
         Route::controller(UserMogouController::class)->group(function () {
             Route::get('/mogous/{mogou}', 'show')->name('mogous.show');
             Route::get('/mogous/{mogou}/getMoreChapters', 'getMoreChapters')->name('mogous.getMoreChapters');
+            Route::get("/mogous/{mogou}/chapters/{chapter}", "getChapter")->name("mogous.getChapter");
+            Route::get("/mogous/{mogou}/chapters/{chapter}/viewed", "getViewed")->name("mogous.getViewed");
             Route::get('/mogous/{mogou}/related', 'relatedPostPerMogou')->name('mogous.relateMogou');
         });
 
@@ -64,10 +67,11 @@ Route::middleware(['user.maintenance'])->group(function () {
         });
 
         Route::get("/tester", function () {
-            return response()->json([
-                'message' => ChapterAnalysis::limit(10)->get(),
-                'status' => 200
-            ], 200);
+             $admins = Admin::where('id',2)->first()->chapters();
+
+             dd(auth()->user()->getMorphClass());
+             return $admins;
+
         });
 
     });

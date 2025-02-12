@@ -32,6 +32,7 @@ return new class extends Migration
             $table->string('prefix_upload')->nullable();
 
             $table->foreignId('mogou_id')->constrained()->onDelete('cascade');
+            $table->morphs('creator');
             $table->timestamps();
         });
     }

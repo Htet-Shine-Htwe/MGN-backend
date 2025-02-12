@@ -6,13 +6,13 @@ use App\Contracts\SmartEnum;
 enum AdminRole : string implements SmartEnum
 {
     case Admin = 'admin';
-    case Moderator = 'moderator';
+    case Uploader = 'uploader';
 
     public static function getRoles(): array
     {
         return [
             self::Admin,
-            self::Moderator
+            self::Uploader
         ];
     }
 
@@ -20,7 +20,7 @@ enum AdminRole : string implements SmartEnum
     {
         return [
             'admin',
-            'moderator'
+            'uploader'
         ];
     }
 

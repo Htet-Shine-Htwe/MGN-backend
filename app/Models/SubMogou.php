@@ -2,12 +2,16 @@
 
 namespace App\Models;
 
+use App\Repo\Admin\SubMogouRepo\MogouPartitionFind;
+use App\Repo\Admin\SubMogouRepo\SubMogouImageRepo;
 use App\Traits\DbPartition;
 use HydraStorage\HydraStorage\Traits\HydraMedia;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Support\Str;
 
 
@@ -34,6 +38,13 @@ class SubMogou extends Model
         'subscription_only',
         'subscription_collection',
         'mogou_id',
+        'creator_id',
+        'creator_type',
+    ];
+
+    protected $hidden = [
+        'creator_id',
+        'creator_type',
     ];
 
     protected $casts = [
@@ -52,6 +63,7 @@ class SubMogou extends Model
             function ($sub_mogou) {
                 $sub_mogou->slug = Str::slug($sub_mogou->title);
                 Mogou::where('id', $sub_mogou->mogou_id)->increment('total_chapters');
+
             }
         );
 
@@ -115,5 +127,10 @@ class SubMogou extends Model
         return $this->newHasMany(
             $instance->newQuery(), $this, $instance->getTable().'.sub_mogou_id', 'id'
         );
+    }
+
+    public function creator() : MorphTo
+    {
+        return $this->morphTo();
     }
 }

@@ -28,6 +28,8 @@ class SubMogouSeeder extends Seeder
                     SubMogou::factory()->create([
                         'mogou_id' => $i,
                         'chapter_number' => $j,
+                        'creator_id' => rand(1,3),
+                        'creator_type' => 'App\Models\Admin',
                     ]);
 
                     $total_images = 20;
@@ -59,6 +61,9 @@ class SubMogouSeeder extends Seeder
                             'mogou_id' => $mogou[$i],
                             'chapter_number' => $j,
                             'created_at' => now()->subDays(rand(1, 100)),
+                            'creator_id' => rand(1,3),
+            'creator_type' => 'App\Models\Admin',
+
                         ];
 
                         $total_images = rand(20, 40);

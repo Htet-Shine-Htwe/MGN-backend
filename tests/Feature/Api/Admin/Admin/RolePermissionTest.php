@@ -34,7 +34,6 @@ test("can create role",function(){
 
     $response = $this->authenticatedAdmin()->postJson(route('api.admin.roles.store'),[
         'name' => 'test_role',
-        'permissions' => ['dashboard','admins','users','book-management','book-genre']
     ]);
 
     $response->assertStatus(201);
@@ -85,7 +84,7 @@ test("get members with roles and pagination",function(int $count){
     expect($role_collection)->toBeArray();
 
     foreach($role_collection as $role){
-        expect($role)->toBeIn(['moderator','admin']);
+        expect($role)->toBeIn(['uploader','admin']);
     }
 })->with([
     10,

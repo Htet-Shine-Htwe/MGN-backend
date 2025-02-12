@@ -3,27 +3,29 @@
 namespace App\Services\ChapterAnalysis;
 
 use App\Models\ChapterAnalysis;
+use App\Models\SubMogou;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Http\JsonResponse;
 
 class ChapterAnalysisService
 {
-    private const CACHE_EXPIRATION_TIME = 180; // 3 minutes
+    private const CACHE_EXPIRATION_TIME = 60; // 2 minutes
 
-    public function storeRecord(Request $request): JsonResponse
+    public function storeRecord(SubMogou $subMogou): JsonResponse
     {
-        $ip = $request->ip();
-        $subMogouId = $request->get('sub_mogou_id');
-        $mogouId = $request->get('mogou_id');
-        $cacheKey = $this->generateCacheKey($mogouId, $subMogouId, $ip);
+        $ip = request()->ip();
+
+
+        $cacheKey = $this->generateCacheKey($subMogou->mogou_id, $subMogou->id, $ip);
 
         if ($this->isChapterViewed($cacheKey)) {
             return $this->chapterAlreadyViewedResponse();
         }
 
+        $subMogou->increment('views');
         $this->cacheChapterView($cacheKey);
-        $this->createChapterAnalysisRecord($subMogouId, $mogouId, $ip);
+        $this->createChapterAnalysisRecord($subMogou->id, $subMogou->mogou_id, $ip);
 
         return $this->chapterViewedResponse();
     }
@@ -49,12 +51,13 @@ class ChapterAnalysisService
             'sub_mogou_id' => $subMogouId,
             'mogou_id' => $mogouId,
             'ip' => $ip,
+            'user_id' => auth()->id() ?? null,
         ]);
     }
 
     private function chapterAlreadyViewedResponse(): JsonResponse
     {
-        return response()->json(['message' => 'Chapter already viewed']);
+        return response()->json(['message' => 'Chapter viewed']);
     }
 
     private function chapterViewedResponse(): JsonResponse

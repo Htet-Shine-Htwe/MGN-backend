@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Admin;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -12,9 +13,10 @@ class AdminPermissionSeeder extends Seeder
      */
     public function run(): void
     {
+
         $roles = [
             'admin',
-            'moderator',
+            'uploader',
         ];
 
         foreach ($roles as $role) {
@@ -25,12 +27,20 @@ class AdminPermissionSeeder extends Seeder
             'dashboard',
             'admins',
             'users',
-            'book-management',
-            'book-genre',
+            'content-management',
+            'content-genre',
+            'social-media',
+            'reports',
         ];
 
         foreach ($parent_permissions as $permission) {
             \Spatie\Permission\Models\Permission::create(['name' => $permission, 'guard_name' => 'admin']);
         }
+
+        if(Admin::count() > 0){
+            Admin::where('email', 'admin@gmail.com')->first()->assignRole('admin');
+            Admin::notWhere('email', 'admin@gmail.com')->first()->assignRole('uploader');
+        }
+
     }
 }

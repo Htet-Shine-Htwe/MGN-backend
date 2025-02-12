@@ -44,7 +44,7 @@ trait UserAuthenticated
         $assistant_admins = Admin::factory()->count($count)->create();
 
         foreach($assistant_admins as $assistant_admin){
-            $assistant_admin->assignRole(AdminRole::Moderator->value);
+            $assistant_admin->assignRole(AdminRole::Uploader->value);
         }
 
         return $assistant_admins;

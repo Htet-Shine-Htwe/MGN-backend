@@ -45,6 +45,8 @@ class SubMogouActionRepo
         }
 
         $data['mogou_id'] = $parent_mogou->id;
+        $data['creator_id'] = auth()->id();
+        $data['creator_type'] = get_class(auth()->user());
 
         return $sub_mogou->create($data);
 

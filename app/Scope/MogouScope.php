@@ -90,7 +90,7 @@ trait MogouScope
      */
     public function scopeByMogouType(Builder $query): Builder
     {
-        $mogouType = request()->input('mogou_type');
+        $mogouType = request()->input('mogou_type') ?? request()->input('type');
 
         return $query->when(
             $mogouType, function (Builder $query) use ($mogouType): Builder {

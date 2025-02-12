@@ -13,10 +13,24 @@ class AdminSeeder extends Seeder
      */
     public function run(): void
     {
-        Admin::create([
+
+        $admin = [
             'name' => 'Admin',
             'email' => 'admin@gmail.com',
             'password' => bcrypt('password'),
-        ]);
+        ];
+        $uploader = [
+            [
+                'name' => 'Uploader One',
+                'email' => 'uploaderOne@gmail.com',
+                'password' => bcrypt('password'),
+            ],
+            [
+                'name' => 'Uploader Two',
+                'email' => 'uploaderTwo@gmail.com',
+                'password' => bcrypt('password'),
+            ]
+        ];
+        Admin::insert(array_merge([$admin], $uploader));
     }
 }
