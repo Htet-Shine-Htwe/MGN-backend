@@ -29,7 +29,7 @@ class ChapterAnalysisService
         return $this->chapterViewedResponse();
     }
 
-    private function generateCacheKey(string $mogouId, string $subMogouId, string $ip): string
+    private function generateCacheKey(int $mogouId, int $subMogouId, string $ip): string
     {
         return "chapter_view:{$mogouId}:{$subMogouId}:{$ip}";
     }
@@ -44,7 +44,7 @@ class ChapterAnalysisService
         Cache::put($cacheKey, true, self::CACHE_EXPIRATION_TIME);
     }
 
-    private function createChapterAnalysisRecord(string $subMogouId, string $mogouId, string $ip): void
+    private function createChapterAnalysisRecord(int $subMogouId, int $mogouId, string $ip): void
     {
         ChapterAnalysis::create([
             'sub_mogou_id' => $subMogouId,

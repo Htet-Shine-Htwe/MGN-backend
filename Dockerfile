@@ -28,7 +28,6 @@ RUN apk update && apk add \
         autoconf \
         gcc \
         g++ \
-        build-essential \
         make && \
         rm -rf /var/lib/apt/lists/*
 
@@ -62,6 +61,7 @@ RUN addgroup -S $user && adduser -S $user -G www-data && \
 
 # Copy custom PHP-FPM configuration
 COPY deployment/config/fpm/custom-php-fpm.conf /usr/local/etc/php-fpm.d/
+COPY deployment/config/php/php.ini /usr/local/etc/php/php.ini
 
 # Copy entrypoint script and ensure it's executable
 COPY ./deployment/entrypoint.sh /entrypoint.sh

@@ -67,8 +67,8 @@ Route::middleware(['user.maintenance'])->group(function () {
         });
 
         Route::get("/tester", function () {
-             $admins = Admin::where('id',2)->first()->chapters();
-
+            //  view phpinfo
+            phpinfo();
              dd(auth()->user()->getMorphClass());
              return $admins;
 

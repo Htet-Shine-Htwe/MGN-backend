@@ -61,7 +61,7 @@ jobs:
         run: ls -l ./vendor/bin
 
       - name: PhpStan analysis
-        run: ./vendor/bin/phpstan analyse --memory-limit=2G
+        run: ./vendor/bin/phpstan analyse --memory-limit=512M
 
 
   # Job 3: Deploy to Heroku

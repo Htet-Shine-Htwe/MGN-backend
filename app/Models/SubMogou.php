@@ -129,6 +129,11 @@ class SubMogou extends Model
         );
     }
 
+    /**
+     * creator
+     *
+     * @return MorphTo<Model, SubMogou>
+     */
     public function creator() : MorphTo
     {
         return $this->morphTo();
