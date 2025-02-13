@@ -16,7 +16,6 @@ class ChapterAnalysisService
     {
         $ip = request()->ip();
 
-
         $cacheKey = $this->generateCacheKey($subMogou->mogou_id, $subMogou->id, $ip);
 
         if ($this->isChapterViewed($cacheKey)) {
@@ -57,7 +56,7 @@ class ChapterAnalysisService
 
     private function chapterAlreadyViewedResponse(): JsonResponse
     {
-        return response()->json(['message' => 'Chapter viewed']);
+        return response()->json(['message' => 'Chapter already viewed']);
     }
 
     private function chapterViewedResponse(): JsonResponse
