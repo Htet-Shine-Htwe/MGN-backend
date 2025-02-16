@@ -58,22 +58,19 @@ class SubMogouStorageUploadRepo
             $mediaOption = $mediaOption->setWaterMark($this->getWaterMarkImage(),'center',100);
         }
         $mediaOption = $mediaOption->get();
-        foreach ($request->upload_files as $file) {
-            $obj['path'] = $this->storeMedia($file['file'], $path, true, $mediaOption,);
-            $obj['page_number'] = $file['page_number'];
-            $obj['sub_mogou_id'] = $subMogou->id;
-            $obj['mogou_id'] = $parent_mogou;
-
-            $data[] = $obj;
-        }
-
         $subMogouImage = new SubMogouImage();
 
         $rotation_key = $this->parentMogou->rotation_key;
         $table = $subMogouImage->getPartition($rotation_key);
         $subMogouImage->setTable($table);
 
-        $subMogouImage->insert($data);
+        foreach ($request->upload_files as $file) {
+            $obj['path'] = $this->storeMedia($file['file'], $path, true, $mediaOption,);
+            $obj['sub_mogou_id'] = $subMogou->id;
+            $obj['mogou_id'] = $parent_mogou;
+
+            (clone $subMogouImage)->create($obj);
+        }
 
         return $subMogou;
     }

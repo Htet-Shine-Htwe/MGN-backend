@@ -101,6 +101,7 @@ Route::middleware(['auth:sanctum'])
         Route::get("/sub-mogous/get-latest-chapter/{mogou_slug}",'getLatestChapterNumber')->name('sub-mogous.getLatestChapterNumber');
         Route::post("/sub-mogous/upload-files",'uploadStorageFiles')->name('sub-mogous.uploadStorageFiles');
         Route::post("/sub-mogous/delete",'deleteSubMogou')->name('sub-mogous.deleteSubMogou');
+        Route::post("/sub-mogous/image/reorder",'updateImageIndex')->name('sub-mogous.reorder');
     });
 
     Route::controller(SocialInfoController::class)->group(function(){

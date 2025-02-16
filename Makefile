@@ -11,7 +11,7 @@ seed:
 	@php artisan migrate:fresh --seed
 
 phpstan:
-	./vendor/bin/phpstan analyse
+	./vendor/bin/phpstan analyse --memory-limit=512M
 
 pest:
 	./vendor/bin/pest
@@ -20,7 +20,7 @@ pest-parallel:
 	./vendor/bin/pest --parallel
 
 stan-pest:
-	./vendor/bin/phpstan analyse && ./vendor/bin/pest --parallel
+	./vendor/bin/phpstan analyse --memory-limit=512M && ./vendor/bin/pest --parallel
 
 up:
 	@docker-compose up -d
