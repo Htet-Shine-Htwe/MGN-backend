@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('email')->unique();
             $table->string('password');
+            $table->dateTime('last_accessed_at')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

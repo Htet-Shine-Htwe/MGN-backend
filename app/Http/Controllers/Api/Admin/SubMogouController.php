@@ -92,6 +92,7 @@ class SubMogouController extends Controller
     public function updateImageIndex(UpdateImageIndexRequest $request)  : JsonResponse
     {
         try{
+            // sleep(2);
             $this->subMogouActionRepo->updateImageIndex($request->validated());
             return response()->json(['message' => 'success'],200);
         }

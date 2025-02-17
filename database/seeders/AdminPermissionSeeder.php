@@ -39,7 +39,10 @@ class AdminPermissionSeeder extends Seeder
 
         if(Admin::count() > 0){
             Admin::where('email', 'admin@gmail.com')->first()->assignRole('admin');
-            Admin::where('email', '!=','admin@gmail.com')->first()->assignRole('uploader');
+
+            Admin::where('email', '!=','admin@gmaill.com')->each(function($admin){
+                $admin->assignRole('uploader');
+            });
         }
 
     }

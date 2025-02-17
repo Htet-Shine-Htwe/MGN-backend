@@ -16,6 +16,7 @@ use App\Http\Controllers\Api\Admin\SubMogouController;
 use App\Http\Controllers\Api\Admin\SubscriptionController;
 use App\Http\Controllers\Api\Admin\UserAvatarController;
 use App\Http\Controllers\Api\Admin\UserSubscriptionController;
+use App\Http\Controllers\Api\Admins\AdminManagementController;
 use App\Http\Controllers\TestController;
 use App\Services\BotPublisher\GetBotServices;
 use Illuminate\Support\Facades\Route;
@@ -37,6 +38,14 @@ Route::middleware(['auth:sanctum'])
         Route::get('/dashboard/user-registrations','userRegistrationByMonths')->name('dashboard.user.registration');
         Route::get('/dashboard/user-logins','userLoginThisWeek')->name('dashboard.user.login');
         Route::get('/dashboard/user-traffics','userTrafficSummary')->name('dashboard.user.traffics');
+    });
+
+    Route::controller(AdminManagementController::class)->group(function(){
+        Route::get("/admins",'index')->name('admins.index');
+        Route::post("/admins",'action')->name('admins.store');
+        Route::post("/admins/update",'action')->name('admins.update');
+        Route::post("/admins/delete/{admin}",'delete')->name('admins.delete');
+        Route::get('/roles','roles')->name('roles.index');
     });
 
     Route::controller(SubscriptionController::class)->group(function(){
@@ -66,7 +75,7 @@ Route::middleware(['auth:sanctum'])
         Route::get('/users/showById/{id}','showById')->name('subscription-users.showById');
     });
 
-    Route::controller( UserAvatarController::class)->group(function(){
+    Route::controller( \UserAvatarController::class)->group(function(){
         Route::get('/user-avatars','get')->name('avatars');
         Route::post('/user-avatars/create','store')->name('avatars.store');
         Route::post('/user-avatars/update','update')->name('avatars.update');
