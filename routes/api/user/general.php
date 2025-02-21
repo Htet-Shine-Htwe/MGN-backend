@@ -10,6 +10,9 @@ use App\Http\Controllers\Api\User\UserReportController;
 use App\Http\Controllers\ApiUserFilterPageController;
 use App\Models\Admin;
 use App\Models\ChapterAnalysis;
+use App\Models\SubMogouImage;
+use App\Repo\Admin\SubMogouRepo\MogouPartitionFind;
+use App\Services\LexoRank\LexoRankHelperService;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware(['user.maintenance'])->group(function () {
@@ -67,11 +70,29 @@ Route::middleware(['user.maintenance'])->group(function () {
         });
 
         Route::get("/tester", function () {
-            //  view phpinfo
-            phpinfo();
-             dd(auth()->user()->getMorphClass());
-             return $admins;
+            $collection = (new SubMogouImage)->setTable("alpha_sub_mogou_images");
 
+
+            $model = MogouPartitionFind::getSubMogouImage('id',48);
+
+            LexoRankHelperService::resetLexoRanks($model,228);
+            // $new = $collection->create([
+            //     'mogou_id' => 1,
+            //     'sub_mogou_id' => 1,
+            //     'path' => '73',
+            // ]);
+
+
+            // dd($collection->latest('id')->where([
+            //     'mogou_id' => 1,
+            //     'sub_mogou_id' => 1
+            // ])->get());
+
+            // $source = (clone $collection)->where('path','73')->first();
+            // $target = (clone $collection)->where('path','55')->first();
+
+            // $source->moveAfter($target);
+            // dd($collection);
         });
 
     });

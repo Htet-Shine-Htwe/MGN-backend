@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Traits\DbPartition;
+use App\Traits\LexoRankTrait;
 use HydraStorage\HydraStorage\Traits\HydraMedia;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -10,11 +11,13 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class SubMogouImage extends Model
 {
-    use HasFactory,DbPartition,HydraMedia;
+    use HasFactory,DbPartition,HydraMedia,LexoRankTrait;
 
     protected $table = 'sub_mogou_images';
 
     protected string $partition_prefix = 'sub_mogou_images';
+
+    protected static string $sortableField = 'position';
 
     protected string $baseTable = 'sub_mogou_images';
 
@@ -29,7 +32,7 @@ class SubMogouImage extends Model
         'mogou_id',
         'sub_mogou_id',
         'path',
-        'page_number'
+        'position',
     ];
 
     public function getPathAttribute(string $value): string

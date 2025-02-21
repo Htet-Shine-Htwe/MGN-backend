@@ -219,7 +219,8 @@ class Authentication
     {
         return [
             'token' => auth()->guard($guard)->user()->createToken($guard)->plainTextToken,
-            'user' => auth()->guard($guard)->user()
+            'user' => auth()->guard($guard)->user(),
+            'role' => $guard == "admin" ? auth()->guard($guard)->user()->role_name : null
         ];
     }
 

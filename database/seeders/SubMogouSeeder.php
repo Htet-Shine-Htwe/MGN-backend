@@ -72,7 +72,6 @@ class SubMogouSeeder extends Seeder
                                 'mogou_id' => $mogou[$i],
                                 'sub_mogou_id' => $j,
                                 'path' => 'image.jpg',
-                                'page_number' => $k,
                             ];
                         }
 

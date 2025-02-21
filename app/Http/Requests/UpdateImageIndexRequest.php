@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class SubMogouStorageUploadRequest extends FormRequest
+class UpdateImageIndexRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,12 +23,9 @@ class SubMogouStorageUploadRequest extends FormRequest
     {
         return [
             'mogou_id' => 'required|integer|exists:mogous,id',
-            'sub_mogou_slug' => 'required',
-            'upload_files' => 'required|array',
-            // 'upload_files.*' => 'required|array',
-            'upload_files.*.file' => 'required|image',
-            // 'upload_files.*.position' => 'required',
-            'watermark_apply' => 'required|boolean'
+            'sub_mogou_id' => 'required',
+            'source_image_id' => 'required',
+            'target_image_id' => 'required',
         ];
     }
 }

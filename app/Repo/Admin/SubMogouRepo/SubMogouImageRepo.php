@@ -16,9 +16,9 @@ class SubMogouImageRepo
 
         $mogouImageInstance->setTable($table);
 
-        return $mogouImageInstance->select("id","path","sub_mogou_id",'mogou_id',"page_number")
+        return $mogouImageInstance->select("id","path","sub_mogou_id",'mogou_id',"position")
         ->where('sub_mogou_id',$subMogou->id)
-        ->orderBy('page_number','asc');
+        ->orderBy('position','asc');
 
     }
 }

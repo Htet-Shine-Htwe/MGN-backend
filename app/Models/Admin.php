@@ -3,20 +3,28 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+
+use App\Scope\AdminScope;
+use DateTime;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Collection;
 use Laravel\Sanctum\HasApiTokens;
+use Spatie\Permission\Models\Role;
 use Spatie\Permission\Traits\HasRoles;
 
 
 class Admin extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable,HasRoles;
+    use HasApiTokens, HasFactory, Notifiable,HasRoles,AdminScope;
 
     protected string $guard_name = 'admin';
+
+
+    // append role_name
+    protected $appends = ['role_name','role_id'];
 
     /**
      * The attributes that are mass assignable.
@@ -27,6 +35,7 @@ class Admin extends Authenticatable
         'name',
         'email',
         'password',
+        'last_accessed_at',
     ];
 
     /**
@@ -46,8 +55,36 @@ class Admin extends Authenticatable
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'last_accessed_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    public function getRoleNameAttribute(): string
+    {
+        return ucFirst(optional($this->roles->first())->name) ;
+    }
+
+    public function getRoleIdAttribute(): int
+    {
+        return optional($this->roles->first())->id;
+    }
+
+    public function getAllPermissionsAttribute(): array
+    {
+         /** @var ?Role $firstRole */
+        $firstRole = $this->roles->first();
+
+        if (!$firstRole) {
+            return [];
+        }
+
+        return array_values(array_unique($firstRole->permissions->pluck('name')->toArray()));
+    }
+
+    public function getLastAccessedAtAttribute(DateTime|null $value): string
+    {
+        return !is_null($value) ? $value->format('Y-m-d H:i:s') : '';
+    }
 
 
     /**
@@ -66,4 +103,5 @@ class Admin extends Authenticatable
 
         return $subMoGou->newCollection($collection)->collapse();
     }
+
 }

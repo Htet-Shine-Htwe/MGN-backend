@@ -1,5 +1,6 @@
 <?php
 
+use Database\Seeders\AdminPermissionSeeder;
 use Illuminate\Support\Facades\Route;
 
 use Tests\Support\UserAuthenticated;
@@ -40,6 +41,7 @@ test("invalid credentials", function () {
 
 test("can login successfully",function(){
     $admin = \App\Models\Admin::factory()->create();
+    $admin->assignRole('admin');
     $response = $this->json('POST', route('api.admin.login'), [
         'email' => $admin->email,
         'password' => 'password',

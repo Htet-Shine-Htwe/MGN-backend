@@ -4,8 +4,112 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "fdabb2dd3861265f22b15701872bbf8f",
+    "content-hash": "b6f010be58636cc28f77f446f82928e2",
     "packages": [
+        {
+            "name": "alexcrawford/lexorank-php",
+            "version": "1.0.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/alexcrawford/lexorank-php.git",
+                "reference": "62273d18a0b3dbe82be8320cd52a8dd035ce847c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/alexcrawford/lexorank-php/zipball/62273d18a0b3dbe82be8320cd52a8dd035ce847c",
+                "reference": "62273d18a0b3dbe82be8320cd52a8dd035ce847c",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.1"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^7.4"
+            },
+            "type": "project",
+            "autoload": {
+                "psr-4": {
+                    "AlexCrawford\\LexoRank\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Alex Crawford",
+                    "email": "alex@kick.digital"
+                }
+            ],
+            "description": "PHP Implementation of JIRA's LexoRank algorithm.",
+            "support": {
+                "issues": "https://github.com/alexcrawford/lexorank-php/issues",
+                "source": "https://github.com/alexcrawford/lexorank-php/tree/1.0.2"
+            },
+            "time": "2021-11-16T13:47:39+00:00"
+        },
+        {
+            "name": "alexcrawford/lexorank-sortable",
+            "version": "7.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/alexcrawford/lexorank-sortable.git",
+                "reference": "9d92fafb0306e27967988e1be033a4f82d996cdd"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/alexcrawford/lexorank-sortable/zipball/9d92fafb0306e27967988e1be033a4f82d996cdd",
+                "reference": "9d92fafb0306e27967988e1be033a4f82d996cdd",
+                "shasum": ""
+            },
+            "require": {
+                "alexcrawford/lexorank-php": "^1.0",
+                "laravel/framework": "*",
+                "php": ">=7.2.5"
+            },
+            "require-dev": {
+                "orchestra/testbench": "~5",
+                "phpunit/phpunit": "~8"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "AlexCrawford\\Sortable": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Dmitry Groza",
+                    "email": "boxfrommars@gmail.com"
+                },
+                {
+                    "name": "Alex Crawford",
+                    "email": "alex@kick.digital"
+                }
+            ],
+            "description": "Adds sortable behavior and ordering to Laravel Eloquent models. Grouping and many to many supported.",
+            "keywords": [
+                "eloquent",
+                "laravel",
+                "laravel4",
+                "laravel5",
+                "order",
+                "orderable",
+                "ordering",
+                "sort",
+                "sortable",
+                "sorting"
+            ],
+            "support": {
+                "source": "https://github.com/alexcrawford/lexorank-sortable/tree/7.2.0"
+            },
+            "time": "2021-07-01T10:53:25+00:00"
+        },
         {
             "name": "aws/aws-crt-php",
             "version": "v1.2.7",
