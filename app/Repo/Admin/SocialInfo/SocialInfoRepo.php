@@ -42,7 +42,7 @@ class SocialInfoRepo
     public function create(array $data): SocialInfo
     {
         if (isset($data['cover_photo'])) {
-            $data['cover_photo'] = $this->storeMedia($data['cover_photo'], 'social_info');
+            $data['cover_photo'] = (string) $this->storeMedia($data['cover_photo'], 'social_info');
         }
 
         return $this->model->create($data);
@@ -52,8 +52,9 @@ class SocialInfoRepo
     {
         $socialInfo = $this->model->findOrfail($id);
         if (isset($data['cover_photo'])) {
-            $data['cover_photo'] = $this->storeMedia($data['cover_photo'], 'social_info', false);
             $this->removeMedia('public/social_info/' . $socialInfo->cover_photo);
+            $data['cover_photo'] = $this->storeMedia($data['cover_photo'], 'social_info', false);
+            \Log::info($data['cover_photo']);
             $socialInfo->text_url = null;
         }
 

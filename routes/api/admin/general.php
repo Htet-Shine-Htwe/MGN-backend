@@ -28,7 +28,7 @@ Route::middleware(['auth:sanctum'])
     Route::get('/roles',[AdminController::class,'roles'])->name('roles.index');
     Route::post('/roles',[AdminController::class,'createRole'])->name('roles.store');
 
-    Route::get('/permissions',[AdminController::class,'permissions'])->name('permissions.index');
+    Route::get('/permissions',[AdminController::class,'getAuthPermissions'])->name('permissions.index');
 
     Route::get('/members',[AdminController::class,'members'])->name('members.index');
 
@@ -75,7 +75,7 @@ Route::middleware(['auth:sanctum'])
         Route::get('/users/showById/{id}','showById')->name('subscription-users.showById');
     });
 
-    Route::controller( \UserAvatarController::class)->group(function(){
+    Route::controller(UserAvatarController::class)->group(function(){
         Route::get('/user-avatars','get')->name('avatars');
         Route::post('/user-avatars/create','store')->name('avatars.store');
         Route::post('/user-avatars/update','update')->name('avatars.update');

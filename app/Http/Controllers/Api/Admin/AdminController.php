@@ -49,11 +49,24 @@ class AdminController extends Controller
 
     public function permissions(Request $request): JsonResponse
     {
-        $permissions = $this->alphaRole->setGuard('admin')->getPermissions();
+        $permissions = $this->alphaRole->setGuard('admin')->getPermissions()->pluck('name');
 
         return response()->json(
             [
             'permissions' => $permissions
+            ]
+        );
+    }
+
+    public function getAuthPermissions() : JsonResponse
+    {
+
+        $permissions = auth()->user()->allPermissions;
+
+        return response()->json(
+            [
+            'permissions' => $permissions,
+
             ]
         );
     }

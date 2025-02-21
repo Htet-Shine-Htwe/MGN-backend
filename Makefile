@@ -19,7 +19,7 @@ pest:
 pest-parallel:
 	./vendor/bin/pest --parallel
 
-stan-pest:
+test:
 	./vendor/bin/phpstan analyse --memory-limit=512M && ./vendor/bin/pest --parallel
 
 up:

@@ -12,6 +12,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Collection;
 use Laravel\Sanctum\HasApiTokens;
+use Spatie\Permission\Models\Role;
 use Spatie\Permission\Traits\HasRoles;
 
 
@@ -66,6 +67,18 @@ class Admin extends Authenticatable
     public function getRoleIdAttribute(): int
     {
         return optional($this->roles->first())->id;
+    }
+
+    public function getAllPermissionsAttribute(): array
+    {
+         /** @var ?Role $firstRole */
+        $firstRole = $this->roles->first();
+
+        if (!$firstRole) {
+            return [];
+        }
+
+        return array_values(array_unique($firstRole->permissions->pluck('name')->toArray()));
     }
 
     public function getLastAccessedAtAttribute(DateTime|null $value): string
