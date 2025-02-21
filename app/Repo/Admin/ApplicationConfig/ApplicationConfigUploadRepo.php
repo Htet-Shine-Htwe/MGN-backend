@@ -13,6 +13,8 @@ class ApplicationConfigUploadRepo
 
     public function upload(Request $request): ApplicationConfig
     {
+
+        $data = $request->all();
         $validUploadProperties = [
             'logo',
             'water_mark',
@@ -21,6 +23,7 @@ class ApplicationConfigUploadRepo
             'intro_b',
             'outro_b',
         ];
+
         $app = ApplicationConfig::firstOrFail();
 
         foreach ($validUploadProperties as $property) {
@@ -33,8 +36,11 @@ class ApplicationConfigUploadRepo
                     throw new \UnexpectedValueException('Expected a string for avatar path but got an array.');
                 }
             }
-
         }
+
+        $ogData = $request->only('user_side_is_maintenance_mode', 'title');
+
+        $app->fill($ogData);
         $app->save();
 
         return $app;
