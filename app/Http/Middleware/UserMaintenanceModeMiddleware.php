@@ -17,7 +17,6 @@ class UserMaintenanceModeMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        // $is_maintenance_mode = ApplicationConfig::first()->user_side_is_maintenance_mode;
         $applicationConfig = (new CacheApplicationConfigService())->getApplicationConfig();
 
         if ($applicationConfig->user_side_is_maintenance_mode) {

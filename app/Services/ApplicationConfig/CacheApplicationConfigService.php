@@ -9,16 +9,17 @@ class CacheApplicationConfigService
 {
     use CacheResponse;
 
-    private static string $cacheKey;
+    private string $cacheKey;
 
     public function __construct()
     {
-        self::$cacheKey = $this->generateCacheKey('application-config');
+        $this->cacheKey = $this->generateCacheKey('application_config');
+
     }
 
-    public static function getApplicationConfig(): mixed
+    public function getApplicationConfig(): mixed
     {
-        $key = self::$cacheKey ;
+        $key = $this->cacheKey ;
         $applicationConfig = (new self)->cacheResponse(
             $key, 300, function () {
                 return ApplicationConfig::first();
@@ -28,7 +29,4 @@ class CacheApplicationConfigService
         return $applicationConfig;
     }
 
-    public function getCacheKey(): string{
-        return $this->cacheKey;
-    }
 }
