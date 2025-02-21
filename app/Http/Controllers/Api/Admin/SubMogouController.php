@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\SubMogouDraftRequest;
 use App\Http\Requests\SubMogouStorageUploadRequest;
 use App\Http\Requests\SubMogouZipUploadRequest;
+use App\Http\Requests\UpdateImageIndexRequest;
 use App\Repo\Admin\SubMogouRepo\MogouPartitionFind;
 use App\Repo\Admin\SubMogouRepo\SubMogouActionRepo;
 use App\Repo\Admin\SubMogouRepo\SubMogouDeleteRepo;
@@ -86,5 +87,18 @@ class SubMogouController extends Controller
             ],
             $sugMogouDelete ? 200 : 500
         );
+    }
+
+    public function updateImageIndex(UpdateImageIndexRequest $request)  : JsonResponse
+    {
+        try{
+            // sleep(2);
+            $this->subMogouActionRepo->updateImageIndex($request->validated());
+            return response()->json(['message' => 'success'],200);
+        }
+        catch(\Exception $e){
+            return response()->json(['message' => $e->getMessage()],500);
+        }
+
     }
 }

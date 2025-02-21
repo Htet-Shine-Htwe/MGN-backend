@@ -19,7 +19,7 @@ class SubMogouImageFactory extends Factory
         return [
             'sub_mogou_id' => rand(),
             'path' => 'image.jpg',
-            'page_number' => rand()
+            'position' => chr(rand(97, 122)),
         ];
     }
 }

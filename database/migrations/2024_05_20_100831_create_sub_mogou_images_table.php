@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('path');
             $table->foreignId('mogou_id')->constrained()->onDelete('cascade');
             $table->foreignId('sub_mogou_id')->constrained()->onDelete('cascade');
-            $table->unsignedInteger('page_number');
+            $table->string('position',20)->default("a");
             $table->timestamps();
         });
     }

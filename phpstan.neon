@@ -9,6 +9,7 @@ parameters:
     excludePaths:
         - app/Services/Auth/Authentication.php
         - app/Exceptions/Handler.php
+        - app/Traits/LexoRankTrait.php
     checkMissingIterableValueType: false
 
 

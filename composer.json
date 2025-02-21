@@ -8,6 +8,7 @@
         "php": "^8.2",
         "ext-gd": "*",
         "ext-imagick": "*",
+        "alexcrawford/lexorank-sortable": "^7.2",
         "dede/hydrastorage": "^0.5.7",
         "fakerphp/faker": "^1.9.1",
         "guzzlehttp/guzzle": "^7.2",
