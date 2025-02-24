@@ -51,3 +51,12 @@ test("last-uploaded mogous data for homepage can fetched successfully",function(
     $count = count($response->json('mogous.data'));
     $this->assertTrue($count > 1);
 });
+
+test("last-uploaded mogou data with safe content can fetched successfully",function(){
+    $response = $this->getJson(route('api.users.last-uploaded', ['legal_only' => true]));
+
+    $response->assertOk();
+    foreach ($response->json('mogous.data') as $mogou) {
+        $this->assertTrue($mogou['legal_age'] == false);
+    }
+});

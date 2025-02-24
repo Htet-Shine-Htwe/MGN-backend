@@ -216,7 +216,7 @@ test("Only Age Legal Mogou returned",function(){
         $this->assertNotEmpty($mogous);
 
         collect($mogous)->each(function($mogou){
-            $this->assertEquals(1,$mogou['legal_age']);
+            $this->assertEquals(0,$mogou['legal_age']);
         });
 })->group("hi");
 

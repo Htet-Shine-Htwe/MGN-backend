@@ -7,6 +7,8 @@ use App\Repo\Admin\SubMogouRepo\MogouPartitionFind;
 use Illuminate\Support\Facades\Log;
 
 class LexoRankHelperService {
+
+
     /**
     * Convert an integer to a base-26 string ( like LexoRank ) using lowercase letters.
     * For example, 0 -> 'a', 1 -> 'b', ..., 25 -> 'z', 26 -> 'aa', etc.
@@ -14,7 +16,6 @@ class LexoRankHelperService {
     * @param int $n
     * @return string
     */
-
     public static function numberToLexoRank( int $n ): string {
         $result = '';
         do {
@@ -44,6 +45,6 @@ class LexoRankHelperService {
                 'new_position' => $newPosition
             ] );
         }
-
     }
+
 }

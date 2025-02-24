@@ -64,7 +64,24 @@ class SubMogouController extends Controller
 
     public function uploadStorageFiles(SubMogouStorageUploadRequest $request): JsonResponse
     {
-        $this->subMogouStorageUploadRepo->upload($request);
+        $subMogou = $this->subMogouStorageUploadRepo->upload($request);
+        return response()->json(['message' => 'success','sub_mogou' => $subMogou],200);
+    }
+
+    public function removeStorageFile(Request $request): JsonResponse
+    {
+        $data = $request->validate(
+            [
+                'mogou_id' => 'required|string|exists:mogous,id',
+                'sub_mogou_id' => 'required|integer',
+                'image_id' => 'required|string'
+            ]
+        );
+
+        $subMogou = MogouPartitionFind::getSubMogou("id", $data['id'])->where('id', $data['sub_mogou_id'])->firstOrFail();
+
+        $subMogou->removeMedia($data['file_name']);
+
         return response()->json(['message' => 'success'],200);
     }
 

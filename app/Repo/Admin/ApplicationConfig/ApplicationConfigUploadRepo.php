@@ -5,44 +5,45 @@ namespace App\Repo\Admin\ApplicationConfig;
 use App\Models\ApplicationConfig;
 use HydraStorage\HydraStorage\Traits\HydraMedia;
 use Illuminate\Http\Request;
+use UnexpectedValueException;
 
 class ApplicationConfigUploadRepo
 {
     use HydraMedia;
 
+    private array $validUploadProperties = [
+        'logo',
+        'water_mark',
+        'intro_a',
+        'outro_a',
+        'intro_b',
+        'outro_b',
+    ];
 
     public function upload(Request $request): ApplicationConfig
     {
-
-        $data = $request->all();
-        $validUploadProperties = [
-            'logo',
-            'water_mark',
-            'intro_a',
-            'outro_a',
-            'intro_b',
-            'outro_b',
-        ];
-
         $app = ApplicationConfig::firstOrFail();
 
-        foreach ($validUploadProperties as $property) {
+        foreach ($this->validUploadProperties as $property) {
             if ($request->hasFile($property)) {
-                $this->removeMedia('public/config/'.$app->getRawOriginal($property));
-                $mediaResult = $this->storeMedia($request->file($property), 'config');
-                if (is_string($mediaResult)) {
-                    $app->$property = $mediaResult;
-                } else {
-                    throw new \UnexpectedValueException('Expected a string for avatar path but got an array.');
-                }
+                $this->handleFileUpload($app, $request, $property);
             }
         }
 
-        $ogData = $request->only('user_side_is_maintenance_mode', 'title');
-
-        $app->fill($ogData);
+        $app->fill($request->only('user_side_is_maintenance_mode', 'title'));
         $app->save();
 
         return $app;
+    }
+
+    private function handleFileUpload(ApplicationConfig $app, Request $request, string $property): void
+    {
+        $oldPath = $app->getRawOriginal($property);
+        $this->removeMedia("public/config/{$oldPath}");
+        $mediaResult = $this->storeMedia($request->file($property), 'config');
+        if (!is_string($mediaResult)) {
+            throw new UnexpectedValueException('Expected a string path but got an array.');
+        }
+        $app->{$property} = $mediaResult;
     }
 }

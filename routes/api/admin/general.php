@@ -109,6 +109,7 @@ Route::middleware(['auth:sanctum'])
         Route::get('/sub-mogous/show/{mogou_slug}/{sub_mogou_id}','show')->name('sub-mogous.show');
         Route::get("/sub-mogous/get-latest-chapter/{mogou_slug}",'getLatestChapterNumber')->name('sub-mogous.getLatestChapterNumber');
         Route::post("/sub-mogous/upload-files",'uploadStorageFiles')->name('sub-mogous.uploadStorageFiles');
+        Route::post("/sub-mogous/remove-file",'removeStorageFile')->name('sub-mogous.removeStorageFile');
         Route::post("/sub-mogous/delete",'deleteSubMogou')->name('sub-mogous.deleteSubMogou');
         Route::post("/sub-mogous/image/reorder",'updateImageIndex')->name('sub-mogous.reorder');
     });
@@ -153,7 +154,7 @@ Route::middleware(['auth:sanctum'])
     });
 
     Route::controller(ApplicationConfigController::class)->group(function(){
-        Route::post('/application-configs','update')->name('application-configs.store');
+        Route::post('/application-configs','update')->name('application-configs.update');
 
     });
 });

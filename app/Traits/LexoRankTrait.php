@@ -2,8 +2,8 @@
 
 namespace App\Traits;
 
-use AlexCrawford\LexoRank\Rank;
 use AlexCrawford\Sortable\SortableException;
+use App\Services\LexoRank\LexoRankGenerator;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Query\Builder as QueryBuilder;
@@ -22,18 +22,23 @@ trait LexoRankTrait
                 $sortableField = static::getSortableField();
                 $query = static::applySortableGroup($model->newQuery(), $model);
 
+                \Log::info('before trait enter', [$model]);
                 // only automatically calculate next position with max+1 when a position has not been set already
-                if ($model->$sortableField === null) {
-                    $max = $model->where("mogou_id", $model->mogou_id)
+                $max = $query->where("mogou_id", $model->mogou_id)
                     ->where("sub_mogou_id", $model->sub_mogou_id)
                     ->max($sortableField) ?: 'a';
 
-                    $model->setAttribute($sortableField, ++$max);
-                }
+                \Log::info('max', [$max]);
 
+                $nextIndex  =  static::getNewPosition($max);
+
+                $model->setAttribute($sortableField,$nextIndex);
+                \Log::info('creating', [$model]);
             }
+
         );
     }
+
 
     /**
      * @param QueryBuilder $query
@@ -105,7 +110,7 @@ trait LexoRankTrait
      */
     public static function getNewPosition($prev, $next = ''): string
     {
-        return (new Rank((string)$prev, (string)$next))->get();
+        return (new LexoRankGenerator((string)$prev, (string)$next))->get();
     }
 
     /**
@@ -197,7 +202,7 @@ trait LexoRankTrait
 
     /**
      * @param QueryBuilder        $query
-     * @param Model|SortableTrait $model
+     * @param Model|LexoRankTrait $model
      *
      * @return QueryBuilder
      */
@@ -254,7 +259,7 @@ trait LexoRankTrait
     }
 
     /**
-     * @param Model|SortableTrait $entity1
+     * @param Model|LexoRankTrait $entity1
      * @param Model               $entity2
      * @param string              $field
      *

@@ -50,7 +50,6 @@ class SubMogouStorageUploadRepo
         $sub_mogou_id = $subMogou->id;
         $path = "mogou/{$parent_mogou}/{$sub_mogou_id}";
 
-        $data = [];
         $mediaOption =  MediaOption::create()
         ->setQuality($this->compress_quality );
 
@@ -73,6 +72,22 @@ class SubMogouStorageUploadRepo
         }
 
         return $subMogou;
+    }
+
+    public function removeStorageFile(array $data): void
+    {
+        $subMogou = $this->setSubMogouTable("id", $data['mogou_id']);
+        $subMogou = $subMogou->where('id', $data['sub_mogou_id'])->firstOrFail();
+
+        $subMogouImage = new SubMogouImage();
+        $rotation_key = $this->parentMogou->rotation_key;
+        $table = $subMogouImage->getPartition($rotation_key);
+        $subMogouImage->setTable($table);
+        $fileRecord =  $subMogouImage->where('id', $data['image_id'])->firstOrFail();
+
+        $this->removeMedia($fileRecord->path, "mogou/{$data['mogou_id']}/{$data['sub_mogou_id']}");
+
+
     }
 
     public function getWaterMarkImage(): string

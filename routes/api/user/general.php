@@ -1,5 +1,6 @@
 <?php
 
+use AlexCrawford\LexoRank\Rank;
 use App\Http\Controllers\Api\Admin\UserAvatarController;
 use App\Http\Controllers\Api\User\FilterPageController;
 use App\Http\Controllers\Api\User\HomePageController;
@@ -70,29 +71,12 @@ Route::middleware(['user.maintenance'])->group(function () {
         });
 
         Route::get("/tester", function () {
-            $collection = (new SubMogouImage)->setTable("alpha_sub_mogou_images");
+
+            $result = new Rank('','');
+
+            dd($result->get());
 
 
-            $model = MogouPartitionFind::getSubMogouImage('id',48);
-
-            LexoRankHelperService::resetLexoRanks($model,228);
-            // $new = $collection->create([
-            //     'mogou_id' => 1,
-            //     'sub_mogou_id' => 1,
-            //     'path' => '73',
-            // ]);
-
-
-            // dd($collection->latest('id')->where([
-            //     'mogou_id' => 1,
-            //     'sub_mogou_id' => 1
-            // ])->get());
-
-            // $source = (clone $collection)->where('path','73')->first();
-            // $target = (clone $collection)->where('path','55')->first();
-
-            // $source->moveAfter($target);
-            // dd($collection);
         });
 
     });
