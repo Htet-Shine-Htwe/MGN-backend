@@ -7,6 +7,7 @@ use Database\Seeders\MogouSeeder;
 use Database\Seeders\SubMogouSeeder;
 use Database\Seeders\SubscriptionSeeder;
 use Database\Seeders\UserAvatarSeeder;
+use Illuminate\Support\Facades\Cache;
 use Tests\Support\UserAuthenticated;
 
 // Group the test
@@ -60,3 +61,15 @@ test("last-uploaded mogou data with safe content can fetched successfully",funct
         $this->assertTrue($mogou['legal_age'] == false);
     }
 });
+
+test("carousel data are cached for 1 hour",function(){
+    $cacheKey = config("control.cache_key.homepage.carousel");
+    $emptyState = Cache::get($cacheKey);
+    $this->assertNull($emptyState);
+    $response = $this->getJson(route('api.users.carousel'));
+    $response->assertOk();
+    $cachedData = Cache::get($cacheKey);
+    $this->assertNotNull($cachedData);
+});
+
+

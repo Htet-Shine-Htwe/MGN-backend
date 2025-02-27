@@ -9,29 +9,26 @@ trait CacheResponse
 {
     public bool $cacheMode = true;
 
-    public function cacheResponse(string $key,int $minutes ,Closure $callback
-     ): mixed
+    public function cacheResponse(string $key, int $minutes, Closure $callback, bool $addTagsKeys = true): mixed
     {
         if (!$this->cacheMode) {
             return $callback();
         }
 
-        $data = Cache::get($key);
-
-        if ($data === null) {
+        return Cache::remember($key, $minutes, function () use ($callback, $addTagsKeys,$key) {
             $process = $callback();
 
+            // Ensure the process is an array or object
             if (is_array($process) || is_object($process)) {
                 $process = $callback();
-
             }
 
-            return Cache::remember($key, $minutes, function () use ($process) {
-                return $process;
-            });
+            if (!empty($this->tagKeys) && $addTagsKeys) {
+                return Cache::tags($this->tagKeys)->rememberForever($key, fn() => $process);
+            }
 
-        }
-        return $data;
+            return $process;
+        });
     }
 
     public function updateCache(string $key,mixed $data,int|null $minutes = null): void

@@ -3,11 +3,12 @@
 namespace App\Models;
 
 use App\Traits\DbPartition;
-use App\Traits\LexoRankTrait;
+use Dede\Lexorank\LexoRankTrait;
 use HydraStorage\HydraStorage\Traits\HydraMedia;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Builder;
 
 class SubMogouImage extends Model
 {
@@ -20,6 +21,24 @@ class SubMogouImage extends Model
     protected static string $sortableField = 'position';
 
     protected string $baseTable = 'sub_mogou_images';
+
+
+    /**
+     * applySortableQuery
+     *
+     * @param  Builder<static> $query
+     * @param  SubMogouImage $model
+     * @return Builder<static>
+     */
+
+    protected static function applySortableQuery(Builder $query,SubMogouImage $model) : Builder
+    {
+        $query->where("mogou_id", $model->mogou_id)
+                ->where("sub_mogou_id", $model->sub_mogou_id);
+
+        return $query;
+    }
+
 
     protected static function boot(): void
     {
