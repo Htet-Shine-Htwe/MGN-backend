@@ -9,7 +9,7 @@
         "ext-gd": "*",
         "ext-imagick": "*",
         "dede/hydrastorage": "^0.5.7",
-        "dede/lexorank": "^0.7.1",
+        "dede/lexorank": "^0.7.3",
         "fakerphp/faker": "^1.9.1",
         "guzzlehttp/guzzle": "^7.2",
         "hisorange/browser-detect": "^5.0",
