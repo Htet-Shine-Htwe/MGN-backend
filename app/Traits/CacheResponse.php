@@ -15,16 +15,16 @@ trait CacheResponse
             return $callback();
         }
 
-        return Cache::remember($key, $minutes, function () use ($callback, $addTagsKeys,$key) {
+        if(Cache::has($key)){
+
+            return Cache::get($key);
+        }
+
+        return Cache::remember($key, $minutes, function () use ($callback, $addTagsKeys,$key,$minutes) {
             $process = $callback();
 
-            // Ensure the process is an array or object
-            if (is_array($process) || is_object($process)) {
-                $process = $callback();
-            }
-
             if (!empty($this->tagKeys) && $addTagsKeys) {
-                return Cache::tags($this->tagKeys)->rememberForever($key, fn() => $process);
+                Cache::tags($this->tagKeys)->put($key, $process, $minutes);
             }
 
             return $process;

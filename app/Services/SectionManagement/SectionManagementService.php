@@ -7,6 +7,7 @@ use App\Models\BaseSection;
 use App\Models\ChildSection;
 use App\Models\Mogou;
 use App\Traits\CacheResponse;
+use Illuminate\Support\Facades\Cache;
 
 class SectionManagementService
 {
@@ -54,6 +55,8 @@ class SectionManagementService
 
         $this->forgetCache($type);
 
+        \Log::info('de',[Cache::has($type)]);
+
         return $baseSection;
     }
 
@@ -64,6 +67,8 @@ class SectionManagementService
         $baseSection->childSections()->where('pivot_key', $child)->delete();
 
         $this->forgetCache($type);
+
+        \Log::info('de',[Cache::has($type)]);
 
         return $baseSection;
     }
@@ -105,6 +110,7 @@ class SectionManagementService
         $baseSection->childSections()->delete();
 
         $this->forgetCache($type);
+
 
         return $baseSection;
     }
