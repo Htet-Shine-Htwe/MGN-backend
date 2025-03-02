@@ -34,10 +34,8 @@ Route::middleware(['auth:sanctum'])
 
     Route::controller(DashboardController::class)->group(function(){
         Route::get('/dashboard/stats','stats')->name('dashboard.stats');
-        Route::get('/dashboard/user-locations','userLocation')->name('dashboard.user.location');
-        Route::get('/dashboard/user-registrations','userRegistrationByMonths')->name('dashboard.user.registration');
-        Route::get('/dashboard/user-logins','userLoginThisWeek')->name('dashboard.user.login');
-        Route::get('/dashboard/user-traffics','userTrafficSummary')->name('dashboard.user.traffics');
+        Route::get('/dashboard/user-growth','userGrowthStats')->name('dashboard.user.userGrowth');
+        Route::get('/dashboard/chapter-growth','chapterGrowthStats')->name('dashboard.user.chapterGrowth');
     });
 
     Route::controller(AdminManagementController::class)->group(function(){
@@ -161,9 +159,5 @@ Route::middleware(['auth:sanctum'])
 
 
 Route::get("/test",function(){
-    $bot = (new GetBotServices())->getBot(1)->getPublisher()->self();
-    $bot->sendMessage([
-        'chat_id' => "1002249930897",
-        'text'    => 'Hello, from Laravel\'s notifications!'
-    ]);
+    dd((new App\Repo\Admin\Dashboard\ContentGrowthRepo('2025-02-01','2025-03-05'))->getMostViewedContents());
 });

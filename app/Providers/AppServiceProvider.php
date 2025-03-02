@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Http\Controllers\Controller;
 use App\Services\IpAddressService;
 use Illuminate\Support\ServiceProvider;
 
@@ -58,5 +59,6 @@ class AppServiceProvider extends ServiceProvider
                 return $client;
             }
         );
+
     }
 }

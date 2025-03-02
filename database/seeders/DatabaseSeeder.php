@@ -33,6 +33,7 @@ class DatabaseSeeder extends Seeder
             MogouSeeder::class,
             MogousCategorySeeder::class,
             SubMogouSeeder::class,
+            UserFavoriteSeeder::class,
             BannerSeeder::class,
             BaseSectionSeeder::class,
             ReportSeeder::class,

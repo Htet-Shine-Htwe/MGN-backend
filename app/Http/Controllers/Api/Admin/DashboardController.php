@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Repo\Admin\Dashboard\ContentGrowthRepo;
 use App\Repo\Admin\Dashboard\DashboardRepo;
 use App\Repo\Admin\Dashboard\UserDashboardRepo;
 use Illuminate\Http\JsonResponse;
@@ -40,7 +41,7 @@ class DashboardController extends Controller
         );
     }
 
-    public function userStats() : JsonResponse
+    public function userGrowthStats() : JsonResponse
     {
        [$userByLocations,$userRegistrationByMonths,$userLoginThisWeek,$isUserTrafficSummary] = Concurrency::run(
             [
@@ -53,39 +54,32 @@ class DashboardController extends Controller
 
         return response()->json(
             [
-                'userByLocations' => $userByLocations,
-                'userRegistrationByMonths' => $userRegistrationByMonths,
-                'userLoginThisWeek' => $userLoginThisWeek,
-                'isUserTrafficSummary' => $isUserTrafficSummary,
+                'user_chart' => $userByLocations,
+                'registration_chart' => $userRegistrationByMonths,
+                'login_chart' => $userLoginThisWeek,
+                'user_traffics' => $isUserTrafficSummary,
             ]
         );
     }
 
-    public function userLocation() : JsonResponse
+    public function chapterGrowthStats() : JsonResponse
     {
-        $data = $this->userDashboardRepo->userByLocations();
+        [$mostChapterUploadedAdmins,$chaptersByWeek,$getContentByFavorites] = Concurrency::run(
+            [
+                fn() => (new ContentGrowthRepo("2025-02-01","2025-02-28"))->mostChapterUploadedAdmins(),
+                fn() => (new ContentGrowthRepo("2025-02-01","2025-02-28"))->chapterUploadedBetweenTimePeriod(),
+                fn() => (new ContentGrowthRepo("2025-02-01","2025-02-28"))->getContentByFavorites(),
+            ]
+        );
 
-        return response()->json($data);
-    }
+        return response()->json(
+            [
+                'most_chapter_uploaded_admins' => $mostChapterUploadedAdmins,
+                'chapters_by_week' => $chaptersByWeek,
+                'content_by_favorites' => $getContentByFavorites,
+            ]
+        );
 
-    public function userRegistrationByMonths() : JsonResponse
-    {
-        $data = $this->userDashboardRepo->userRegistrationByMonths();
 
-        return response()->json($data);
-    }
-
-    public function userLoginThisWeek() : JsonResponse
-    {
-        $data = $this->userDashboardRepo->userLoginThisWeek();
-
-        return response()->json($data);
-    }
-
-    public function userTrafficSummary() : JsonResponse
-    {
-        $data = $this->userDashboardRepo->isUserTrafficSummary();
-
-        return response()->json($data);
     }
 }

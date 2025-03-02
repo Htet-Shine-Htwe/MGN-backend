@@ -12,7 +12,6 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('chapter_analyses', function (Blueprint $table) {
-            $table->id();
             $table->foreignId('sub_mogou_id');
             $table->foreignId('mogou_id')->constrained()->onDelete('cascade');
             $table->ipAddress('ip');

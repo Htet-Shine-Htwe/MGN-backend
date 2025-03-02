@@ -6,11 +6,16 @@ use App\Services\IpAddressService;
 use Database\Factories\ChapterAnalysisFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class ChapterAnalysis extends Model
 {
     /** @use HasFactory<ChapterAnalysisFactory> */
     use HasFactory;
+
+    protected $primaryKey = null;
+
+    public $incrementing = false;
 
     public $timestamps = false;
 
@@ -29,6 +34,26 @@ class ChapterAnalysis extends Model
         static::creating(function ($model) {
             $model->date = now();
         });
+    }
+
+    /**
+     * mogou
+     *
+     * @return BelongsTo<Mogou,$this>
+     */
+    public function mogou() : BelongsTo
+    {
+        return $this->belongsTo(Mogou::class);
+    }
+
+    /**
+     * subMogou
+     *
+     * @return BelongsTo<SubMogou,$this>
+     */
+    public function subMogou() : BelongsTo
+    {
+        return $this->belongsTo(SubMogou::class);
     }
 
     // public function setIpAttribute($value)

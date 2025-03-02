@@ -10,11 +10,12 @@ class UserDashboardRepo
 {
     public function userRegistrationByMonths() : object
     {
-        return User::whereNotNull('created_at') // Ensure created_at is not NULL
-        ->where('created_at', '>=', now()->subMonths(6)) // Only last six months
-        ->selectRaw('TO_CHAR(created_at, \'Month\') as key, COUNT(id) as count') // Format in SQL
-        ->groupBy('key')
-        ->get();
+        return User::whereNotNull('created_at')
+            ->where('created_at', '>=', now()->subMonths(6))
+            ->selectRaw("TO_CHAR(created_at, 'Month') as key, EXTRACT(MONTH FROM created_at) as month_int, COUNT(id) as count")
+            ->groupBy('key', 'month_int')
+            ->orderBy('month_int')
+            ->get();
     }
 
     public function userByLocations() : object
@@ -52,7 +53,7 @@ class UserDashboardRepo
         // date 30days ago
         // { date: "2024-06-01", user: 178, non: 200 },
         $traffic = ChapterAnalysis::query()
-            ->selectRaw('TO_CHAR(date, \'YYYY-MM-DD\') as key, COUNT(id) as count, CASE WHEN user_id IS NULL THEN \'non_user\' ELSE \'user\' END as type')
+            ->selectRaw('TO_CHAR(date, \'YYYY-MM-DD\') as key, COUNT(*) as count, CASE WHEN user_id IS NULL THEN \'non_user\' ELSE \'user\' END as type')
             ->whereBetween('date', [now()->subDays(15), now()])
             ->groupBy('key', 'type')
             ->orderBy('key')

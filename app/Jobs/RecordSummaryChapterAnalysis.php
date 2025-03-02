@@ -75,8 +75,8 @@ class RecordSummaryChapterAnalysis implements ShouldQueue
             ],
             [
                 'total_views' => $chapter->total_views ?? 0,
-                'start_date' => now()->startOfWeek(),
-                'end_date' => now()->endOfWeek(),
+                'start_date' => $this->start_time,
+                'end_date' => $this->end_time
             ]
         );
     }
