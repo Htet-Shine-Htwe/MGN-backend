@@ -1,6 +1,5 @@
 <?php
 
-use AlexCrawford\LexoRank\Rank;
 use App\Http\Controllers\Api\Admin\UserAvatarController;
 use App\Http\Controllers\Api\User\FilterPageController;
 use App\Http\Controllers\Api\User\HomePageController;
@@ -8,12 +7,6 @@ use App\Http\Controllers\Api\User\UserFavoriteController;
 use App\Http\Controllers\Api\User\UserMogouController;
 use App\Http\Controllers\Api\User\UserProfileController;
 use App\Http\Controllers\Api\User\UserReportController;
-use App\Http\Controllers\ApiUserFilterPageController;
-use App\Models\Admin;
-use App\Models\ChapterAnalysis;
-use App\Models\SubMogouImage;
-use App\Repo\Admin\SubMogouRepo\MogouPartitionFind;
-use App\Services\LexoRank\LexoRankHelperService;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware(['user.maintenance'])->group(function () {
@@ -62,22 +55,11 @@ Route::middleware(['user.maintenance'])->group(function () {
             Route::post('/create-report', 'create')->name("reports.create");
         });
 
-
         Route::get("/check-server", function () {
             return response()->json([
                 'message' => 'service available',
                 'status' => 200
             ], 200);
         });
-
-        Route::get("/tester", function () {
-
-            $result = new Rank('','');
-
-            dd($result->get());
-
-
-        });
-
     });
 });

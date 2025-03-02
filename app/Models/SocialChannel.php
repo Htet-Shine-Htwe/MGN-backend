@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enum\SocialMediaType;
+use Database\Factories\SocialChannelFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -11,6 +12,7 @@ use Illuminate\Database\Eloquent\Model;
  */
 class SocialChannel extends Model
 {
+    /** @use HasFactory<SocialChannelFactory> */
     use HasFactory;
 
     protected $fillable = [

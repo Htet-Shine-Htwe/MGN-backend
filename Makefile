@@ -37,7 +37,7 @@ d-restart:
 
 d-restart-build:
 	@docker-compose down
-	@docker-compose --env-file .env.dev up -d --build
+	@docker-compose up -d --build
 
 d-app:
 	@docker exec -it mgn-app bash

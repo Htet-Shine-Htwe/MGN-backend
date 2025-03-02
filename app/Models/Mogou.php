@@ -7,17 +7,18 @@ use App\Enum\MogousStatus;
 use App\Enum\MogouTypeEnum;
 use App\Scope\MogouScope;
 use App\Services\Partition\TablePartition;
+use Database\Factories\MogouFactory;
 use HydraStorage\HydraStorage\Traits\HydraMedia;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Str;
-use Mews\Purifier\Casts\CleanHtml;
 
 class Mogou extends Model
 {
-    use HasFactory,\Staudenmeir\EloquentEagerLimit\HasEagerLimit;
+    /** @use HasFactory<MogouFactory> */
+    use HasFactory;
     use MogouScope;
     use HydraMedia;
 
@@ -106,7 +107,7 @@ class Mogou extends Model
     /**
      * categories
      *
-     * @return BelongsToMany<Category>
+     * @return BelongsToMany<Category,$this>
      */
     public function categories(): BelongsToMany
     {
@@ -117,7 +118,7 @@ class Mogou extends Model
      * subMogous
      *
      * @param string $table_name
-     * @return HasMany<SubMogou>
+     * @return HasMany<SubMogou, $this>
      */
     public function subMogous(string $table_name="alpha"): HasMany
     {

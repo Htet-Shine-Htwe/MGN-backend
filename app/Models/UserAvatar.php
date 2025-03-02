@@ -2,14 +2,15 @@
 
 namespace App\Models;
 
+use Database\Factories\UserAvatarFactory;
 use HydraStorage\HydraStorage\Traits\HydraMedia;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class UserAvatar extends Model
 {
+    /** @use HasFactory<UserAvatarFactory> */
     use HasFactory, HydraMedia;
-
     protected $fillable = [
         'avatar_name',
         'avatar_path',

@@ -34,4 +34,14 @@ return [
             ],
         ],
     ],
+
+    'cache_key' => [
+        'homepage' => [
+            'tags' => "homepage",
+            'most_viewed' => 'homepage_most_viewed',
+            'last_uploaded' => 'homepage_last_uploaded',
+            'carousel' => 'hero_highlight_slider',
+            'recommend' => 'main_page_recommended',
+        ]
+    ]
 ];

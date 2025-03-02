@@ -9,52 +9,62 @@ use App\Models\Mogou;
 use App\Models\SocialInfo;
 use App\Repo\Admin\Mogou\MogouRepo;
 use App\Services\SectionManagement\SectionManagementService;
+use App\Traits\CacheResponse;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class HomePageController extends Controller
 {
+
+    use CacheResponse;
+
+    public array $tagKeys = ['homepage'];
     // make constructor
-    public function __construct(protected MogouRepo $mogouRepo,protected SectionManagementService $sms)
-    {
-        //
-    }
+    public function __construct(protected MogouRepo $mogouRepo, protected SectionManagementService $sms) {}
 
     public function carousel(): JsonResponse
     {
-        $mogous_ids = $this->sms->getBySection("hero_highlight_slider")->childSections
-        ->where("is_visible", 1)
-        ->pluck('pivot_key');
+        $cacheKey = config("control.cache_key.homepage.carousel");
 
-        $mogou = Mogou::select("id", "title", "slug", "cover", "rotation_key", "description", "finish_status", 'mogou_type', 'status', "rating")
-            ->where('status', MogousStatus::PUBLISHED->value)
-            ->with('categories:title')
-            ->whereIn('id', $mogous_ids)
-            ->get();
+        $mogous = $this->cacheResponse($cacheKey, 300, function () {
+            $mogous_ids = $this->sms->getBySection("hero_highlight_slider")->childSections
+                ->where("is_visible", 1)
+                ->pluck('pivot_key');
+
+            return Mogou::select("id", "title", "slug", "cover", "rotation_key", "description", "finish_status", 'mogou_type', 'status', "rating")
+                ->where('status', MogousStatus::PUBLISHED->value)
+                ->with('categories:title')
+                ->whereIn('id', $mogous_ids)
+                ->get();
+        });
 
         return response()->json(
             [
-            'mogous' => $mogou
+                'mogous' => $mogous
             ]
         );
     }
 
     public function recommended(): JsonResponse
     {
-        $mogous_ids = $this->sms->getBySection("main_page_recommended")->childSections
-        ->where("is_visible", 1)
-        ->pluck('pivot_key');
+        $cacheKey = config("control.cache_key.homepage.recommend");
 
-        $mogou = Mogou::select("id", "title", "slug", "cover", "rotation_key", "description", "finish_status", 'mogou_type', 'status', "rating")
-            ->where('status', MogousStatus::PUBLISHED->value)
-            ->with('categories:title')
-            ->whereIn('id', $mogous_ids)
-            ->take(20)
-            ->get();
+        $mogous = $this->cacheResponse($cacheKey, 300, function () {
+            $mogous_ids = $this->sms->getBySection("main_page_recommended")->childSections
+                ->where("is_visible", 1)
+                ->pluck('pivot_key');
+
+            return Mogou::select("id", "title", "slug", "cover", "rotation_key", "description", "finish_status", 'mogou_type', 'status', "rating")
+                ->where('status', MogousStatus::PUBLISHED->value)
+                ->with('categories:title')
+                ->whereIn('id', $mogous_ids)
+                ->take(20)
+                ->get();
+        });
 
         return response()->json(
             [
-            'mogous' => $mogou
+                'mogous' => $mogous
             ]
         );
     }
@@ -69,7 +79,7 @@ class HomePageController extends Controller
 
         return response()->json(
             [
-            'mogous' => $mogous
+                'mogous' => $mogous
             ]
         );
     }
@@ -86,8 +96,15 @@ class HomePageController extends Controller
                 $key = $mogou->rotation_key;
 
                 $subMogou = $mogou->subMogous($key)->select(
-                   'id', 'title', 'slug', 'chapter_number', 'created_at','subscription_only','third_party_url','third_party_redirect'
-                    )->latest('chapter_number')->limit(3)->get();
+                    'id',
+                    'title',
+                    'slug',
+                    'chapter_number',
+                    'created_at',
+                    'subscription_only',
+                    'third_party_url',
+                    'third_party_redirect'
+                )->latest('chapter_number')->limit(2)->get();
 
                 $mogou->setRelation('subMogous', $subMogou);
             }
@@ -95,7 +112,7 @@ class HomePageController extends Controller
 
         return response()->json(
             [
-            'mogous' => $collection
+                'mogous' => $collection
             ]
         );
     }
@@ -106,7 +123,7 @@ class HomePageController extends Controller
 
         return response()->json(
             [
-            'banners' => $banners
+                'banners' => $banners
             ]
         );
     }

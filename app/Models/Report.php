@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enum\ReportStatusEnum;
+use Database\Factories\ReportFactory;
 use HydraStorage\HydraStorage\Traits\HydraMedia;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -10,8 +11,8 @@ use Illuminate\Database\Eloquent\Builder;
 
 class Report extends Model
 {
+    /** @use HasFactory<ReportFactory> */
     use HasFactory,HydraMedia;
-
     protected $fillable = [
         'title',
         'description',

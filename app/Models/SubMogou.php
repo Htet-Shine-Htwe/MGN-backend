@@ -2,11 +2,9 @@
 
 namespace App\Models;
 
-use App\Repo\Admin\SubMogouRepo\MogouPartitionFind;
-use App\Repo\Admin\SubMogouRepo\SubMogouImageRepo;
 use App\Traits\DbPartition;
+use Database\Factories\SubMogouFactory;
 use HydraStorage\HydraStorage\Traits\HydraMedia;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -17,7 +15,8 @@ use Illuminate\Support\Str;
 
 class SubMogou extends Model
 {
-    use HasFactory,\Staudenmeir\EloquentEagerLimit\HasEagerLimit,DbPartition,HydraMedia;
+    /** @use HasFactory<SubMogouFactory> */
+    use HasFactory,DbPartition,HydraMedia;
 
     protected $table = 'sub_mogous';
 
@@ -104,7 +103,7 @@ class SubMogou extends Model
     /**
      * mogou
      *
-     * @return BelongsTo<Mogou, SubMogou>
+     * @return BelongsTo<Mogou, $this>
      */
     public function mogou(): BelongsTo
     {
@@ -116,23 +115,22 @@ class SubMogou extends Model
      * images
      *
      * @param string $table_name
-     * @return HasMany<SubMogouImage>
+     * @return HasMany<SubMogouImage, $this>
      */
     public function images(string $table_name="alpha"): HasMany
     {
         $instance = new SubMogouImage;
-        // $table_name = "beta";
-        $instance->setTable($table_name."_sub_mogou_images");
+        $instance->setTable("{$table_name}_sub_mogou_images");
 
         return $this->newHasMany(
-            $instance->newQuery(), $this, $instance->getTable().'.sub_mogou_id', 'id'
+           ( new $instance)->query(), $this,'sub_mogou_id', 'id'
         );
     }
 
     /**
      * creator
      *
-     * @return MorphTo<Model, SubMogou>
+     * @return MorphTo<Model, $this>
      */
     public function creator() : MorphTo
     {

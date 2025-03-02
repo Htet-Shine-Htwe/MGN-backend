@@ -48,6 +48,29 @@ class MogouRepo implements \App\Contracts\ModelRepoInterface
         return $this->collection;
     }
 
+    public function getCollection() : mixed
+    {
+        return $this->collection;
+    }
+
+    public function rawCollection(callable $callback) : mixed
+    {
+        $this->collection = $callback($this->collection);
+        return $this->collection;
+    }
+
+    public function withFilterGenres() : self
+    {
+        $this->collection = $this->collection->filterGenres();
+        return $this;
+    }
+
+    public function withLegalOnly() : self
+    {
+        $this->collection = $this->collection->legalOnly();
+        return $this;
+    }
+
     public function withCategories() : self
     {
         $this->collection = $this->collection->with('categories:id,title');

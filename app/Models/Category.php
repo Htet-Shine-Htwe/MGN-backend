@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Database\Factories\CategoryFactory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -9,6 +10,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Support\Str;
 class Category extends Model
 {
+    /** @use HasFactory<CategoryFactory> */
     use HasFactory;
 
     protected $fillable = ['title','slug'];
@@ -48,7 +50,7 @@ class Category extends Model
     /**
      * mogous
      *
-     * @return BelongsToMany<Mogou>
+     * @return BelongsToMany<Mogou,$this>
      */
     public function mogous(): BelongsToMany
     {

@@ -15,7 +15,8 @@ class FilterPageController extends Controller
     {
         $collection =  $this->mogouRepo
             ->withCategories()
-            ->publishedOnly()
+            ->withFilterGenres()
+            ->withLegalOnly()
             ->get($request);
 
         $collection->each(

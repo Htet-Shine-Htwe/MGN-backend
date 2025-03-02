@@ -6,9 +6,14 @@ use App\Enum\MogousStatus;
 use App\Models\BaseSection;
 use App\Models\ChildSection;
 use App\Models\Mogou;
+use App\Traits\CacheResponse;
+use Illuminate\Support\Facades\Cache;
 
 class SectionManagementService
 {
+
+    use CacheResponse;
+
     public function getBySection(string $type): BaseSection
     {
         return BaseSection::where('section_name', $type)->firstOrFail();
@@ -48,6 +53,10 @@ class SectionManagementService
             "base_section_id" => $baseSection->id
         ]);
 
+        $this->forgetCache($type);
+
+        \Log::info('de',[Cache::has($type)]);
+
         return $baseSection;
     }
 
@@ -56,6 +65,10 @@ class SectionManagementService
         $baseSection = $this->getBySection($type);
 
         $baseSection->childSections()->where('pivot_key', $child)->delete();
+
+        $this->forgetCache($type);
+
+        \Log::info('de',[Cache::has($type)]);
 
         return $baseSection;
     }
@@ -85,6 +98,8 @@ class SectionManagementService
 
         $baseSection->childSections()->where('pivot_key', $child)->update(['is_visible' => $visibility]);
 
+        $this->forgetCache($type);
+
         return $baseSection;
     }
 
@@ -93,6 +108,9 @@ class SectionManagementService
         $baseSection = $this->getBySection($type);
 
         $baseSection->childSections()->delete();
+
+        $this->forgetCache($type);
+
 
         return $baseSection;
     }
