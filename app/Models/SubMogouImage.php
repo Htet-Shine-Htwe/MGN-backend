@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use App\Traits\DbPartition;
-use Database\Factories\SubMogouImageFactory;
 use Dede\Lexorank\LexoRankTrait;
 use HydraStorage\HydraStorage\Traits\HydraMedia;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
