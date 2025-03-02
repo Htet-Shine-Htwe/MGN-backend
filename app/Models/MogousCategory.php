@@ -2,12 +2,14 @@
 
 namespace App\Models;
 
+use Database\Factories\MogousCategoryFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class MogousCategory extends Model
 {
+    /** @use HasFactory<MogousCategoryFactory> */
     use HasFactory;
 
     public $timestamps = false;
@@ -20,7 +22,7 @@ class MogousCategory extends Model
     /**
      * mogou
      *
-     * @return BelongsTo<Mogou, MogousCategory>
+     * @return BelongsTo<Mogou, $this>
      */
     public function mogou(): BelongsTo
     {

@@ -3,6 +3,8 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+
+use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -14,13 +16,9 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class User extends Authenticatable
 {
+    /** @use HasFactory<UserFactory> */
     use HasApiTokens, HasFactory, Notifiable, HasRoles;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
     protected $fillable = [
         'name',
         'email',
@@ -34,14 +32,8 @@ class User extends Authenticatable
         'avatar_id',
     ];
 
-    // appends
     protected $appends = ['subscription_name', 'avatar_url'];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var array<int, string>
-     */
     protected $hidden = [
         'password',
         'remember_token',
@@ -83,7 +75,7 @@ class User extends Authenticatable
     /**
      * subscription
      *
-     * @return BelongsTo<Subscription, User>
+     * @return BelongsTo<Subscription, $this>
      */
     public function subscription(): BelongsTo
     {
@@ -93,7 +85,7 @@ class User extends Authenticatable
     /**
      * subscriptions
      *
-     * @return HasMany<UserSubscription>
+     * @return HasMany<UserSubscription,$this>
      */
     public function subscriptions(): HasMany
     {
@@ -103,7 +95,7 @@ class User extends Authenticatable
     /**
      * favorites
      *
-     * @return HasMany<UserFavorite>
+     * @return HasMany<UserFavorite, $this>
      */
     public function favorites(): HasMany
     {
@@ -113,7 +105,7 @@ class User extends Authenticatable
     /**
      * login_history
      *
-     * @return HasMany<LoginHistory>
+     * @return HasMany<LoginHistory, $this>
      */
     public function loginHistory(): HasMany
     {
@@ -123,7 +115,7 @@ class User extends Authenticatable
     /**
      * avatar
      *
-     * @return BelongsTo<UserAvatar, User>
+     * @return BelongsTo<UserAvatar, $this>
      */
     public function avatar(): BelongsTo
     {

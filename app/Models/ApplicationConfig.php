@@ -2,14 +2,15 @@
 
 namespace App\Models;
 
+use Database\Factories\ApplicationConfigFactory;
 use HydraStorage\HydraStorage\Traits\HydraMedia;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class ApplicationConfig extends Model
 {
+    /** @use HasFactory<ApplicationConfigFactory> */
     use HasFactory, HydraMedia;
-
     protected $fillable = [
         'title',
         'logo',

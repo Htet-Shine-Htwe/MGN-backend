@@ -14,9 +14,9 @@ class FilterPageController extends Controller
     public function index(Request $request): JsonResponse
     {
         $collection =  $this->mogouRepo
-        ->withCategories()
-        // ->publishedOnly()
-            // ->search()
+            ->withCategories()
+            ->withFilterGenres()
+            ->withLegalOnly()
             ->get($request);
 
         $collection->each(

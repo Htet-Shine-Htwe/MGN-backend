@@ -2,11 +2,14 @@
 
 namespace App\Models;
 
+use Database\Factories\ChapterAnalysisSummaryFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class ChapterAnalysisSummary extends Model
 {
+    /** @use HasFactory<ChapterAnalysisSummaryFactory> */
+
     use HasFactory;
     public $timestamps = false;
 

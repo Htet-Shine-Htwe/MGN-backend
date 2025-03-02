@@ -4,12 +4,14 @@ namespace App\Models;
 
 use App\Enum\SocialInfoStatus;
 use App\Enum\SocialInfoType;
+use Database\Factories\SocialInfoFactory;
 use HydraStorage\HydraStorage\Traits\HydraMedia;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class SocialInfo extends Model
 {
+    /** @use HasFactory<SocialInfoFactory> */
     use HasFactory,HydraMedia;
 
     protected $fillable = [

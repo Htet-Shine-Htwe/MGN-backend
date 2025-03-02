@@ -2,12 +2,14 @@
 
 namespace App\Models;
 
+use Database\Factories\UserSubscriptionFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class UserSubscription extends Model
 {
+    /** @use HasFactory<UserSubscriptionFactory> */
     use HasFactory;
 
     protected $fillable = [
@@ -19,7 +21,7 @@ class UserSubscription extends Model
     /**
      * user
      *
-     * @return BelongsTo<User, UserSubscription>
+     * @return BelongsTo<User,$this>
      */
     public function user(): BelongsTo
     {
@@ -29,7 +31,7 @@ class UserSubscription extends Model
     /**
      * user
      *
-     * @return BelongsTo<Subscription, UserSubscription>
+     * @return BelongsTo<Subscription,$this>
      */
     public function subscription(): BelongsTo
     {

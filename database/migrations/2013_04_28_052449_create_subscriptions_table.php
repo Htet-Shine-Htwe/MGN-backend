@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('subscriptions', function (Blueprint $table) {
             $table->id();
             $table->string('title');
-            $table->unsignedDecimal('price',14,2)->default(0);
+            $table->decimal('price',14,2)->default(0);
             $table->unsignedInteger('max');
             $table->unsignedInteger('duration');
         });

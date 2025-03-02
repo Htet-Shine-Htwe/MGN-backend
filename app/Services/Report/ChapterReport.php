@@ -8,9 +8,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class ChapterReport
 {
-
-    /** @var HasMany<SubMogou> */
-    protected HasMany $submogouCollection;
+    protected mixed $submogouCollection;
 
     public function __construct(protected Mogou $mogou)
     {

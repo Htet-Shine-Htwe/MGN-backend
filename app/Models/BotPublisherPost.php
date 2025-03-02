@@ -2,12 +2,15 @@
 
 namespace App\Models;
 
+use Database\Factories\BotPublisherPostFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class BotPublisherPost extends Model
 {
+    /** @use HasFactory<BotPublisherPostFactory> */
+
     use HasFactory;
 
     protected $fillable = [
@@ -25,7 +28,7 @@ class BotPublisherPost extends Model
     /**
      * botPublisher
      *
-     * @return BelongsTo<BotPublisher,BotPublisherPost>
+     * @return BelongsTo<BotPublisher,$this>
      */
     public function botPublisher(): BelongsTo
     {

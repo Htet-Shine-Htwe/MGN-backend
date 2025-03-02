@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enum\SocialMediaType;
+use Database\Factories\BotPublisherFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -14,6 +15,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  */
 class BotPublisher extends Model
 {
+    /** @use HasFactory<BotPublisherFactory> */
     use HasFactory;
 
     protected $fillable = [
@@ -44,7 +46,7 @@ class BotPublisher extends Model
     /**
      * socialChannels
      *
-     * @return BelongsToMany<SocialChannel>
+     * @return BelongsToMany<SocialChannel,$this>
      */
     public function socialChannels(): BelongsToMany
     {

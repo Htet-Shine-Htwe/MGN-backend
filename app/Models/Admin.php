@@ -5,6 +5,7 @@ namespace App\Models;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 
 use App\Scope\AdminScope;
+use Database\Factories\AdminFactory;
 use DateTime;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -18,13 +19,14 @@ use Spatie\Permission\Traits\HasRoles;
 
 class Admin extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable,HasRoles,AdminScope;
+    /** @use HasFactory<AdminFactory> */
+    use HasApiTokens, HasFactory, Notifiable, HasRoles, AdminScope;
 
     protected string $guard_name = 'admin';
 
 
     // append role_name
-    protected $appends = ['role_name','role_id'];
+    protected $appends = ['role_name', 'role_id'];
 
     /**
      * The attributes that are mass assignable.
@@ -61,7 +63,7 @@ class Admin extends Authenticatable
 
     public function getRoleNameAttribute(): string
     {
-        return ucFirst(optional($this->roles->first())->name) ;
+        return ucFirst(optional($this->roles->first())->name);
     }
 
     public function getRoleIdAttribute(): int
@@ -71,7 +73,7 @@ class Admin extends Authenticatable
 
     public function getAllPermissionsAttribute(): array
     {
-         /** @var ?Role $firstRole */
+        /** @var ?Role $firstRole */
         $firstRole = $this->roles->first();
 
         if (!$firstRole) {
@@ -92,16 +94,18 @@ class Admin extends Authenticatable
      *
      * @return Collection<int, SubMogou>
      */
-    public function chapters() : Collection
+    public function chapters(): Collection
     {
         $subMoGou = new SubMogou();
         $tables = $subMoGou->getCreatedPartitions();
-        $collection = [];
+        $models = [];
+
         foreach ($tables as $table) {
-            $collection[] = $subMoGou->setTable($table)->where('creator_id', $this->id)->get();
+            foreach ($subMoGou->setTable($table)->where('creator_id', $this->id)->get() as $item) {
+                $models[] = $item; // Ensures $models is an array of SubMogou instances
+            }
         }
 
-        return $subMoGou->newCollection($collection)->collapse();
+        return $subMoGou->newCollection($models);
     }
-
 }

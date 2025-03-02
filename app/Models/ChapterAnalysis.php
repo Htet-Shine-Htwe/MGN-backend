@@ -3,11 +3,13 @@
 namespace App\Models;
 
 use App\Services\IpAddressService;
+use Database\Factories\ChapterAnalysisFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class ChapterAnalysis extends Model
 {
+    /** @use HasFactory<ChapterAnalysisFactory> */
     use HasFactory;
 
     public $timestamps = false;

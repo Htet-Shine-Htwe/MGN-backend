@@ -8,7 +8,6 @@ use App\Repo\Admin\ApplicationConfig\ApplicationConfigUploadRepo;
 use App\Traits\CacheResponse;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Cache;
 
 class ApplicationConfigController extends Controller
 {
