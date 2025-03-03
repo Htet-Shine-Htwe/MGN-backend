@@ -4,8 +4,10 @@ namespace App\Repo\Admin\Dashboard;
 
 use App\Models\Admin;
 use App\Models\ChapterAnalysis;
+use App\Models\Mogou;
 use App\Models\SubMogou;
 use App\Models\UserFavorite;
+use App\Repo\Admin\SubMogouRepo\MogouPartitionFind;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\DB;
 
@@ -91,12 +93,20 @@ class ContentGrowthRepo
     {
         $thisWeekViews = ChapterAnalysis::query()
             ->whereBetween('date', [$this->startDate, $this->endDate])
-            ->select('sub_mogou_id', DB::raw('SUM(sub_mogou_id) as total_views'))
-            ->groupBy('sub_mogou_id')
+            ->select('sub_mogou_id','mogou_id', DB::raw('SUM(sub_mogou_id) as total_views'))
+            ->groupBy('sub_mogou_id','mogou_id')
             ->orderByDesc('total_views')
-            ->limit(5)
-            ->get()
-            ->toArray();
+            ->limit(10)->get()->toArray();
+
+        foreach ($thisWeekViews as $key => $data) {
+            $subMogou =  MogouPartitionFind::getSubMogou("id", $data['mogou_id'])->where('id', $data['sub_mogou_id'])->firstOrFail();
+
+            $thisWeekViews[$key]['sub_mogou_title'] = $subMogou->title;
+            $thisWeekViews[$key]['mogou_title'] = $subMogou->mogou->title;
+            $thisWeekViews[$key]['cover'] = $subMogou->mogou->cover;
+            $thisWeekViews[$key]['created_at'] = $subMogou->created_at;
+        }
+
 
         return $thisWeekViews;
     }

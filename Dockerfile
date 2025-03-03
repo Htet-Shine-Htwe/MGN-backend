@@ -46,7 +46,7 @@ WORKDIR /var/www/mgn
 COPY --from=composer /usr/bin/composer /usr/bin/composer
 
 # Copy source code
-COPY . .
+COPY --chown=$user:$user . /var/www/mgn
 
 # Install composer dependencies
 RUN composer install --prefer-dist --optimize-autoloader --no-interaction && \
@@ -56,7 +56,8 @@ RUN composer install --prefer-dist --optimize-autoloader --no-interaction && \
 
 RUN addgroup -S $user && adduser -S $user -G www-data && \
     mkdir -p /etc/supervisor /var/log/supervisor && \
-    chown -R $user:www-data /var/www/mgn /usr/local/var/log /etc/supervisor /var/log/supervisor
+    chown -R $user:www-data /usr/local/var/log /etc/supervisor /var/log/supervisor && \
+    chmod -R 775 /var/www/mgn/storage /usr/local/var/log /etc/supervisor /var/log/supervisor
 
 
 # Copy custom PHP-FPM configuration
@@ -84,8 +85,6 @@ RUN mkdir -p /var/log/supervisor /var/www/mgn/storage/logs
 # Copy Supervisor configuration for worker
 COPY deployment/config/supervisor /etc/supervisor/conf.d
 COPY deployment/config/supervisor/supervisord.conf /etc/supervisor/supervisord.conf
-
-RUN chown -R www-data:www-data /var/log/supervisor /var/www/mgn/storage/logs /var/spool/cron/crontabs
 
 RUN echo "* * * * * www-data php /var/www/mgn/artisan schedule:run >> /var/log/cron.log 2>&1" > /var/spool/cron/crontabs/www-data && \
     chmod 0644 /var/spool/cron/crontabs/www-data

@@ -159,5 +159,5 @@ Route::middleware(['auth:sanctum'])
 
 
 Route::get("/test",function(){
-    dd((new App\Repo\Admin\Dashboard\ContentGrowthRepo('2025-02-01','2025-03-05'))->getMostViewedContents());
+    dd((new App\Repo\Admin\Dashboard\ContentGrowthRepo('2025-02-01','2025-02-28'))->getMostViewedContents());
 });

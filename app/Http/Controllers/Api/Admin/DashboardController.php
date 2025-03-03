@@ -62,13 +62,20 @@ class DashboardController extends Controller
         );
     }
 
-    public function chapterGrowthStats() : JsonResponse
+    public function chapterGrowthStats(Request $request) : JsonResponse
     {
+
+        // date: 2025-03-03T07:31:22.998Z
+        $date = $request->date;
+        $startDate = date('Y-m-01', strtotime($date));
+        $endDate = date('Y-m-t', strtotime($date));
+
         [$mostChapterUploadedAdmins,$chaptersByWeek,$getContentByFavorites] = Concurrency::run(
             [
-                fn() => (new ContentGrowthRepo("2025-02-01","2025-02-28"))->mostChapterUploadedAdmins(),
-                fn() => (new ContentGrowthRepo("2025-02-01","2025-02-28"))->chapterUploadedBetweenTimePeriod(),
-                fn() => (new ContentGrowthRepo("2025-02-01","2025-02-28"))->getContentByFavorites(),
+                fn() => (new ContentGrowthRepo($startDate,$endDate))->mostChapterUploadedAdmins(),
+                fn() => (new ContentGrowthRepo($startDate,$endDate))->chapterUploadedBetweenTimePeriod(),
+                fn() => (new ContentGrowthRepo($startDate,$endDate))->getContentByFavorites(),
+                fn() => (new ContentGrowthRepo($startDate,$endDate))->getMostViewedContents(),
             ]
         );
 
