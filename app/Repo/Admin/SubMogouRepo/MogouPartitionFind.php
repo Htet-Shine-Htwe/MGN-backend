@@ -8,7 +8,9 @@ use App\Models\SubMogouImage;
 
 class MogouPartitionFind
 {
+    public static Mogou $parentMogou;
 
+    public static string $rotation_key;
 
     public function getSubMogouInstance(string $key="id",string $value =null): SubMogou
     {
@@ -23,13 +25,14 @@ class MogouPartitionFind
         return $sub_mogou;
     }
 
-
     public static function getSubMogou(string $key="id",string $value =null): SubMogou
     {
-        $mogou = (new Mogou)->where($key, $value)->firstOrFail();
+        self::$parentMogou = Mogou::where($key, $value)->firstOrFail();
+
+        self::$rotation_key = self::$parentMogou->rotation_key;
 
         $sub_mogou = new SubMogou();
-        $table = $sub_mogou->getPartition($mogou->rotation_key);
+        $table = $sub_mogou->getPartition(self::$rotation_key);
 
         $sub_mogou->setTable($table);
 
@@ -39,10 +42,12 @@ class MogouPartitionFind
 
     public static function getSubMogouImage(string $key="id",string $value =null): SubMogouImage
     {
-        $mogou= Mogou::where($key, $value)->firstOrFail();
+        self::$parentMogou = Mogou::where($key, $value)->firstOrFail();
+
+        self::$rotation_key = self::$parentMogou->rotation_key;
 
         $sub_mogou = new SubMogouImage;
-        $table = $sub_mogou->getPartition($mogou->rotation_key);
+        $table = $sub_mogou->getPartition(self::$rotation_key);
 
         $sub_mogou->setTable($table);
 
