@@ -138,7 +138,7 @@ class DashboardController extends Controller
                 'time_zone' => date_default_timezone_get(),
                 'disk_space' => formatBytes(disk_total_space('/var/www/')),
                 'dis_space_used' => formatBytes(disk_total_space('/var/www') - disk_free_space('/var/www')),
-                'disk_percentage' => disk_total_space('/var/www') != 0 ? round((disk_free_space('/var/www') / disk_total_space('/var/www')) * 100, 2) : 0,
+                'disk_used_percentage' => disk_total_space('/var/www') - disk_free_space('/var/www'),
             ]
         );
     }

@@ -25,6 +25,7 @@ services:
             POSTGRES_USER: "${DB_USER:-user}"
             POSTGRES_PASSWORD: "${DB_PASSWORD:-password}"
             POSTGRES_DB: "${DB_DATABASE:-mgn}"
+            PGDATA: /var/lib/postgresql/data
         networks:
             - mgn-network
         command: ["postgres", "-c", "config_file=/var/lib/postgresql/data/postgresql.conf"]
