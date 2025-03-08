@@ -1,0 +1,138 @@
+version: "3.8"
+
+services:
+    db:
+        image: postgres:15
+        deploy:
+            resources:
+                limits:
+                    cpus: "1"  # Limits DB to 1.5 CPUs
+                    memory: "1.5GB"  # Limits DB to 1.5GB RAM
+                reservations:
+                    cpus: "1"  # Reserves at least 1 CPU
+                    memory: "1GB"  # Reserves at least 1GB RAM
+            placement:
+                constraints:
+                    - "node.labels.db == true"
+        container_name: mgn-db
+        volumes:
+            - ./docker/postgres/data:/var/lib/postgresql/data
+            - ./deployment/config/postgres/postgresql.conf:/var/lib/postgresql/data/postgresql.conf
+        restart: always
+        ports:
+            - "${DB_HOST_PORT:-5432}:5432"
+        environment:
+            POSTGRES_USER: "${DB_USER:-user}"
+            POSTGRES_PASSWORD: "${DB_PASSWORD:-password}"
+            POSTGRES_DB: "${DB_DATABASE:-mgn}"
+        networks:
+            - mgn-network
+        command: ["postgres", "-c", "config_file=/var/lib/postgresql/data/postgresql.conf"]
+
+    laravel:
+        build:
+            context: .
+            dockerfile: Dockerfile
+            target: api
+            args:
+                - user=radian
+                - uid=1000
+        container_name: mgn-app
+        restart: always
+        tty: true
+        deploy:
+            resources:
+                limits:
+                    cpus: "1"  # Limits Laravel app to 1 CPU
+                    memory: "800MB"  # Limits Laravel app to 800MB RAM
+                reservations:
+                    cpus: "0.5"  # Reserves at least 0.5 CPU
+                    memory: "512MB"  # Reserves at least 512MB RAM
+        volumes:
+            - .:/var/www/mgn
+        ports:
+            - "${LARAVEL_PORT:-9001}:80"
+        networks:
+            - mgn-network
+        depends_on:
+            - db
+            - redis
+
+    nginx:
+        image: nginx:alpine
+        container_name: mgn-nginx
+        restart: unless-stopped
+        tty: true
+        deploy:
+            resources:
+                limits:
+                    cpus: "0.5"  # Limits Nginx to 0.5 CPU
+                    memory: "400MB"  # Limits Nginx to 400MB RAM
+                reservations:
+                    cpus: "0.2"  # Reserves at least 0.2 CPU
+                    memory: "256MB"  # Reserves at least 256MB RAM
+        ports:
+            - "${NGINX_PORT:-7777}:80"
+        volumes:
+            - ./deployment/config/nginx/default.conf:/etc/nginx/conf.d/default.conf
+            - .:/var/www/mgn
+        depends_on:
+            - laravel
+        networks:
+            - mgn-network
+
+    redis:
+        image: redis:alpine
+        container_name: mgn-redis
+        deploy:
+            resources:
+                limits:
+                    cpus: "0.5"  # Limits Redis to 0.5 CPU
+                    memory: "300MB"  # Limits Redis to 300MB RAM
+                reservations:
+                    cpus: "0.2"  # Reserves at least 0.2 CPU
+                    memory: "128MB"  # Reserves at least 128MB RAM
+            placement:
+                constraints:
+                    - "node.labels.db == true"
+        restart: always
+        volumes:
+            - ./docker/redisdata:/data
+        ports:
+            - "${REDIS_HOST_PORT:-6378}:6379"
+        networks:
+            - mgn-network
+
+    supervisor:
+        build:
+            context: .
+            dockerfile: Dockerfile
+            target: worker
+        container_name: mgn-supervisor
+        restart: always
+        command: ["/usr/bin/supervisord", "-n", "-c", "/etc/supervisor/supervisord.conf"]
+        deploy:
+            resources:
+                limits:
+                    cpus: "0.5"  # Limits Supervisor to 0.5 CPU
+                    memory: "256MB"  # Limits Supervisor to 256MB RAM
+                reservations:
+                    cpus: "0.2"  # Reserves at least 0.2 CPU
+                    memory: "128MB"  # Reserves at least 128MB RAM
+        volumes:
+            - .:/var/www/mgn
+            - ./deployment/config/supervisor:/etc/supervisor/conf.d
+        networks:
+            - mgn-network
+        depends_on:
+            - laravel
+            - db
+            - redis
+
+volumes:
+    db_data:
+        driver: local
+
+networks:
+    mgn-network:
+        driver: bridge
