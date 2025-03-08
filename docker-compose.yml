@@ -8,6 +8,7 @@ services:
         container_name: mgn-db
         volumes:
              -  ./docker/postgres/data:/var/lib/postgresql/data
+             -  ./deployment/config/postgres/postgresql.conf:/var/lib/postgresql/data/postgresql.conf
         restart: always
         ports:
             - "${DB_HOST_PORT:-5432}:5432"
@@ -17,6 +18,7 @@ services:
             POSTGRES_DB: "${DB_DATABASE:-mgn}"
         networks:
             - mgn-network
+        command: ["postgres", "-c", "config_file=/var/lib/postgresql/data/postgresql.conf"]
 
     laravel:
         build:

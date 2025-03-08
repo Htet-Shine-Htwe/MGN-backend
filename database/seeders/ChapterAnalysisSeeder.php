@@ -14,14 +14,16 @@ class ChapterAnalysisSeeder extends Seeder
      */
     public function run(): void
     {
-        $mogouCount = Mogou::count();
         for ($k = 0; $k < 4; $k++) {
             $insert = [];
             for ($i = 1; $i <= 20000; $i++) {
                 $should_user_id = fake()->boolean(50);
+                $mogou = Mogou::inRandomOrder()->first();
+                $mogou_id = $mogou->id;
+                $sub_mogou_id = $mogou->subMogous($mogou->rotation_key)->inRandomOrder()->first()->id;
                 $insert[] = [
-                    'mogou_id' => rand(1,$mogouCount),
-                    'sub_mogou_id' => rand(1, 10),
+                    'mogou_id' => $mogou_id,
+                    'sub_mogou_id' => $sub_mogou_id,
                     'ip' =>  fake()->ipv4,
                     'date' => fake()->dateTimeBetween('2024-01-01', 'now')->format('Y-m-d H:i:s'),
                     'user_id' => $should_user_id ? config("control.test.users_count") : null,

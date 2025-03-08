@@ -1,4 +1,4 @@
-# Use PHP 8.1
+# Use PHP 8.2
 FROM php:8.2-fpm-alpine AS template
 
 ARG user=radian

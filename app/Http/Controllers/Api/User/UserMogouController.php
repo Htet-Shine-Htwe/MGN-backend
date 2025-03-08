@@ -126,12 +126,12 @@ class UserMogouController extends Controller
         try {
             DB::beginTransaction();
 
-            $mogou = Mogou::where('slug', $request->mogou)->firstOrFail();
+            $mogou = Mogou::where('id', $request->mogou)->firstOrFail();
             $chapter = $mogou->subMogous($mogou->rotation_key)
-                ->where('slug', $request->chapter)
+                ->where('id', $request->chapter)
                 ->firstOrFail();
 
-            $is = event(new ChapterViewed($chapter));
+            event(new ChapterViewed($chapter));
 
             DB::commit();
 

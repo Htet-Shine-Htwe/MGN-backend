@@ -16,7 +16,7 @@ class ContentGrowthRepo
 
     public function __construct(protected string $startDate, protected string $endDate) {}
 
-    public function mostChapterUploadedAdmins() : array
+    public function mostChapterUploadedAdmins(): array
     {
         $subMogou = new SubMogou();
         $tables = $subMogou->getCreatedPartitions();
@@ -40,10 +40,9 @@ class ContentGrowthRepo
                 'chapters' => $group->sum('total') // Sum all total counts for the same name
             ];
         })->values()->toArray();
-
     }
 
-    public function chapterUploadedBetweenTimePeriod() :array
+    public function chapterUploadedBetweenTimePeriod(): array
     {
         $subMogou = new SubMogou();
         $tables = $subMogou->getCreatedPartitions();
@@ -75,7 +74,7 @@ class ContentGrowthRepo
         return $finalData->take(4)->toArray();
     }
 
-    public function getContentByFavorites() : array
+    public function getContentByFavorites(): array
     {
         $favorite_id = UserFavorite::query()
             ->join('mogous', 'mogous.id', '=', 'user_favorites.mogou_id') // Join mogou table
@@ -89,26 +88,33 @@ class ContentGrowthRepo
         return $favorite_id;
     }
 
-    public function getMostViewedContents() : array
+    public function getMostViewedContents(): array
     {
         $thisWeekViews = ChapterAnalysis::query()
             ->whereBetween('date', [$this->startDate, $this->endDate])
-            ->select('sub_mogou_id','mogou_id', DB::raw('SUM(sub_mogou_id) as total_views'))
-            ->groupBy('sub_mogou_id','mogou_id')
+            ->select(
+                'sub_mogou_id',
+                'mogou_id',
+                DB::raw('SUM(sub_mogou_id) as total_views'),
+                DB::raw('SUM(CASE WHEN Date(date) = CURRENT_DATE THEN 1 ELSE 0 END) as today_views')
+            )
+            ->groupBy('sub_mogou_id', 'mogou_id')
             ->orderByDesc('total_views')
-            ->limit(10)->get()->toArray();
+            ->limit(15)
+            ->get()
+            ->toArray();
 
         foreach ($thisWeekViews as $key => $data) {
-            $subMogou =  MogouPartitionFind::getSubMogou("id", $data['mogou_id'])->where('id', $data['sub_mogou_id'])->firstOrFail();
+            $subMogou =  (new MogouPartitionFind)->getSubMogouInstance("id", $data['mogou_id'])
+            ->where("id", $data['sub_mogou_id'])
+            ->where("mogou_id", $data['mogou_id'])
+            ->select('title', 'mogou_id')
+            ->firstOrFail();
 
             $thisWeekViews[$key]['sub_mogou_title'] = $subMogou->title;
             $thisWeekViews[$key]['mogou_title'] = $subMogou->mogou->title;
-            $thisWeekViews[$key]['cover'] = $subMogou->mogou->cover;
-            $thisWeekViews[$key]['created_at'] = $subMogou->created_at;
         }
-
 
         return $thisWeekViews;
     }
-
 }

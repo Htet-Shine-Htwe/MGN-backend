@@ -69,4 +69,9 @@ class Subscription extends Model
     {
         return $this->hasMany(User::class, 'current_subscription_id');
     }
+
+    public function userSubscriptions()
+    {
+        return $this->hasMany(UserSubscription::class, 'subscription_id');
+    }
 }

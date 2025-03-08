@@ -14,6 +14,8 @@ return new class extends Migration
         Schema::create('application_configs', function (Blueprint $table) {
             $table->id();
             $table->string("title");
+            $table->integer("target_subscriptions")->default(100);
+            $table->integer("daily_traffic_target")->default(1000);
             $table->string("logo")->nullable();
             $table->string("water_mark")->nullable();
             $table->string("intro_a")->nullable();

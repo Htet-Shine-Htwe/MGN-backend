@@ -131,7 +131,7 @@ trait MogouScope
         return $query->when(
             $search,
             function (Builder $query) use ($search): Builder {
-                return $query->orWhere('title', 'like', $search . '%');
+                return $query->whereRaw('LOWER(title) LIKE ?', [strtolower($search) . '%']);
             }
         );
     }

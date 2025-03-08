@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\Admin;
 use App\Http\Controllers\Controller;
 use App\Repo\Admin\Dashboard\ContentGrowthRepo;
 use App\Repo\Admin\Dashboard\DashboardRepo;
+use App\Repo\Admin\Dashboard\RevenueGrowthRepo;
 use App\Repo\Admin\Dashboard\UserDashboardRepo;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -64,13 +65,11 @@ class DashboardController extends Controller
 
     public function chapterGrowthStats(Request $request) : JsonResponse
     {
-
-        // date: 2025-03-03T07:31:22.998Z
         $date = $request->date;
         $startDate = date('Y-m-01', strtotime($date));
         $endDate = date('Y-m-t', strtotime($date));
 
-        [$mostChapterUploadedAdmins,$chaptersByWeek,$getContentByFavorites] = Concurrency::run(
+        [$mostChapterUploadedAdmins,$chaptersByWeek,$getContentByFavorites,$mostViewContents] = Concurrency::run(
             [
                 fn() => (new ContentGrowthRepo($startDate,$endDate))->mostChapterUploadedAdmins(),
                 fn() => (new ContentGrowthRepo($startDate,$endDate))->chapterUploadedBetweenTimePeriod(),
@@ -84,9 +83,63 @@ class DashboardController extends Controller
                 'most_chapter_uploaded_admins' => $mostChapterUploadedAdmins,
                 'chapters_by_week' => $chaptersByWeek,
                 'content_by_favorites' => $getContentByFavorites,
+                'most_view_contents' => $mostViewContents,
+
+            ]
+        );
+    }
+
+    public function revenueGrowthStats(Request $request) : JsonResponse
+    {
+        $date = $request->date;
+        $startDate = date('Y-m-01', strtotime($date));
+        $endDate = date('Y-m-t', strtotime($date));
+
+        [$countBySubscriptions,$monthlySubscriptions,$revenueByDaysOfTheMonth] = Concurrency::run(
+            [
+                fn() => (new RevenueGrowthRepo($startDate,$endDate))->getCountBySubscriptions(),
+                fn() => (new RevenueGrowthRepo($startDate,$endDate))->getMonthlySubscriptions(),
+                fn() => (new RevenueGrowthRepo($startDate,$endDate))->getRevenueByDaysOfTheMonth(),
             ]
         );
 
+        return response()->json(
+            [
+                'count_by_subscriptions' => $countBySubscriptions,
+                'monthly_subscriptions' => $monthlySubscriptions,
+                'revenue_by_days_of_the_month' => $revenueByDaysOfTheMonth,
+            ]
+        );
+    }
 
+    public function dailyStats() : JsonResponse
+    {
+        $today = date('Y-m-d');
+        $tomorrow = date('Y-m-d', strtotime('+1 day', strtotime($today)));
+        $yesterday = date('Y-m-d', strtotime('-1 day', strtotime($today)));
+        [$subscriptions,$users,$traffics,$revenue,$trafficByChapters] = Concurrency::run(
+            [
+                fn() => (new DashboardRepo)->setDates($today,$tomorrow,$yesterday,$today)->subscriptions(),
+                fn() => (new DashboardRepo)->setDates($today,$tomorrow,$yesterday,$today)->users(),
+                fn() => (new DashboardRepo)->setDates($today,$tomorrow,$yesterday,$today)->traffic(),
+                fn() => (new DashboardRepo)->setDates($today,$tomorrow,$yesterday,$today)->revenue(),
+                fn() => (new DashboardRepo)->setDates($today,$tomorrow,$yesterday,$today)->trafficByChapters(),
+            ]
+        );
+
+        return response()->json(
+            [
+                'subscriptions' => $subscriptions,
+                'users' => $users,
+                'traffics' => $traffics,
+                'revenue' => $revenue,
+                'traffic_by_chapters' => $trafficByChapters,
+                'up_time' => fGetUptime(),
+                'time_zone' => date_default_timezone_get(),
+                'disk_space' => formatBytes(disk_total_space('/var/www/')),
+                'dis_space_used' => formatBytes(disk_total_space('/var/www') - disk_free_space('/var/www')),
+                'disk_percentage' => disk_total_space('/var/www') != 0 ? round((disk_free_space('/var/www') / disk_total_space('/var/www')) * 100, 2) : 0,
+            ]
+        );
     }
 }
