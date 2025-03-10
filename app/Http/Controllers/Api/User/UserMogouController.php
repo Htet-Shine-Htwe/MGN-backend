@@ -82,7 +82,7 @@ class UserMogouController extends Controller
 
     public function getChapter(Request $request): JsonResponse
     {
-        $mogou = Mogou::where('slug', $request->mogou)->firstOrFail();
+        $mogou = Mogou::select('id','rotation_key','title','slug','cover')->where('slug', $request->mogou)->firstOrFail();
 
         $currentChapter = $mogou->subMogous($mogou->rotation_key)
             ->where('slug', $request->chapter)
@@ -114,10 +114,10 @@ class UserMogouController extends Controller
 
         return response()->json([
             'current_chapter' => $currentChapter,
-            'previous_chapter' => $previousChapter,
+            'prev_chapter' => $previousChapter,
             'next_chapter' => $nextChapter,
             'all_chapters' => $allChapters,
-
+            'mogou' => $mogou,
         ]);
     }
 
