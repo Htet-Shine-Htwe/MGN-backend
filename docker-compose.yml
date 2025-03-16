@@ -11,11 +11,12 @@ services:
              -  ./deployment/config/postgres/postgresql.conf:/var/lib/postgresql/data/postgresql.conf
         restart: always
         ports:
-            - "${DB_HOST_PORT:-5432}:5432"
+            - "${DB_HOST_PORT:-5438}:5432"
         environment:
             POSTGRES_USER: "${DB_USER:-user}"
             POSTGRES_PASSWORD: "${DB_PASSWORD:-password}"
             POSTGRES_DB: "${DB_DATABASE:-mgn}"
+            PGDATA: /var/lib/postgresql/data
         networks:
             - mgn-network
         command: ["postgres", "-c", "config_file=/var/lib/postgresql/data/postgresql.conf"]

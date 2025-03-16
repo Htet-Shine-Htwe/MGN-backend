@@ -15,7 +15,7 @@ class RevenueGrowthRepo
     {
         $applicationConfig = (new CacheApplicationConfigService())->getApplicationConfig();
         return [
-            'target' => $applicationConfig->target_subscriptions,
+            'target' => $applicationConfig->monthly_subscriptions_target,
             'subscriptions' => UserSubscription::whereBetween('created_at', [$this->startDate, $this->endDate])->count(),
         ];
     }

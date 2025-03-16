@@ -14,7 +14,9 @@ class ApplicationConfig extends Model
     protected $fillable = [
         'title',
         'logo',
-        'target_subscriptions',
+        'daily_subscriptions_target',
+        'daily_traffic_target',
+        'monthly_subscriptions_target',
         'user_side_is_maintenance_mode',
         'water_mark',
         'intro_a',

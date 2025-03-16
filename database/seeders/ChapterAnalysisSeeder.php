@@ -16,7 +16,7 @@ class ChapterAnalysisSeeder extends Seeder
     {
         for ($k = 0; $k < 4; $k++) {
             $insert = [];
-            for ($i = 1; $i <= 20000; $i++) {
+            for ($i = 1; $i <= 30; $i++) {
                 $should_user_id = fake()->boolean(50);
                 $mogou = Mogou::inRandomOrder()->first();
                 $mogou_id = $mogou->id;

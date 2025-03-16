@@ -127,6 +127,8 @@ class DashboardController extends Controller
             ]
         );
 
+        $folder = "/";
+
         return response()->json(
             [
                 'subscriptions' => $subscriptions,
@@ -136,9 +138,9 @@ class DashboardController extends Controller
                 'traffic_by_chapters' => $trafficByChapters,
                 'up_time' => fGetUptime(),
                 'time_zone' => date_default_timezone_get(),
-                'disk_space' => formatBytes(disk_total_space('/var/www/')),
-                'disk_space_used' => formatBytes(disk_total_space('/var/www') - disk_free_space('/var/www')),
-                'disk_used_percentage' => ((disk_total_space('/var/www') - disk_free_space('/var/www')) / disk_total_space('/var/www')) * 100,
+                'disk_space' => formatBytes(disk_total_space($folder)),
+                'disk_space_used' => formatBytes(disk_total_space($folder) - disk_free_space($folder)),
+                'disk_used_percentage' => ((disk_total_space($folder) - disk_free_space($folder)) / disk_total_space($folder)) * 100,
             ]
         );
     }
