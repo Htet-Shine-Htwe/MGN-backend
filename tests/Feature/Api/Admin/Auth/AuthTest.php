@@ -9,7 +9,6 @@ uses()->group('admin','api','admin-auth');
 uses(UserAuthenticated::class);
 
 test('admin login route exists', function () {
-    // check if the route exists in Route
     $this->assertTrue(Route::has('api.admin.login'));
 
 });

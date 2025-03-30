@@ -5,6 +5,7 @@ return [
         'users_count' => 180,
         'mogous_count' => 50,
         'categories_count' => 22,
+        'chapter_analysis_count' => 120,
     ],
     'mongou_storage' => "local",
 

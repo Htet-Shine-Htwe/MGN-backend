@@ -32,13 +32,13 @@ class ApplicationConfig extends Model
     public function getLogoAttribute(string $value): string
     {
 
-        return $this->getMedia($value,'public/config');
+        return $this->getMedia($value,'config');
     }
 
     public function getWaterMarkAttribute(?string $value): string
     {
         if($value){
-            return $this->getMedia($value,'public/config');
+            return $this->getMedia($value,'config');
         }
         return '';
     }
@@ -46,14 +46,14 @@ class ApplicationConfig extends Model
     public function getIntroAAttribute(?string $value): string
     {
         if($value){
-            return $this->getMedia($value,'public/config');
+            return $this->getMedia($value,'config');
         }
         return '';
     }
     public function getOutroAAttribute(?string $value): string
     {
         if($value){
-            return $this->getMedia($value,'public/config');
+            return $this->getMedia($value,'config');
         }
         return '';
     }
@@ -61,7 +61,7 @@ class ApplicationConfig extends Model
     public function getIntroBAttribute(?string $value): string
     {
         if($value){
-            return $this->getMedia($value,'public/config');
+            return $this->getMedia($value,'config');
         }
         return '';
     }
@@ -69,7 +69,7 @@ class ApplicationConfig extends Model
     public function getOutroBAttribute(?string $value): string
     {
         if($value){
-            return $this->getMedia($value,'public/config');
+            return $this->getMedia($value,'config');
         }
         return '';
     }

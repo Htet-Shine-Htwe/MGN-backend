@@ -28,9 +28,10 @@ class ApplicationConfigUploadRepo
             if ($request->hasFile($property)) {
                 $this->handleFileUpload($app, $request, $property);
             }
+
         }
 
-        $app->fill($request->only('title','daily_subscriptions_target','daily_traffic_target','monthly_subscriptions_target'));
+        $app->fill($request->only('title','daily_subscriptions_target','daily_traffic_target','monthly_subscriptions_target','user_side_is_maintenance_mode'));
         $app->save();
 
         return $app;

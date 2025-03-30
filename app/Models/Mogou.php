@@ -81,7 +81,7 @@ class Mogou extends Model
     protected function getCoverAttribute(string $value): string
     {
 
-        return $this->getMedia($value, 'public/mogou/cover');
+        return $this->getMedia($value, 'mogou/cover');
     }
 
     protected function getMogouTypeNameAttribute(): string

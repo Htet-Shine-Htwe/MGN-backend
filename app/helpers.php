@@ -62,7 +62,8 @@ if (!function_exists("enumValue")) {
 
 
 if(!function_exists("fGetUptime")){
-    function fGetUptime( ){
+    function fGetUptime( ) :string
+    {
         $uptime = '';
 
         if(is_readable('/proc/uptime')){
@@ -84,7 +85,7 @@ if(!function_exists("fGetUptime")){
 }
 
 if(!function_exists('formatBytes')){
-    function formatBytes($bytes)
+    function formatBytes(int|float $bytes)  : string
 {
     $units = ['B','KB','MB','GB','TB','PB'];
     $i = 0;

@@ -163,20 +163,7 @@ Route::middleware(['auth:sanctum'])
 
 
 
-function fGetNumCPUs( ){
-    $NumCPUs = 1; // Default 1 cpu
-
-    if(is_file('/proc/cpuinfo')) {
-        $cpuinfo = file_get_contents('/proc/cpuinfo');
-        preg_match_all('/^processor/m', $cpuinfo, $matches);
-        $NumCPUs = count($matches[0]);
-    }
-
-    return $NumCPUs;
-}
-
 Route::get("/test",function(){
     // dd((new App\Repo\Admin\Dashboard\RevenueGrowthRepo('2025-02-01','2025-02-28'))->getRevenueByDaysOfTheMonth());
     dd((new App\Repo\Admin\Dashboard\DashboardRepo())->trafficByChapters());
-    dd(fGetNumCPUs());
 });

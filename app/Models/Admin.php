@@ -83,9 +83,9 @@ class Admin extends Authenticatable
         return array_values(array_unique($firstRole->permissions->pluck('name')->toArray()));
     }
 
-    public function getLastAccessedAtAttribute(DateTime|null $value): string
+    public function getLastAccessedAtAttribute(string|null $value): string
     {
-        return !is_null($value) ? $value->format('Y-m-d H:i:s') : '';
+        return !is_null($value) ? (new DateTime($value))->format('Y-m-d H:i:s') : '';
     }
 
 

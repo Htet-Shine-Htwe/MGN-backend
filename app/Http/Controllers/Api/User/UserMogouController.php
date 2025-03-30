@@ -6,9 +6,11 @@ use App\Events\ChapterViewed;
 use App\Http\Controllers\Controller;
 use App\Models\Mogou;
 use App\Repo\Admin\SubMogouRepo\SubMogouImageRepo;
+use App\Services\ApplicationConfig\CacheApplicationConfigService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class UserMogouController extends Controller
 {
@@ -88,7 +90,28 @@ class UserMogouController extends Controller
             ->where('slug', $request->chapter)
             ->firstOrFail();
 
+        $applicationConfig = (new CacheApplicationConfigService)->getApplicationConfig();
+
         $currentChapter['images'] = (new SubMogouImageRepo)->getImages($currentChapter,$mogou->rotation_key)->get();
+        
+        $intro = [
+            "id" => Str::uuid(),
+            "path" => $applicationConfig->intro_a,
+            "sub_mogou_id" => $currentChapter->id,
+            "mogou_id" => $mogou->id,
+            "position" => 0
+        ];
+
+        $outro = [
+            "id" => Str::uuid(),
+            "path" => $applicationConfig->outro_a,
+            "sub_mogou_id" => $currentChapter->id,
+            "mogou_id" => $mogou->id,
+            "position" => $currentChapter['images']?->last()?->position . "z"
+        ];
+
+        $currentChapter['images']->prepend($intro);
+        $currentChapter['images']->push($outro);
 
         $allChapters = $mogou->subMogous($mogou->rotation_key)
             ->select("id","title","slug","chapter_number")
