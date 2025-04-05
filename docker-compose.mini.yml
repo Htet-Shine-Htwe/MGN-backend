@@ -1,0 +1,48 @@
+services:
+    laravel:
+          image: test_build-api:latest
+          container_name: mgn-app
+          restart: always
+          tty: true
+          volumes:
+              - .:/var/www/mgn
+          ports:
+              - "${LARAVEL_PORT:-9001}:80"
+          networks:
+              - mgn-network
+
+    nginx:
+        image: nginx:alpine
+        container_name: mgn-nginx
+        restart: unless-stopped
+        tty: true
+        ports:
+            - "${NGINX_PORT:-7777}:80"
+        volumes:
+            - ./deployment/config/nginx/default.conf:/etc/nginx/conf.d/default.conf
+            - .:/var/www/mgn
+        depends_on:
+            - laravel
+        networks:
+            - mgn-network
+
+    supervisor:
+        image: test_build-worker:latest
+        container_name: mgn-supervisor
+        restart: always
+        command: ["/usr/bin/supervisord", "-n", "-c", "/etc/supervisor/supervisord.conf"]
+        volumes:
+            - .:/var/www/mgn
+            - ./deployment/config/supervisor:/etc/supervisor/conf.d
+        networks:
+            - mgn-network
+        depends_on:
+            - laravel
+
+volumes:
+    db_data:
+        driver: local
+
+networks:
+    mgn-network:
+        driver: bridge
