@@ -20,6 +20,8 @@ use App\Http\Controllers\Api\Admins\AdminManagementController;
 use App\Http\Controllers\TestController;
 use App\Services\BotPublisher\GetBotServices;
 use Illuminate\Support\Facades\Route;
+use MohsenAbrishami\Stethoscope\Services\MonitorService;
+
 
 Route::middleware(['auth:sanctum'])
 ->prefix('admin')
@@ -36,6 +38,8 @@ Route::middleware(['auth:sanctum'])
         Route::get('/dashboard/stats','stats')->name('dashboard.stats');
         Route::get('/dashboard/user-growth','userGrowthStats')->name('dashboard.user.userGrowth');
         Route::get('/dashboard/chapter-growth','chapterGrowthStats')->name('dashboard.user.chapterGrowth');
+        Route::get('/dashboard/revenue-growth','revenueGrowthStats')->name('dashboard.user.revenueGrowth');
+        Route::get('/dashboard/daily-stats','dailyStats')->name('dashboard.user.dailyStats');
     });
 
     Route::controller(AdminManagementController::class)->group(function(){
@@ -158,6 +162,8 @@ Route::middleware(['auth:sanctum'])
 });
 
 
+
 Route::get("/test",function(){
-    dd((new App\Repo\Admin\Dashboard\ContentGrowthRepo('2025-02-01','2025-03-05'))->getMostViewedContents());
+    // dd((new App\Repo\Admin\Dashboard\RevenueGrowthRepo('2025-02-01','2025-02-28'))->getRevenueByDaysOfTheMonth());
+    dd((new App\Repo\Admin\Dashboard\DashboardRepo())->trafficByChapters());
 });

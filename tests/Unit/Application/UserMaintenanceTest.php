@@ -2,6 +2,7 @@
 
 use App\Http\Middleware\UserMaintenanceModeMiddleware;
 use App\Models\ApplicationConfig;
+use App\Services\ApplicationConfig\CacheApplicationConfigService;
 use Database\Seeders\AdminPermissionSeeder;
 use Illuminate\Support\Facades\Route;
 use Tests\Support\UserAuthenticated;
@@ -47,11 +48,11 @@ it("make sure redis cache is working with maintenance mode", function () {
     $response->assertJson(['message' => 'The application is in maintenance mode. Please try again later.']);
 
    $this->authenticatedAdmin()->post(route("api.admin.application-configs.update"), [
-        'user_side_is_maintenance_mode' => false,
+        'user_side_is_maintenance_mode' => 0,
     ]);
 
     $response = $this->get('/test-route');
 
     $response->assertStatus(200);
     $response->assertJson(['message' => 'Success']);
-});
+})->group("debug");

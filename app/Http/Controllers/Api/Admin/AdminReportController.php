@@ -37,7 +37,9 @@ class AdminReportController extends Controller
         $this->rir->updateStatus($request, $id);
         return response()->json(
             [
-                'message' => 'Report status updated successfully'
+                'message' => 'Report status updated successfully',
+                'id' => $id,
+                'status' => $request->status
             ]
         );
     }

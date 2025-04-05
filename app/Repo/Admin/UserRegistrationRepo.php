@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Models\UserSubscription;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 /**
  * Class UserRegistrationRepo
@@ -27,12 +28,20 @@ class UserRegistrationRepo
      * @param UserRegistrationRequest $request
      * @return User
      */
-    public static function registerUser(UserRegistrationRequest $request) :User
+    public static function registerUser(UserRegistrationRequest $request): User
     {
-
-        $data =  $request->validated();
-        $data = self::mutateDataSubscription($data);
-        return User::create($data);
+        return DB::transaction(function () use ($request) {
+            $data =  $request->validated();
+            $data = self::mutateDataSubscription($data);
+            $user = User::create($data);
+            UserSubscription::create(
+                [
+                    'user_id' => $user->id,
+                    'subscription_id' => $data['current_subscription_id'],
+                ]
+            );
+            return $user;
+        });
     }
 
     /**
@@ -45,12 +54,12 @@ class UserRegistrationRepo
     {
 
         return User::search($request->search)
-        ->expiredSubscription($request->expired)
-        ->filterSubscription()
-        ->filterActiveUser($request->active)
-        ->orderBy($request->order_by ?? 'id', $request->order ?? 'desc')
-        ->paginate($request->limit ?? 10)
-        ->withQueryString();
+            ->expiredSubscription($request->expired)
+            ->filterSubscription()
+            ->filterActiveUser($request->active)
+            ->orderBy($request->order_by ?? 'id', $request->order ?? 'desc')
+            ->paginate($request->limit ?? 10)
+            ->withQueryString();
     }
 
     /**
@@ -60,7 +69,7 @@ class UserRegistrationRepo
      * @param  string $value
      * @return User
      */
-    public function show(string $haystack,string $value): User
+    public function show(string $haystack, string $value): User
     {
         return User::where($haystack, $value)->firstOrFail();
     }
@@ -72,13 +81,13 @@ class UserRegistrationRepo
      * @param  string $id
      * @return User
      */
-    public function updateUser(UserRegistrationRequest $request,string $id) :User
+    public function updateUser(UserRegistrationRequest $request, string $id): User
     {
         $data = $request->all();
 
         isset($data['password']) ? $data['password'] = bcrypt($data['password']) : null;
 
-        if($data['password'] == null) {
+        if ($data['password'] == null) {
             unset($data['password']);
         }
 
@@ -98,7 +107,7 @@ class UserRegistrationRepo
      */
     protected static function mutateDataSubscription(mixed $data): mixed
     {
-        if(isset($data['current_subscription_id'])) {
+        if (isset($data['current_subscription_id'])) {
             $end_date = Subscription::where('id', $data['current_subscription_id'])->first()->duration;
 
             $data['subscription_end_date'] = now()->addDays($end_date);
@@ -113,21 +122,20 @@ class UserRegistrationRepo
      * @param  User $user
      * @return mixed
      */
-    public static function updateDataSubscription(mixed $data,User $user): mixed
+    public static function updateDataSubscription(mixed $data, User $user): mixed
     {
 
-        if(isset($data['current_subscription_id'])) {
+        if (isset($data['current_subscription_id'])) {
             $end_date = Subscription::where('id', $data['current_subscription_id'])->first()->duration;
 
-            if($end_date == 0)
-            {
+            if ($end_date == 0) {
                 $end_date = 2500;
             }
 
             UserSubscription::create(
                 [
-                'user_id' => $user->id,
-                'subscription_id' => $data['current_subscription_id'],
+                    'user_id' => $user->id,
+                    'subscription_id' => $data['current_subscription_id'],
                 ]
             );
 
@@ -135,8 +143,5 @@ class UserRegistrationRepo
         }
 
         return $data;
-
     }
-
-
 }

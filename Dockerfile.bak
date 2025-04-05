@@ -5,69 +5,60 @@ ARG user=radian
 ARG uid=1000
 
 # Install common PHP extension dependencies
-RUN apk add --no-cache \
-        autoconf \
-        bash \
-        bash-completion \
-        bzip2 \
-        curl \
-        freetype-dev \
-        gcc \
-        g++ \
+RUN apk update && apk add \
         git \
-        imagemagick \
-        imagemagick-dev \
+        bash \
+        freetype-dev \
+        libpng-dev \
         jpeg-dev \
         libjpeg-turbo-dev \
-        libpng-dev \
-        libpq-dev \
-        libtool \
+        zlib \
         libzip-dev \
-        linux-headers \
-        make \
+        libpq-dev \
+        unzip \
+        imagemagick \
         oniguruma \
         oniguruma-dev \
-        openssl \
-        supervisor \
-        unzip \
+        imagemagick-dev \
+        libtool \
         wget \
-        zlib-dev
+        curl \
+        supervisor \
+        linux-headers \
+        autoconf \
+        gcc \
+        g++ \
+        make && \
+        rm -rf /var/lib/apt/lists/*
 
 # Install PHP extensions
-RUN docker-php-ext-configure gd --with-freetype --with-jpeg && \
-    docker-php-ext-install -j$(nproc) \
-        bcmath \
-        exif \
-        gd \
-        mbstring \
-        opcache \
-        pcntl \
-        pdo \
-        pdo_pgsql \
-        sockets \
-        zip && \
+RUN docker-php-ext-install pdo pdo_pgsql && \
+    docker-php-ext-configure gd --with-freetype --with-jpeg && \
+    docker-php-ext-install -j$(nproc) mbstring exif pcntl bcmath zip gd opcache sockets && \
     pecl install imagick && \
-    docker-php-ext-enable imagick sockets
+    docker-php-ext-enable imagick && \
+    docker-php-ext-enable sockets
 
 # Set the working directory
 WORKDIR /var/www/mgn
 
 # Copy composer
-COPY --from=composer:2.6 /usr/bin/composer /usr/bin/composer
+COPY --from=composer /usr/bin/composer /usr/bin/composer
 
 # Copy source code
 COPY --chown=$user:$user . /var/www/mgn
 
 # Install composer dependencies
-RUN --mount=type=cache,target=/tmp/cache \
-    composer install --prefer-dist --optimize-autoloader --no-interaction && \
+RUN composer install --prefer-dist --optimize-autoloader --no-interaction && \
     composer dump-autoload --optimize
 
 # Add user and set permission
+
 RUN addgroup -S $user && adduser -S $user -G www-data && \
     mkdir -p /etc/supervisor /var/log/supervisor && \
     chown -R $user:www-data /usr/local/var/log /etc/supervisor /var/log/supervisor && \
     chmod -R 775 /var/www/mgn/storage /usr/local/var/log /etc/supervisor /var/log/supervisor
+
 
 # Copy custom PHP-FPM configuration
 COPY deployment/config/fpm/custom-php-fpm.conf /usr/local/etc/php-fpm.d/
@@ -75,7 +66,8 @@ COPY deployment/config/php/php.ini /usr/local/etc/php/php.ini
 
 # Copy entrypoint script and ensure it's executable
 COPY ./deployment/entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh
+RUN chmod +x ./deployment/entrypoint.sh
+
 
 FROM template AS api
 

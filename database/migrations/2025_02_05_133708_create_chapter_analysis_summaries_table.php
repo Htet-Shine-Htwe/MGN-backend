@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('chapter_analysis_summaries', function (Blueprint $table) {
             $table->id();
             $table->foreignId('sub_mogou_id');
-            $table->foreignId('mogou_id')->constrained()->onDelete('cascade');
+            $table->foreignId('mogou_id');
             $table->unsignedInteger("total_views")->default(0);
             $table->dateTime("start_date");
             $table->dateTime("end_date");

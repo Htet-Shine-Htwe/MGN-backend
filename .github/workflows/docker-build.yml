@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - docker-master
-      # - development
+      - development
 
 jobs:
   build-and-push:
@@ -36,7 +36,7 @@ jobs:
         with:
           context: .
           push: true
-          platforms: linux/amd64,linux/arm64
+          platforms: linux/amd64
           target: ${{ matrix.image.target }}
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ matrix.image.tag }}:latest
           build-args: |

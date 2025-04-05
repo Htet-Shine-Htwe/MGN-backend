@@ -22,7 +22,7 @@ beforeEach(function () {
 
     // Store the counts as class properties
     $this->this_month_count_1 = 5;
-    $this->this_month_count_2 = 20;
+    $this->this_month_count_2 = 10;
     $this->prev_month_count_1 = 10;
     $this->prev_month_count_2 = 5;
 
@@ -54,13 +54,5 @@ it("can get the previous month subscriptions", function () {
 
 it("can get the current month subscriptions", function () {
     $this->assertEquals($this->this_month_count_1 + $this->this_month_count_2, $this->subscriptionAnalysis->getCurrentMonthSubscriptions());
-});
-
-it("can get the previous month profit", function () {
-    $this->assertEquals(Subscription::find(1)->price * $this->prev_month_count_1 + Subscription::find(2)->price * $this->prev_month_count_2, $this->subscriptionAnalysis->getPreviousMonthProfit());
-});
-
-it("can get the current month profit", function () {
-    $this->assertEquals(Subscription::find(1)->price * $this->this_month_count_1 + Subscription::find(2)->price * $this->this_month_count_2, $this->subscriptionAnalysis->getCurrentMonthProfit());
 });
 

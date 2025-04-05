@@ -59,3 +59,40 @@ if (!function_exists("enumValue")) {
         return ($enum instanceof \BackedEnum ? $enum->value : $enum);
     }
 }
+
+
+if(!function_exists("fGetUptime")){
+    function fGetUptime( ) :string
+    {
+        $uptime = '';
+
+        if(is_readable('/proc/uptime')){
+            $str   = @file_get_contents('/proc/uptime');
+            $num   = floatval($str);
+            $secs  = $num % 60;
+            $num   = (int)($num / 60);
+            $mins  = $num % 60;
+            $num   = (int)($num / 60);
+            $hours = $num % 24;
+            $num   = (int)($num / 24);
+            $days  = $num;
+
+            $uptime = $days.' days, '.$hours.' hours & '.$mins.' minutes';
+            } // /is_readable('/proc/uptime')
+
+        return $uptime;
+    }
+}
+
+if(!function_exists('formatBytes')){
+    function formatBytes(int|float $bytes)  : string
+{
+    $units = ['B','KB','MB','GB','TB','PB'];
+    $i = 0;
+    while ($bytes >= 1024 && $i < count($units) - 1) {
+        $bytes /= 1024;
+        $i++;
+    }
+    return round($bytes, 2).' '.$units[$i];
+}
+}

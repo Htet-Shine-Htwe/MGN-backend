@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "942fae1ae20a73a6b4b357cfe3cdb2f3",
+    "content-hash": "7416ee98ee754f44fbcca16b2828df56",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -3869,6 +3869,71 @@
                 }
             ],
             "time": "2024-12-10T15:32:06+00:00"
+        },
+        {
+            "name": "mohsenabrishami/stethoscope",
+            "version": "2.7.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/MohsenAbrishami/stethoscope.git",
+                "reference": "079b272483c8d457bacf91544b92ffe0dc342043"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/MohsenAbrishami/stethoscope/zipball/079b272483c8d457bacf91544b92ffe0dc342043",
+                "reference": "079b272483c8d457bacf91544b92ffe0dc342043",
+                "shasum": ""
+            },
+            "require": {
+                "guzzlehttp/guzzle": "^7.5",
+                "php": "^8.0"
+            },
+            "require-dev": {
+                "orchestra/testbench": "^7.11",
+                "phpunit/phpunit": "^9.5"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "MohsenAbrishami\\Stethoscope\\StethoscopeServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "MohsenAbrishami\\Stethoscope\\": "src/",
+                    "MohsenAbrishami\\Stethoscope\\Database\\Factories\\": "database/factories/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Mohsen Abrishami",
+                    "email": "mohsenabrishami.ma@gmail.com"
+                }
+            ],
+            "description": "laravel server monitoring",
+            "homepage": "https://github.com/MohsenAbrishami/stethoscope",
+            "keywords": [
+                "laravel",
+                "server monitoring",
+                "stethoscope"
+            ],
+            "support": {
+                "issues": "https://github.com/MohsenAbrishami/stethoscope/issues",
+                "source": "https://github.com/MohsenAbrishami/stethoscope/tree/2.7.2"
+            },
+            "funding": [
+                {
+                    "url": "https://www.buymeacoffee.com/abrishami",
+                    "type": "custom"
+                }
+            ],
+            "time": "2024-06-01T06:02:21+00:00"
         },
         {
             "name": "monolog/monolog",

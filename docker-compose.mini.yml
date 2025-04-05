@@ -1,23 +1,4 @@
 services:
-    db:
-        image: postgres:15
-        deploy:
-            placement:
-                constraints:
-                    - "node.labels.db == true"
-        container_name: mgn-db
-        volumes:
-             -  ./docker/postgres/data:/var/lib/postgresql/data
-        restart: always
-        ports:
-            - "${DB_HOST_PORT:-5432}:5432"
-        environment:
-            POSTGRES_USER: "${DB_USER:-user}"
-            POSTGRES_PASSWORD: "${DB_PASSWORD:-password}"
-            POSTGRES_DB: "${DB_DATABASE:-mgn}"
-        networks:
-            - mgn-network
-
     laravel:
           image: test_build-api:latest
           container_name: mgn-app
@@ -29,10 +10,6 @@ services:
               - "${LARAVEL_PORT:-9001}:80"
           networks:
               - mgn-network
-
-          depends_on:
-              - db
-              - redis
 
     nginx:
         image: nginx:alpine
@@ -49,21 +26,6 @@ services:
         networks:
             - mgn-network
 
-    redis:
-        image: redis:alpine
-        container_name: mgn-redis
-        deploy:
-            placement:
-                constraints:
-                    - "node.labels.db == true"
-        restart: always
-        volumes:
-            - ./docker/redisdata:/data
-        ports:
-            - "${REDIS_HOST_PORT:-6378}:6379"
-        networks:
-            - mgn-network
-
     supervisor:
         image: test_build-worker:latest
         container_name: mgn-supervisor
@@ -76,8 +38,6 @@ services:
             - mgn-network
         depends_on:
             - laravel
-            - db
-            - redis
 
 volumes:
     db_data:

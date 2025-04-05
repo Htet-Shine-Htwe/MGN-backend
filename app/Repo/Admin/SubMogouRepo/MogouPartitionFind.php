@@ -12,6 +12,19 @@ class MogouPartitionFind
 
     public static string $rotation_key;
 
+    public function getSubMogouInstance(string $key="id",string $value =null): SubMogou
+    {
+        $mogou = (new Mogou)->where($key, $value)->firstOrFail();
+
+        $sub_mogou = new SubMogou();
+        $table = $sub_mogou->getPartition($mogou->rotation_key);
+
+        $sub_mogou->setTable($table);
+
+        $sub_mogou->setKeyName('id');
+        return $sub_mogou;
+    }
+
     public static function getSubMogou(string $key="id",string $value =null): SubMogou
     {
         self::$parentMogou = Mogou::where($key, $value)->firstOrFail();

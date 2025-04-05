@@ -5,6 +5,7 @@ namespace App\Scope;
 use App\Enum\MogouFinishStatus;
 use App\Enum\MogouTypeEnum;
 use App\Models\Mogou;
+use App\Services\Mogou\MogouService;
 use Illuminate\Database\Eloquent\Builder;
 
 trait MogouScope
@@ -131,7 +132,7 @@ trait MogouScope
         return $query->when(
             $search,
             function (Builder $query) use ($search): Builder {
-                return $query->orWhere('title', 'like', $search . '%');
+                return $query->whereRaw('LOWER(title) LIKE ?', [strtolower($search) . '%']);
             }
         );
     }
@@ -234,5 +235,30 @@ trait MogouScope
             // return $builder->order_by("total_chapters",$chapters_count_order);
             return $builder->orderBy("total_chapters", $chapters_count_order);
         });
+    }
+    
+    /**
+     * scopeBySorting
+     *
+     * @param  Builder<Mogou> $query
+     * @return Builder<Mogou>
+     */
+    public function scopeBySorting(Builder $query): Builder
+    {
+        $orderBy = request('order_by');
+        $orderByDirection = request('order_by_direction', 'desc');
+
+        if ($orderBy == 'popular') {
+            $popularIds = (new MogouService())->getMogouByPopularity();
+            return $query->whereIn('id', $popularIds);
+        }
+
+        $sortColumn = match ($orderBy) {
+            'rating' => 'rating',
+            'latest' => 'created_at',
+            default => 'created_at',
+        };
+
+        return $query->orderBy($sortColumn, $orderByDirection);
     }
 }

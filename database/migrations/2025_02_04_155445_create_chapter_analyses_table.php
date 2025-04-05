@@ -12,11 +12,18 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('chapter_analyses', function (Blueprint $table) {
-            $table->foreignId('sub_mogou_id');
-            $table->foreignId('mogou_id')->constrained()->onDelete('cascade');
+
+            if(config('database.default') == 'sqlite') {
+                $table->unsignedBigInteger('sub_mogou_id');
+                $table->unsignedBigInteger('mogou_id');
+            }else{
+                $table->foreignId('sub_mogou_id');
+                $table->foreignId('mogou_id')->constrained()->onDelete('cascade');
+            }
+           
             $table->ipAddress('ip');
             $table->dateTime('date');
-            $table->foreignId('user_id')->nullable()->constrained()->onDelete('cascade');
+            $table->foreignId('user_id')->nullable();
             $table->index(['sub_mogou_id', 'mogou_id']);
         });
     }

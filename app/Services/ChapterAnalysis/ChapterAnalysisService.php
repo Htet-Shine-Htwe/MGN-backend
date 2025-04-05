@@ -23,6 +23,9 @@ class ChapterAnalysisService
         }
 
         $subMogou->increment('views');
+
+        $subMogou->save();
+
         $this->cacheChapterView($cacheKey);
         $this->createChapterAnalysisRecord($subMogou->id, $subMogou->mogou_id, $ip);
 

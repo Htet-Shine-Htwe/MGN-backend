@@ -6,9 +6,11 @@ use App\Events\ChapterViewed;
 use App\Http\Controllers\Controller;
 use App\Models\Mogou;
 use App\Repo\Admin\SubMogouRepo\SubMogouImageRepo;
+use App\Services\ApplicationConfig\CacheApplicationConfigService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class UserMogouController extends Controller
 {
@@ -82,13 +84,34 @@ class UserMogouController extends Controller
 
     public function getChapter(Request $request): JsonResponse
     {
-        $mogou = Mogou::where('slug', $request->mogou)->firstOrFail();
+        $mogou = Mogou::select('id','rotation_key','title','slug','cover')->where('slug', $request->mogou)->firstOrFail();
 
         $currentChapter = $mogou->subMogous($mogou->rotation_key)
             ->where('slug', $request->chapter)
             ->firstOrFail();
 
+        $applicationConfig = (new CacheApplicationConfigService)->getApplicationConfig();
+
         $currentChapter['images'] = (new SubMogouImageRepo)->getImages($currentChapter,$mogou->rotation_key)->get();
+        
+        $intro = [
+            "id" => Str::uuid(),
+            "path" => $applicationConfig->intro_a,
+            "sub_mogou_id" => $currentChapter->id,
+            "mogou_id" => $mogou->id,
+            "position" => 0
+        ];
+
+        $outro = [
+            "id" => Str::uuid(),
+            "path" => $applicationConfig->outro_a,
+            "sub_mogou_id" => $currentChapter->id,
+            "mogou_id" => $mogou->id,
+            "position" => $currentChapter['images']?->last()?->position . "z"
+        ];
+
+        $currentChapter['images']->prepend($intro);
+        $currentChapter['images']->push($outro);
 
         $allChapters = $mogou->subMogous($mogou->rotation_key)
             ->select("id","title","slug","chapter_number")
@@ -114,10 +137,10 @@ class UserMogouController extends Controller
 
         return response()->json([
             'current_chapter' => $currentChapter,
-            'previous_chapter' => $previousChapter,
+            'prev_chapter' => $previousChapter,
             'next_chapter' => $nextChapter,
             'all_chapters' => $allChapters,
-
+            'mogou' => $mogou,
         ]);
     }
 
@@ -126,12 +149,12 @@ class UserMogouController extends Controller
         try {
             DB::beginTransaction();
 
-            $mogou = Mogou::where('slug', $request->mogou)->firstOrFail();
+            $mogou = Mogou::where('id', $request->mogou)->firstOrFail();
             $chapter = $mogou->subMogous($mogou->rotation_key)
-                ->where('slug', $request->chapter)
+                ->where('id', $request->chapter)
                 ->firstOrFail();
 
-            $is = event(new ChapterViewed($chapter));
+            event(new ChapterViewed($chapter));
 
             DB::commit();
 
