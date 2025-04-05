@@ -1,15 +1,24 @@
 services:
     laravel:
-          image: test_build-api:latest
-          container_name: mgn-app
-          restart: always
-          tty: true
-          volumes:
-              - .:/var/www/mgn
-          ports:
-              - "${LARAVEL_PORT:-9001}:80"
-          networks:
-              - mgn-network
+        build:
+            context: .
+            dockerfile: Dockerfile
+            target: api
+            args:
+                - user=radian
+                - uid=1000
+        container_name: mgn-app
+        restart: always
+        tty: true
+        volumes:
+            - .:/var/www/mgn
+        ports:
+            - "${LARAVEL_PORT:-9001}:80"
+        networks:
+            - mgn-network
+
+        depends_on:
+            - redis
 
     nginx:
         image: nginx:alpine
@@ -27,7 +36,10 @@ services:
             - mgn-network
 
     supervisor:
-        image: test_build-worker:latest
+        build:
+            context: .
+            dockerfile: Dockerfile
+            target: worker
         container_name: mgn-supervisor
         restart: always
         command: ["/usr/bin/supervisord", "-n", "-c", "/etc/supervisor/supervisord.conf"]
