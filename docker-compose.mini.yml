@@ -17,9 +17,6 @@ services:
         networks:
             - mgn-network
 
-        depends_on:
-            - redis
-
     nginx:
         image: nginx:alpine
         container_name: mgn-nginx
