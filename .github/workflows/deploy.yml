@@ -85,6 +85,7 @@ jobs:
               ssh -o StrictHostKeyChecking=no ${{ secrets.SU }}@${{ secrets.SH }} << 'EOF'
                 cd ${{ secrets.APP_PATH }}
                 git pull origin master
+                make d-app
                 composer install --no-interaction --prefer-dist --optimize-autoloader
                 php artisan migrate --force
                 php artisan config:cache
