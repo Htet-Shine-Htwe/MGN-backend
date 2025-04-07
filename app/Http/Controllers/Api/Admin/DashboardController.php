@@ -127,7 +127,7 @@ class DashboardController extends Controller
             ]
         );
 
-        $folder = "/";
+        $folder = env('FILESYSTEM_DISK') == "local" ? env("STORAGE_VOLUME_PATH","/") : '/';
 
         return response()->json(
             [

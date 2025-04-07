@@ -27,6 +27,7 @@ class FilterPageController extends Controller
                     'id',
                     'title',
                     'slug',
+                    'description',
                     'chapter_number',
                     'created_at',
                     'subscription_only',

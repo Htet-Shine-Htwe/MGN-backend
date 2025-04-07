@@ -98,13 +98,14 @@ class HomePageController extends Controller
                 $subMogou = $mogou->subMogous($key)->select(
                     'id',
                     'title',
+                    'description',
                     'slug',
                     'chapter_number',
                     'created_at',
                     'subscription_only',
                     'third_party_url',
                     'third_party_redirect'
-                )->latest('chapter_number')->limit(2)->get();
+                )->latest('chapter_number')->limit(3)->get();
 
                 $mogou->setRelation('subMogous', $subMogou);
             }
