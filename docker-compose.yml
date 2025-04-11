@@ -9,7 +9,6 @@ services:
         volumes:
              -  ./docker/postgres/data:/var/lib/postgresql/data
              -  ./deployment/config/postgres/postgresql.conf:/var/lib/postgresql/postgresql.conf
-        restart: always
         ports:
             - "${DB_HOST_PORT:-5438}:5432"
         environment:
@@ -30,7 +29,6 @@ services:
                 - user=radian
                 - uid=1000
         container_name: mgn-app
-        restart: always
         tty: true
         volumes:
             - .:/var/www/mgn
@@ -65,7 +63,6 @@ services:
             placement:
                 constraints:
                     - "node.labels.db == true"
-        restart: always
         volumes:
             - ./docker/redisdata:/data
         ports:
@@ -79,7 +76,6 @@ services:
             dockerfile: Dockerfile
             target: worker
         container_name: mgn-supervisor
-        restart: always
         command: ["/usr/bin/supervisord", "-n", "-c", "/etc/supervisor/supervisord.conf"]
         volumes:
             - .:/var/www/mgn

@@ -38,6 +38,17 @@ class SocialInfoRepo
     {
         return $this->model->where('type', SocialInfoType::Banner->value)->get();
     }
+    
+    /**
+     * getSocialInfoByType
+     *
+     * @param string $type
+     * @return Collection<int,SocialInfo>
+     */
+    public function getSocialInfoByType(string $type): Collection
+    {
+        return $this->model->where('type', $type)->latest()->get();
+    }
 
     public function create(array $data): SocialInfo
     {

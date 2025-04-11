@@ -34,8 +34,8 @@ class SocialInfo extends Model
         'active' => SocialInfoStatus::class
     ];
 
-    public function getCoverPhotoUrlAttribute(): string
+    public function getCoverPhotoUrlAttribute(): string | null
     {
-        return $this->getMedia($this->cover_photo, "/social_info");
+        return isset($this->cover_photo) ?  $this->getMedia($this->cover_photo, "/social_info") : null;
     }
 }

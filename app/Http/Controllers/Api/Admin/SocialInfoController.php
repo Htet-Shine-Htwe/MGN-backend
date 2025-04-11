@@ -68,13 +68,13 @@ class SocialInfoController extends Controller
     }
 
 
-    public function banners(Request $request): JsonResponse
+    public function social_infos(): JsonResponse
     {
-        $banners = $this->socialInfoRepo->getBanners();
+        $data = $this->socialInfoRepo->getSocialInfoByType(request('type'));
         return response()->json(
             [
             'success' => true,
-            'social_info' => $banners
+            'data' => $data
             ], 200
         );
     }

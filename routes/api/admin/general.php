@@ -17,10 +17,8 @@ use App\Http\Controllers\Api\Admin\SubscriptionController;
 use App\Http\Controllers\Api\Admin\UserAvatarController;
 use App\Http\Controllers\Api\Admin\UserSubscriptionController;
 use App\Http\Controllers\Api\Admins\AdminManagementController;
-use App\Http\Controllers\TestController;
-use App\Services\BotPublisher\GetBotServices;
 use Illuminate\Support\Facades\Route;
-use MohsenAbrishami\Stethoscope\Services\MonitorService;
+
 
 
 Route::middleware(['auth:sanctum'])
@@ -122,7 +120,7 @@ Route::middleware(['auth:sanctum'])
         Route::post('/social-info/update/{social_info}','update')->name('social-info.update');
         Route::post('/social-info/{social_info}','delete')->name('social-info.delete');
 
-        Route::get('/social-info/banners','banners')->name('social-info.banners');
+        Route::get('/social-info/{type}','social_infos')->name('social-info.type');
     });
 
     Route::controller(SectionManagementController::class)->group(function(){
