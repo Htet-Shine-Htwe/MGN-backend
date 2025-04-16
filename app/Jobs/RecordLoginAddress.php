@@ -20,12 +20,15 @@ class RecordLoginAddress implements ShouldQueue
     public int $timeout = 60;
 
     public User $user;
+
+    public string $ip;
     /**
      * Create a new job instance.
      */
-    public function __construct(User $user)
+    public function __construct(User $user, string $ip)
     {
         $this->user = $user;
+        $this->ip = $ip;
     }
 
     /**
@@ -35,10 +38,7 @@ class RecordLoginAddress implements ShouldQueue
     {
         $clientIp = app(ClientIpAddressService::class);
 
-        Log::info('RecordLoginAddress', ['clientIp' => $clientIp]);
-
-        $clientIp->saveRecord($this->user);
-
+        $clientIp->saveRecord($this->user, $this->ip);
     }
 
 }

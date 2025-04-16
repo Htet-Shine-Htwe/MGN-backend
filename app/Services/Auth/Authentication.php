@@ -37,7 +37,8 @@ class Authentication
     {
         try {
             $this->authenticate($guard);
-            RecordLoginAddress::dispatchIf( $guard == "web", auth()->user())->onQueue('normal');
+            \Log::info('request ip', ['ip' => request()->ip()]);
+            RecordLoginAddress::dispatchIf( $guard == "web", auth()->user(),request()->ip())->onQueue('normal');
             $guard == "admin" && auth('admin')->user()->update(['last_accessed_at' => now()->toDateTimeString()]);
             return $this->signInResponse($path, $guard);
         } catch (ValidationException $e) {

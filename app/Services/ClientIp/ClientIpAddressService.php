@@ -11,22 +11,19 @@ use Stevebauman\Location\Position;
 
 class ClientIpAddressService
 {
-    public function getClientInfo(): bool|Position
+    public function getClientInfo(string $ip): bool|Position
     {
-        $client_ip = request()->ip();
-
-        Log::info('ClientIpAddressService', ['client_ip' => $client_ip]);
-
-        return Location::get($client_ip);
+        Log::info('ClientIpAddressService R1', ['client_ip' => $ip]);
+        return Location::get($ip);
     }
 
-    public function saveRecord(User $user): bool
+    public function saveRecord(User $user, string $ip): bool
     {
         if ($user == null) {
             return false;
         }
 
-        $location = $this->getClientInfo();
+        $location = $this->getClientInfo($ip);
 
         $device = Browser::platformName() . " ( " . Browser::browserFamily() . " ) ";
 
