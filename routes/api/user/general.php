@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\Admin\ApplicationConfigController;
 use App\Http\Controllers\Api\Admin\UserAvatarController;
 use App\Http\Controllers\Api\User\FilterPageController;
+use App\Http\Controllers\Api\User\GeneralController;
 use App\Http\Controllers\Api\User\HomePageController;
 use App\Http\Controllers\Api\User\UserFavoriteController;
 use App\Http\Controllers\Api\User\UserMogouController;
@@ -54,6 +55,10 @@ Route::middleware(['user.maintenance'])->group(function () {
 
         Route::controller(UserReportController::class)->group(function () {
             Route::post('/create-report', 'create')->name("reports.create");
+        });
+
+        Route::controller(GeneralController::class)->group(function(){
+            Route::get("/contact-us","contactUs")->name("general.contactUs");
         });
 
         Route::get("/check-server", function () {

@@ -6,7 +6,6 @@ use App\Models\LoginHistory;
 use App\Models\User;
 use hisorange\BrowserDetect\Facade as Browser;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Request;
 use Stevebauman\Location\Facades\Location;
 use Stevebauman\Location\Position;
 
@@ -14,7 +13,7 @@ class ClientIpAddressService
 {
     public function getClientInfo(): bool|Position
     {
-        $client_ip = Request::getClientIp();
+        $client_ip = request()->ip();
 
         Log::info('ClientIpAddressService', ['client_ip' => $client_ip]);
 
